@@ -6,9 +6,11 @@
     <groupId>com.example</groupId>
     <artifactId>ecom</artifactId>
     <version>1.0.0</version>
-    <packaging>pom</packaging> <!-- IMPORTANT: Parent must have 'pom' packaging -->
+    <packaging>pom</packaging>
 
     <modules>
-        <module>product</module> <!-- List all submodules here -->
+        <module>product</module>
+        <module>auth</module>
+
     </modules>
 </project>
