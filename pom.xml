@@ -9,8 +9,21 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>product</module>
+        <module>account</module>
+        <module>analytic</module>
         <module>auth</module>
+        <module>cart</module>
+        <module>customer</module>
+        <module>message</module>
+        <module>notification</module>
+        <module>order</module>
+        <module>payment</module>
+        <module>product</module>
+        <module>search</module>
+        <module>shop</module>
+        <module>suggestion</module>
+        <module>user</module>
+        <module>voucher</module>
 
     </modules>
 </project>
