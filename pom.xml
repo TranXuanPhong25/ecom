@@ -16,6 +16,7 @@
         <module>customer</module>
         <module>message</module>
         <module>notification</module>
+<!--        <module>product-category</module>-->
         <module>order</module>
         <module>payment</module>
         <module>product</module>
