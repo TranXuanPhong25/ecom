@@ -6,6 +6,8 @@ import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +23,9 @@ public class ProductCategoryController {
     public List<ProductCategoryEntity> getAllProductCategories() {
         return productCategoryService.getALlRootProductCategories();
     }
+
     @GetMapping("/hierarchy")
+    @Cacheable(value = "productCategoriesTree", key = "'tree'")
     public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
         return productCategoryService.getProductCategoriesTree();
     }
