@@ -1,16 +1,18 @@
 package com.ecom.productcategory.services;
 
 import com.ecom.productcategory.dto.ProductCategoryDTO;
+import com.ecom.productcategory.entities.ProductCategoryClosureEntity;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.exceptions.ResourceNotFoundException;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.repositories.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
@@ -41,6 +43,21 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product category not found with id: " + id));
         ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO(productCategoryEntity);
+        List<ProductCategoryEntity> children = productCategoryRepository.findAllChildrenById(id);
+//        HashSet<Integer> childrenIds = new HashSet<>();
+//        HashMap<Integer, ArrayList<Integer>> treeMap = new HashMap<>(childrenOfProductCategory.size(), 1.0f);
+//        for (ProductCategoryClosureEntity closureEntity : childrenOfProductCategory) {
+//            childrenIds.add(closureEntity.getDescendantId());
+//            Integer ancestorId = closureEntity.getAncestorId();
+//            Integer descendantId = closureEntity.getDescendantId();
+//            if (!treeMap.containsKey(ancestorId)) {
+//                treeMap.put(ancestorId, new ArrayList<>());
+//            }
+//            treeMap.get(ancestorId).add(descendantId);
+//        }
+//        List<ProductCategoryEntity> children = productCategoryRepository.findAllById(childrenIds);
+//        HashMap<Integer, ProductCategoryEntity> childrenProductCategoryMap = (HashMap<Integer, ProductCategoryEntity>) children.stream().collect(Collectors.toMap(ProductCategoryEntity::getId, category->category));
+        productCategoryDTO.setChildren(children);
         return productCategoryDTO;
     }
 
@@ -53,7 +70,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         productCategoryEntity.setName(productCategoryDTO.getName());
         productCategoryEntity.setImageUrl(productCategoryDTO.getImageUrl());
         productCategoryEntity = productCategoryRepository.save(productCategoryEntity);
-        Integer parentCategoryId = productCategoryDTO.getParentCategory() != null ? productCategoryDTO.getParentCategory().getId() : null;
+        Integer parentCategoryId = productCategoryDTO.getParent()!=null?productCategoryDTO.getParent().getId():null;
         productCategoryClosureService.createProductCategory(
                 parentCategoryId,
                 productCategoryEntity.getId()

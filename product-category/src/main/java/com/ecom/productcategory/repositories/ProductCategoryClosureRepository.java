@@ -15,7 +15,7 @@ import java.util.List;
 public interface ProductCategoryClosureRepository extends JpaRepository<ProductCategoryClosureEntity, ProductCategoryClosureId> {
     @Modifying
     @Query("DELETE FROM ProductCategoryClosureEntity pcs " +
-            "WHERE pcs.id.ancestorId IN :categoryIds OR pcs.id.descendantId IN :categoryIds")
+            "WHERE pcs.ancestorId IN :categoryIds OR pcs.descendantId IN :categoryIds")
     void deleteByCategoryIds(@Param("categoryIds") List<Integer> categoryIds);
 
     @Modifying
@@ -25,4 +25,16 @@ public interface ProductCategoryClosureRepository extends JpaRepository<ProductC
             "where pcc.descendant_id =:parentId",
     nativeQuery = true)
     void createSubCategory(Integer parentId, Integer id);
+
+    @Query(value = "WITH recursive cte AS (" +
+            "select * from product_category_closure " +
+            "where product_category_closure.ancestor_id  = :id and depth!=0 " +
+            "union " +
+            "select pcc.ancestor_id , pcc.descendant_id ,pcc.depth " +
+            "from product_category_closure pcc " +
+            "inner join cte c on c.descendant_id = pcc.ancestor_id and pcc.depth!=0 " +
+            ") select * from cte",
+            nativeQuery = true)
+    List<ProductCategoryClosureEntity> getProductCategoryHierachyById(Integer id);
+
 }

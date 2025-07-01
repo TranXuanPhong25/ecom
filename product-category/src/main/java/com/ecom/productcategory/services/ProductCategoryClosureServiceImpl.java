@@ -1,6 +1,5 @@
 package com.ecom.productcategory.services;
 
-import com.ecom.productcategory.dto.ProductCategoryDTO;
 import com.ecom.productcategory.entities.ProductCategoryClosureEntity;
 import com.ecom.productcategory.repositories.ProductCategoryClosureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,11 @@ public class ProductCategoryClosureServiceImpl implements ProductCategoryClosure
        if(parentId!=null){
            productCategoryClosureRepository.createSubCategory(parentId, id);
        }
+    }
+
+    @Override
+    public List<ProductCategoryClosureEntity> getProductCategoryHierachyById(Integer id) {
+        return productCategoryClosureRepository.getProductCategoryHierachyById(id);
     }
 
 }

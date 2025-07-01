@@ -14,7 +14,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ProductCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,20 +21,4 @@ public class ProductCategoryEntity {
     private String name;
     private String imageUrl;
 
-    @OneToMany(mappedBy = "ancestorId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductCategoryClosureEntity> ancestors;
-
-    @OneToMany(mappedBy = "descendantId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductCategoryClosureEntity> descendants;
-
-    public ProductCategoryEntity(String name, String imageUrl) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-    }
-
-    public ProductCategoryEntity(Integer id, String name, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.imageUrl = imageUrl;
-    }
 }
