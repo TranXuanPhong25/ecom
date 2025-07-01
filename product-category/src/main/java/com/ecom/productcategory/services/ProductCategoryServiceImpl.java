@@ -1,6 +1,7 @@
 package com.ecom.productcategory.services;
 
 import com.ecom.productcategory.dto.ProductCategoryDTO;
+import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
 import com.ecom.productcategory.entities.ProductCategoryClosureEntity;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.exceptions.ResourceNotFoundException;
@@ -22,9 +23,44 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     ProductCategoryClosureService productCategoryClosureService;
 
     @Override
-    public List<ProductCategoryEntity> getAllProductCategories() {
-        return productCategoryRepository.findAll();
+    public List<ProductCategoryEntity> getALlRootProductCategories() {
+        return productCategoryRepository.findAllRootCategories();
     }
+    private void traverseTree(ProductCategoryNodeDTO category) {
+        List<ProductCategoryEntity> childEntities = productCategoryRepository.findAllChildrenById(category.getId());
+        if (!childEntities.isEmpty()) {
+            List<ProductCategoryNodeDTO> children = childEntities.stream().map(ProductCategoryNodeDTO::new).toList();
+            category.setChildren(children);
+            for (ProductCategoryNodeDTO child : children) {
+                traverseTree(child);
+            }
+        }
+    }
+    @Override
+    public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
+        List<ProductCategoryEntity> rootCategories = productCategoryRepository.findAllRootCategories();
+        List<ProductCategoryNodeDTO> productCategoryDTOs = rootCategories.stream()
+                .map(ProductCategoryNodeDTO::new).collect(Collectors.toList());
+        for (ProductCategoryNodeDTO rootCategory : productCategoryDTOs) {
+            traverseTree(rootCategory);
+        }
+//        HashSet<Integer> childrenIds = new HashSet<>();
+//        HashMap<Integer, ArrayList<Integer>> treeMap = new HashMap<>(childrenOfProductCategory.size(), 1.0f);
+//        for (ProductCategoryClosureEntity closureEntity : childrenOfProductCategory) {
+//            childrenIds.add(closureEntity.getDescendantId());
+//            Integer ancestorId = closureEntity.getAncestorId();
+//            Integer descendantId = closureEntity.getDescendantId();
+//            if (!treeMap.containsKey(ancestorId)) {
+//                treeMap.put(ancestorId, new ArrayList<>());
+//            }
+//            treeMap.get(ancestorId).add(descendantId);
+//        }
+//        List<ProductCategoryEntity> children = productCategoryRepository.findAllById(childrenIds);
+//        HashMap<Integer, ProductCategoryEntity> childrenProductCategoryMap = (HashMap<Integer, ProductCategoryEntity>) children.stream().collect(Collectors.toMap(ProductCategoryEntity::getId, category->category));
+        return productCategoryDTOs;
+    }
+
+
 
     @Override
     public List<ProductCategoryEntity> updateProductCategories(ProductCategoryUpdateModel productCategoryUpdateModel) {

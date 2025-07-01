@@ -1,6 +1,7 @@
 package com.ecom.productcategory.controllers;
 
 import com.ecom.productcategory.dto.ProductCategoryDTO;
+import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.services.ProductCategoryService;
@@ -18,9 +19,12 @@ public class ProductCategoryController {
 
     @GetMapping
     public List<ProductCategoryEntity> getAllProductCategories() {
-        return productCategoryService.getAllProductCategories();
+        return productCategoryService.getALlRootProductCategories();
     }
-
+    @GetMapping("/hierarchy")
+    public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
+        return productCategoryService.getProductCategoriesTree();
+    }
 //    @PutMapping
 //    public List<ProductCategoryEntity> updateProductCategories(@RequestBody ProductCategoryUpdateModel productCategoryUpdateModel) {
 //        return productCategoryService.updateProductCategories(productCategoryUpdateModel);
