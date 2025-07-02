@@ -7,9 +7,10 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - product-review
+      - product-category
     networks:
       - backend
-  postgres:
+  postgres-product-review:
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
@@ -19,14 +20,38 @@ services:
       - "5433:5432"
     networks:
       - backend
+  postgres-product-category:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5434:5432"
+    networks:
+      - backend
   product-review:
     build: ./product-review
     ports:
-      - "8101:8101"
+      - "8200:8200"
     depends_on:
-      - postgres
+      - postgres-product-review
     environment:
-      DB_HOST: postgres
+      DB_HOST: postgres-product-review
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    networks:
+      - backend
+  product-category:
+    build: ./product-category
+    ports:
+      - "8097:8097"
+    depends_on:
+      - postgres-product-category
+    environment:
+      DB_HOST: postgres-product-category
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: mydatabase
