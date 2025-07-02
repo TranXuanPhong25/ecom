@@ -86,9 +86,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         productCategoryEntity.setName(productCategoryDTO.getName());
         productCategoryEntity.setImageUrl(productCategoryDTO.getImageUrl());
         productCategoryEntity = productCategoryRepository.save(productCategoryEntity);
-        Integer parentCategoryId = productCategoryDTO.getParent() != null
-                ? productCategoryDTO.getParent().getId()
-                : null;
+        Integer parentCategoryId = productCategoryDTO.getParentId();
         productCategoryClosureService.createProductCategory(
                 parentCategoryId,
                 productCategoryEntity.getId()
@@ -98,27 +96,28 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public ProductCategoryEntity updateProductCategory( ProductCategoryEntity productCategoryDetails) {
-        ProductCategoryEntity productCategory = getProductCategoryById(productCategoryDetails.getId());
+        Optional<ProductCategoryEntity> productCategory = productCategoryRepository.findById(productCategoryDetails.getId());
+        if( !productCategory.isPresent()) {
+            throw new ResourceNotFoundException("Product category not found with id: " + productCategoryDetails.getId());
+        }
+        productCategory.get().setName(productCategoryDetails.getName());
+        productCategory.get().setImageUrl(productCategoryDetails.getImageUrl());
 
-        productCategory.setName(productCategoryDetails.getName());
-        productCategory.setImageUrl(productCategoryDetails.getImageUrl());
-
-        return productCategoryRepository.save(productCategory);
+        return productCategoryRepository.save(productCategory.get());
     }
     @Override
     public void deleteProductCategory(Integer id) {
         if (!productCategoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product category not found with id: " + id);
         }
-        productCategoryRepository.deleteById(id);
-        // Delete the closure entries for this category
-        List<ProductCategoryEntity> closureEntities = productCategoryRepository.findAllChildrenById(id);
-        List<Integer> categoryIds = closureEntities.stream()
-                .map(ProductCategoryEntity::getId)
-                .collect(Collectors.toList());
-        if (categoryIds.isEmpty()) {
-            throw new ResourceNotFoundException("No closure entries found for category with id: " + id);
+        // Get all descendant categories first
+        List<Integer> productCategoriesNeedDeleted = productCategoryClosureService.getAllDescendantById(id);
+        if (productCategoriesNeedDeleted.isEmpty()) {
+            productCategoriesNeedDeleted.add(id);
+        } else {
+            productCategoriesNeedDeleted.addFirst(id); // Add the current category ID to the list
         }
-        productCategoryClosureService.deleteByCategoryIds(categoryIds);
+        productCategoryRepository.deleteAllById(productCategoriesNeedDeleted);
+        productCategoryClosureService.deleteByCategoryIds(productCategoriesNeedDeleted);
     }
 }

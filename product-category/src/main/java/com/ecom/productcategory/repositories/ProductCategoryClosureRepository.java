@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,8 +32,8 @@ public interface ProductCategoryClosureRepository extends JpaRepository<ProductC
             "select pcc.ancestor_id , pcc.descendant_id ,pcc.depth " +
             "from product_category_closure pcc " +
             "inner join cte c on c.descendant_id = pcc.ancestor_id and pcc.depth!=0 " +
-            ") select * from cte",
+            ") select DISTINCT(cte.descendant_id) from cte",
             nativeQuery = true)
-    List<ProductCategoryClosureEntity> getProductCategoryHierachyById(Integer id);
+    List<Integer> getAllDescendantById(Integer id);
 
 }

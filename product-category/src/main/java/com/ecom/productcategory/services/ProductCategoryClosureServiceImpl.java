@@ -32,8 +32,9 @@ public class ProductCategoryClosureServiceImpl implements ProductCategoryClosure
     }
 
     @Override
-    public List<ProductCategoryClosureEntity> getProductCategoryHierachyById(Integer id) {
-        return productCategoryClosureRepository.getProductCategoryHierachyById(id);
+    public List<Integer> getAllDescendantById(Integer id) {
+        return productCategoryClosureRepository.getAllDescendantById(id);
     }
+
 
 }

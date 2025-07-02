@@ -13,5 +13,5 @@ public interface ProductCategoryClosureService {
 
     void createProductCategory(Integer parentId, Integer id);
 
-    List<ProductCategoryClosureEntity> getProductCategoryHierachyById(Integer id);
+    List<Integer> getAllDescendantById(Integer id);
 }

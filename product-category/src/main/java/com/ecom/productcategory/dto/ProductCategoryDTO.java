@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductCategoryDTO extends ProductCategoryEntity {
-    private ProductCategoryEntity parent;
+    private Integer parentId;
     private List<ProductCategoryEntity> children;
     public ProductCategoryDTO(ProductCategoryEntity productCategoryEntity) {
         super(productCategoryEntity.getId(), productCategoryEntity.getName(), productCategoryEntity.getImageUrl());
