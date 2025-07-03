@@ -32,7 +32,9 @@ services:
     networks:
       - backend
   product-review:
-    build: ./product-review
+    build:
+      context: ./product-review
+    restart: on-failure
     ports:
       - "8200:8200"
     depends_on:
@@ -60,7 +62,7 @@ services:
       DB_NAME: mydatabase
       DB_PORT: 5432
     volumes:
-        - ./product-category/:/app/
+        - ./product-category:/app
     networks:
       - backend
 networks:
