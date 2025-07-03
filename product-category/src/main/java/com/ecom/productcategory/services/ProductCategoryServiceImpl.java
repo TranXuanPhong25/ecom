@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Autowired
     ProductCategoryRepository productCategoryRepository;
+
     @Autowired
     ProductCategoryClosureService productCategoryClosureService;
 
@@ -71,6 +72,15 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO(productCategoryEntity);
         List<ProductCategoryEntity> children = productCategoryRepository.findAllChildrenById(id);
         productCategoryDTO.setChildren(children);
+
+        ProductCategoryEntity parentCategory = productCategoryRepository.findAncestorById(id);
+        if( parentCategory != null) {
+            productCategoryDTO.setParent(parentCategory);
+            productCategoryDTO.setParentId(parentCategory.getId());
+        } else {
+            productCategoryDTO.setParent(null);
+            productCategoryDTO.setParentId(null);
+        }
         return productCategoryDTO;
     }
 
