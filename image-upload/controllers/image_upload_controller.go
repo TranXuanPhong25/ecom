@@ -6,5 +6,5 @@ import (
 )
 
 func ImageUpload(c echo.Context) error {
-	return c.JSON(http.StatusNotImplemented, "Not Implemented")
+	return c.JSON(http.StatusOK, "Not Implemented")
 }
