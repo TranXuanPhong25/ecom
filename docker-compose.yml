@@ -56,6 +56,9 @@ services:
     depends_on:
       kong-migrations:
         condition: service_completed_successfully
+    volumes:
+      - ./kong/plugins:/usr/local/kong/plugins
+      - ./kong/conf/kong.conf:/etc/kong/kong.conf
     restart: unless-stopped
     environment:
       KONG_DATABASE: postgres
