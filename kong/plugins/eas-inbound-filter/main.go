@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	pb "github.com/TranXuanPhong25/jwt-service/proto"
+	pb "github.com/TranXuanPhong25/ecom/jwt-service/proto"
 )
 
 func main() {

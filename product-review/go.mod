@@ -1,4 +1,4 @@
-module product-review
+module github.com/TranXuanPhong25/ecom/product-review
 
 go 1.23.0
 

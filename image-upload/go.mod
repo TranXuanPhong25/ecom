@@ -1,4 +1,4 @@
-module image-upload
+module github.com/TranXuanPhong25/ecom/image-upload
 
 go 1.23.0
 
