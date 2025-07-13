@@ -120,7 +120,7 @@ const file_proto_token_proto_rawDesc = "" +
 	"\x05valid\x18\x01 \x01(\bR\x05valid2M\n" +
 	"\n" +
 	"JWTService\x12?\n" +
-	"\rValidateToken\x12\x13.token.TokenRequest\x1a\x19.token.ValidationResponseB\tZ\a./protob\x06proto3"
+	"\rValidateToken\x12\x13.token.TokenRequest\x1a\x19.token.ValidationResponseB.Z,github.com/TranXuanPhong25/jwt-service/protob\x06proto3"
 
 var (
 	file_proto_token_proto_rawDescOnce sync.Once

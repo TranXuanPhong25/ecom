@@ -8,14 +8,15 @@ package main
 import (
 	"bytes"
 	"context"
+	"log"
+	"time"
+
 	"github.com/Kong/go-pdk"
 	"github.com/Kong/go-pdk/server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
-	"time"
 
-	pb "eas-inbound-filter/proto"
+	pb "github.com/TranXuanPhong25/jwt-service/proto"
 )
 
 func main() {
