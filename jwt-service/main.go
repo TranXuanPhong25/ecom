@@ -20,11 +20,11 @@ func (s *JWTService) ValidateToken(ctx context.Context, in *pb.TokenRequest) (*p
 }
 
 var (
-	RPC_PORT = ":8202" // gRPC server port
+	RpcPort = ":8202" // gRPC server port
 )
 
 func main() {
-	lis, err := net.Listen("tcp", RPC_PORT)
+	lis, err := net.Listen("tcp", RpcPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -32,7 +32,7 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterJWTServiceServer(s, &JWTService{})
 
-	log.Printf("gRPC server listening on %v\n", RPC_PORT)
+	log.Printf("gRPC server listening on %v\n", RpcPort)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
