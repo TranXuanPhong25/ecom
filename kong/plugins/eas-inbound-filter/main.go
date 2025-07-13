@@ -8,7 +8,7 @@ package main
 import (
 	"bytes"
 	"context"
-	"log"
+	"fmt"
 	"time"
 
 	"github.com/Kong/go-pdk"
@@ -27,56 +27,43 @@ var Version = "0.1"
 var Priority = 1
 
 type Config struct {
-	Timeout         int    `json:"timeout"`
-	Message         string `json:"message"`
-	AuthServiceAddr string `json:"auth_service_addr"` // Địa chỉ gRPC service
+	Timeout        int
+	JWTServiceAddr string
 }
 
 func New() interface{} {
-	return &Config{}
+	return &Config{
+		JWTServiceAddr: "jwt-service:50051", // Default address
+		Timeout:        5000,                // Default timeout (5 seconds)
+	}
 }
 
 func (conf Config) Access(kong *pdk.PDK) {
-	var token string
+	token := getTokenFromHeaders(kong)
+	if token == "" {
+		return
+	}
+	validateToken(token, kong, &conf)
+}
+
+func getTokenFromHeaders(kong *pdk.PDK) string {
+	token := ""
 	authorizationHeader, getAuthorizationError := kong.Request.GetHeader("Authorization")
 	if getAuthorizationError == nil {
 		token = getTokenFromAuthorizationHeader(authorizationHeader)
-	}
-	cookieHeader, getCookieError := kong.Request.GetHeader("Cookie")
-	if getCookieError == nil {
-		token = getTokenFromCookieHeader(cookieHeader)
-	}
-	if token == "" {
-		kong.Response.Exit(401, []byte("Unauthorized access"), map[string][]string{
-			"Content-Type": {"application/json"},
-		})
-		return
-	}
-
-	//follow https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-
-	conn, err := grpc.NewClient(conf.AuthServiceAddr, opts...)
-	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
-	}
-	defer func(conn *grpc.ClientConn) {
-		err := conn.Close()
-		if err != nil {
-			log.Fatalf("fail to close connection: %v", err)
+		if token != "" {
+			return token
 		}
-	}(conn)
-
-	client := pb.NewJWTServiceClient(conn)
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	r, err := client.ValidateToken(ctx, &pb.TokenRequest{Token: token})
-	if err != nil {
-		log.Fatalf("could not validate token: %v", err)
 	}
-	log.Printf("the token is: %v", r.GetValid())
+
+	cookieHeader, getCookieError := kong.Request.GetHeader("Cookie")
+	if getCookieError == nil && token == "" {
+		token = getTokenFromCookieHeader(cookieHeader)
+		if token != "" {
+			return token
+		}
+	}
+	return token
 }
 
 func getTokenFromAuthorizationHeader(authorizationHeader string) string {
@@ -85,6 +72,7 @@ func getTokenFromAuthorizationHeader(authorizationHeader string) string {
 	}
 	return ""
 }
+
 func getTokenFromCookieHeader(cookieHeader string) string {
 	tokenField := []string{"token", "Token", "TOKEN"}
 	// Parse the cookie header to extract the token
@@ -97,4 +85,39 @@ func getTokenFromCookieHeader(cookieHeader string) string {
 		}
 	}
 	return ""
+}
+
+func validateToken(token string, kong *pdk.PDK, conf *Config) {
+	//follow https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
+
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	conn, err := grpc.NewClient(conf.JWTServiceAddr, opts...)
+	if err != nil {
+		kong.Log.Err(fmt.Sprintf("fail to dial: %v", err))
+		return
+	}
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+			kong.Log.Err("fail to close connection: %v", err)
+		}
+	}(conn)
+
+	client := pb.NewJWTServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
+	defer cancel()
+	r, err := client.ValidateToken(ctx, &pb.TokenRequest{Token: token})
+	if err != nil {
+		kong.Log.Err("could not validate token: %v", err)
+		return
+	}
+
+	if !r.GetValid() {
+		kong.Response.Exit(401, []byte(`{"error":"Unauthorized"}`), map[string][]string{
+			"Content-Type": {"application/json"},
+		})
+	}
 }

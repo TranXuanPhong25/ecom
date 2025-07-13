@@ -1,4 +1,4 @@
-module eas-inbound-filter
+module github.com/TranXuanPhong25/ecom/kong/plugins/eas-inbound-filter
 
 go 1.23.10
 

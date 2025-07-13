@@ -79,7 +79,15 @@ services:
     networks:
       - backend
       - kong-net
-
+  jwt-service:
+    build:
+      context: ./jwt-service
+    container_name: jwt-service
+    restart: on-failure
+    ports:
+      - "50051:50051"
+    networks:
+      - kong-net
   postgres-product-review:
     image: postgres:15-alpine
     environment:

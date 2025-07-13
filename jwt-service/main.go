@@ -20,7 +20,7 @@ func (s *JWTService) ValidateToken(ctx context.Context, in *pb.TokenRequest) (*p
 }
 
 var (
-	RpcPort = ":8202" // gRPC server port
+	RpcPort = ":50051" // gRPC server port
 )
 
 func main() {
@@ -36,6 +36,9 @@ func main() {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
-	lis.Close()
+	err = lis.Close()
+	if err != nil {
+		return
+	}
 	s.Stop()
 }
