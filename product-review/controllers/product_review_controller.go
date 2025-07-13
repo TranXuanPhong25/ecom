@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"github.com/TranXuanPhong25/ecom/product-review/database"
+	"github.com/TranXuanPhong25/ecom/product-review/models"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"product-review/database"
-	"product-review/models"
 )
 
 // Lấy tất cả reviews

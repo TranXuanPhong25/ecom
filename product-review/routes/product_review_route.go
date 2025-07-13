@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"github.com/TranXuanPhong25/ecom/product-review/controllers"
 	"github.com/labstack/echo/v4"
-	"product-review/controllers"
 )
 
 func ReviewRoutes(e *echo.Echo) {

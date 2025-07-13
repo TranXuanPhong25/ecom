@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/TranXuanPhong25/ecom/image-upload/routes"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"image-upload/routes"
 )
 
 func main() {

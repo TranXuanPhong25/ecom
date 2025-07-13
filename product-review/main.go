@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/TranXuanPhong25/ecom/product-review/database"
+	"github.com/TranXuanPhong25/ecom/product-review/models"
+	"github.com/TranXuanPhong25/ecom/product-review/routes"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"product-review/database"
-	"product-review/models"
-	"product-review/routes"
 )
 
 func main() {
