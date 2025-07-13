@@ -1,44 +1,31 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
-	pb "github.com/TranXuanPhong25/ecom/jwt-service/proto"
+	services "github.com/TranXuanPhong25/ecom/jwt-service/services"
 	"google.golang.org/grpc"
 )
-
-type JWTService struct {
-	pb.UnimplementedJWTServiceServer
-}
-
-func (s *JWTService) ValidateToken(ctx context.Context, in *pb.TokenRequest) (*pb.ValidationResponse, error) {
-	log.Printf("Received token: %s", in.Token)
-	// Thêm logic xác thực token thực tế ở đây
-	return &pb.ValidationResponse{Valid: true}, nil
-}
 
 var (
 	RpcPort = ":50051" // gRPC server port
 )
 
 func main() {
+	services.LoadEnv()
+	runServer()
+}
+func runServer() {
 	lis, err := net.Listen("tcp", RpcPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterJWTServiceServer(s, &JWTService{})
-
+	services.RegisterService(s)
 	log.Printf("gRPC server listening on %v\n", RpcPort)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
-	err = lis.Close()
-	if err != nil {
-		return
-	}
-	s.Stop()
 }

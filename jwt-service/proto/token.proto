@@ -1,10 +1,12 @@
 //protoc --go_out=. --go_opt=paths=source_relative  --go-grpc_out=. --go-grpc_opt=paths=source_relative  proto/token.proto
+//export PATH="$PATH:$(go env GOPATH)/bin"
 syntax = "proto3";
 
 package token;
 option go_package = "github.com/TranXuanPhong25/ecom/jwt-service/proto";
 service JWTService {
    rpc ValidateToken(TokenRequest) returns (ValidationResponse);
+   rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse);
 }
 
 message TokenRequest {
@@ -13,4 +15,13 @@ message TokenRequest {
 
 message ValidationResponse {
   bool valid = 1;
+}
+
+message CreateTokenRequest {
+  string user_id = 1;
+  repeated string roles = 2;
+}
+
+message CreateTokenResponse {
+  string token = 1 ;
 }
