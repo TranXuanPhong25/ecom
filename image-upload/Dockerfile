@@ -8,7 +8,7 @@ RUN apk add --no-cache git
 WORKDIR /app
 
 # Copy go mod và sum trước để optimize cache Docker layer
-COPY go.mod go.sum ./
+COPY go.mod go.sum  ./
 
 # Download dependencies
 RUN go mod download
@@ -20,17 +20,14 @@ COPY . .
 RUN go build -o main .
 
 # ===== STAGE 2: Build a minimal image =====
-FROM alpine:latest
-
-# Cài thêm ca-certificates nếu app gọi API HTTPS
-RUN apk --no-cache add ca-certificates
+FROM alpine:latest as release
 
 # Tạo thư mục app
 WORKDIR /root/
 
 # Copy binary từ stage build
 COPY --from=builder /app/main .
-
+COPY --from=builder /app/.env.* ./ || true
 EXPOSE 8201
 
 # Lệnh chạy app
