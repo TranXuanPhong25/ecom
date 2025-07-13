@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package token;
+option go_package = "./proto";
+service JWTService {
+   rpc ValidateToken(TokenRequest) returns (ValidationResponse);
+}
+
+message TokenRequest {
+  string token = 1;
+}
+
+message ValidationResponse {
+  bool valid = 1;
+}
