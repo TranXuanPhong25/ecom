@@ -11,8 +11,6 @@
     <modules>
         <module>account</module>
         <module>analytic</module>
-        <module>auth</module>
-        <module>cart</module>
         <module>customer</module>
         <module>message</module>
         <module>notification</module>
