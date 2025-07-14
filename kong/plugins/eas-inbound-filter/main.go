@@ -87,7 +87,7 @@ func getTokenFromHeaders(kong *pdk.PDK) string {
 	}
 
 	cookieHeader, getCookieError := kong.Request.GetHeader("Cookie")
-	if getCookieError == nil && token == "" {
+	if getCookieError == nil {
 		token = getTokenFromCookieHeader(cookieHeader)
 		if token != "" {
 			return token
