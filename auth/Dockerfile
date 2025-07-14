@@ -2,7 +2,7 @@
 FROM golang:1.23-alpine AS builder
 
 # Install git (nếu dùng go get lấy module từ github)
-RUN apk add --no-cache git
+RUN apk add --no-cache git 
 
 # Set working directory
 WORKDIR /app

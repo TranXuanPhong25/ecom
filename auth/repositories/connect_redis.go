@@ -32,3 +32,13 @@ func TestRedis() {
 	}
 
 }
+
+func CloseRedisConnection() {
+	if rdb != nil {
+		if err := rdb.Close(); err != nil {
+			log.Errorf("Error closing redis connection: %v", err)
+		} else {
+			log.Info("Redis connection closed successfully")
+		}
+	}
+}
