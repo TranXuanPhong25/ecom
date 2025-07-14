@@ -9,7 +9,10 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/Kong/go-pdk"
@@ -21,7 +24,11 @@ import (
 )
 
 func main() {
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	server.StartServer(New, Version, Priority)
+	<-quit
+	close()
 }
 
 var (
@@ -56,12 +63,6 @@ func initClient(addr string) pb.JWTServiceClient {
 		if err != nil {
 			panic(fmt.Sprintf("failed to dial: %v", err))
 		}
-		defer func(conn *grpc.ClientConn) {
-			err := conn.Close()
-			if err != nil {
-				panic(fmt.Sprintf("fail to close connection: %v", err))
-			}
-		}(conn)
 
 		client = pb.NewJWTServiceClient(conn)
 	})
@@ -130,5 +131,12 @@ func validateToken(token string, kong *pdk.PDK) {
 		kong.Response.Exit(401, []byte(`{"error":"Unauthorized"}`), map[string][]string{
 			"Content-Type": {"application/json"},
 		})
+	}
+}
+
+// Thêm hàm này để clean up kết nối khi plugin bị hủy
+func close() {
+	if conn != nil {
+		conn.Close()
 	}
 }
