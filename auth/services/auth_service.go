@@ -52,5 +52,6 @@ func RegisterWithEmailAndPassword(email, password string) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
