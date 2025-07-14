@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"encoding/base64"
-	"log"
+	"github.com/labstack/gommon/log"
 	"os"
 	"time"
 
@@ -76,5 +76,5 @@ func (s *JWTService) CreateToken(ctx context.Context, in *pb.CreateTokenRequest)
 
 func RegisterService(server *grpc.Server) {
 	pb.RegisterJWTServiceServer(server, &JWTService{})
-	log.Println("JWTService registered")
+	log.Info("JWTService registered")
 }
