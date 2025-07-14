@@ -20,14 +20,14 @@ COPY . .
 RUN go build -o main .
 
 # ===== STAGE 2: Build a minimal image =====
-FROM alpine:latest as release
+FROM alpine:latest AS release
 
 # Tạo thư mục app
 WORKDIR /root/
 
 # Copy binary từ stage build
 COPY --from=builder /app/main .
-COPY --from=builder /app/.env.* ./
+
 EXPOSE 8201
 
 # Lệnh chạy app

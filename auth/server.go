@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/TranXuanPhong25/ecom/auth/repositories"
+	"github.com/TranXuanPhong25/ecom/auth/routes"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -12,13 +14,10 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	// database.ConnectDB()
-	// err := database.DB.AutoMigrate(&models.Review{})
-	// if err != nil {
-	// 	return
-	// } // Tự tạo bảng nếu chưa có
+	repositories.ConnectRedis()
+	repositories.TestRedis()
 
-	// routes.ReviewRoutes(e) // Add các route
-	// Start server
+	routes.AuthRoute(e)
+
 	e.Logger.Fatal(e.Start(":8202"))
 }
