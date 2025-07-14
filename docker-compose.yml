@@ -108,6 +108,16 @@ services:
       - "5434:5432"
     networks:
       - backend
+  postgres-user:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5435:5432"
+    networks:
+      - backend
   product-review:
     build:
       context: ./product-review
@@ -140,5 +150,49 @@ services:
       DB_PORT: 5432
     volumes:
         - ./product-category:/app
+    networks:
+      - backend
+  auth-redis:
+    image: redis:7-alpine
+    container_name: auth-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - backend
+  auth:
+    container_name: auth
+    build:
+      context: ./auth
+    ports:
+      - "8202:8202"
+    depends_on:
+      - auth-redis
+    environment:
+      REDIS_ADDR: auth-redis:6379
+      REDIS_PASSWORD: redis-password
+    volumes:
+        - ./product-category:/app
+    networks:
+      - backend
+  user:
+    container_name: user
+    build:
+      context: ./user
+    ports:
+      - "50052:50052"
+    depends_on:
+      - postgres-user
+    environment:
+      DB_HOST: postgres-product-category
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./user:/app
     networks:
       - backend
