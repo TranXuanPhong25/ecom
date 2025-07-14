@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/TranXuanPhong25/ecom/user/models"
 	"github.com/TranXuanPhong25/ecom/user/repositories"
 	"github.com/TranXuanPhong25/ecom/user/services"
 	"google.golang.org/grpc"
@@ -25,6 +26,10 @@ func runServer() {
 
 	s := grpc.NewServer()
 	repositories.ConnectDB()
+	err = repositories.DB.AutoMigrate(&models.User{})
+	if err != nil {
+		return
+	}
 	services.RegisterService(s)
 	reflection.Register(s)
 	log.Printf("gRPC server listening on %v\n", RpcPort)
