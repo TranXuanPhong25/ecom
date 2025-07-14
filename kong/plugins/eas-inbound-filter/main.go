@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/Kong/go-pdk"
@@ -23,8 +24,14 @@ func main() {
 	server.StartServer(New, Version, Priority)
 }
 
-var Version = "0.1"
-var Priority = 1
+var (
+	Priority = 1
+	Version  = "0.2"
+
+	client pb.JWTServiceClient
+	conn   *grpc.ClientConn
+	once   sync.Once
+)
 
 type Config struct {
 	Timeout        int
@@ -32,10 +39,33 @@ type Config struct {
 }
 
 func New() interface{} {
+	initClient("jwt-service:50051")
 	return &Config{
 		JWTServiceAddr: "jwt-service:50051", // Default address
 		Timeout:        5000,                // Default timeout (5 seconds)
 	}
+}
+
+func initClient(addr string) pb.JWTServiceClient {
+	once.Do(func() {
+		//follow https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
+		var opts []grpc.DialOption
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+		conn, err := grpc.NewClient(addr, opts...)
+		if err != nil {
+			panic(fmt.Sprintf("failed to dial: %v", err))
+		}
+		defer func(conn *grpc.ClientConn) {
+			err := conn.Close()
+			if err != nil {
+				panic(fmt.Sprintf("fail to close connection: %v", err))
+			}
+		}(conn)
+
+		client = pb.NewJWTServiceClient(conn)
+	})
+	return client
 }
 
 func (conf Config) Access(kong *pdk.PDK) {
@@ -43,7 +73,7 @@ func (conf Config) Access(kong *pdk.PDK) {
 	if token == "" {
 		return
 	}
-	validateToken(token, kong, &conf)
+	validateToken(token, kong)
 }
 
 func getTokenFromHeaders(kong *pdk.PDK) string {
@@ -87,26 +117,7 @@ func getTokenFromCookieHeader(cookieHeader string) string {
 	return ""
 }
 
-func validateToken(token string, kong *pdk.PDK, conf *Config) {
-	//follow https://github.com/grpc/grpc-go/blob/master/examples/helloworld/greeter_client/main.go
-
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-
-	conn, err := grpc.NewClient(conf.JWTServiceAddr, opts...)
-	if err != nil {
-		kong.Log.Err(fmt.Sprintf("fail to dial: %v", err))
-		return
-	}
-	defer func(conn *grpc.ClientConn) {
-		err := conn.Close()
-		if err != nil {
-			kong.Log.Err("fail to close connection: %v", err)
-		}
-	}(conn)
-
-	client := pb.NewJWTServiceClient(conn)
-
+func validateToken(token string, kong *pdk.PDK) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
 	defer cancel()
 	r, err := client.ValidateToken(ctx, &pb.TokenRequest{Token: token})
