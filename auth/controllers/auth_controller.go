@@ -3,9 +3,10 @@ package controllers
 import (
 	"github.com/TranXuanPhong25/ecom/auth/models"
 	"github.com/TranXuanPhong25/ecom/auth/services"
-	"net/http"
-
+	"github.com/TranXuanPhong25/ecom/auth/validators"
 	"github.com/labstack/echo/v4"
+	"net/http"
+	"strings"
 )
 
 func LoginWithEmailAndPassword(c echo.Context) error {
@@ -18,18 +19,12 @@ func LoginWithEmailAndPassword(c echo.Context) error {
 		})
 	}
 
-	// Validate dữ liệu
-	if req.Email == "" || req.Password == "" {
+	if err := validators.ValidateStruct(req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "Email and password are required",
+			"error": err.Error(),
 		})
 	}
 
-	//if !services.IsValidEmailFormat(req.Email) {
-	//	return c.JSON(http.StatusBadRequest, map[string]string{
-	//		"error": "Invalid email format",
-	//	})
-	//}
 	response, err := services.LoginWithEmailAndPassword(req.Email, req.Password)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
@@ -40,7 +35,7 @@ func LoginWithEmailAndPassword(c echo.Context) error {
 }
 
 func RegisterWithEmailAndPassword(c echo.Context) error {
-	req := new(models.LoginRequest)
+	req := new(models.RegisterRequest)
 
 	// Bind JSON request body vào struct
 	if err := c.Bind(req); err != nil {
@@ -49,19 +44,19 @@ func RegisterWithEmailAndPassword(c echo.Context) error {
 		})
 	}
 
-	// Validate dữ liệu
-	if req.Email == "" || req.Password == "" {
+	if err := validators.ValidateStruct(req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "Email and password are required",
+			"error": err.Error(),
 		})
 	}
-	//if !services.IsValidEmailFormat(req.Email) {
-	//	return c.JSON(http.StatusBadRequest, map[string]string{
-	//		"error": "Invalid email format",
-	//	})
-	//}
+
 	err := services.RegisterWithEmailAndPassword(req.Email, req.Password)
 	if err != nil {
+		if strings.Contains(err.Error(), "exists") {
+			return c.JSON(http.StatusConflict, map[string]string{
+				"error": strings.SplitAfter(err.Error(), "desc = ")[1],
+			})
+		}
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	return c.JSON(http.StatusOK, map[string]string{

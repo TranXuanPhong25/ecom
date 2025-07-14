@@ -8,10 +8,14 @@ import (
 	pb "github.com/TranXuanPhong25/ecom/user/proto"
 	"github.com/TranXuanPhong25/ecom/user/repositories"
 	"github.com/google/uuid"
+	"github.com/labstack/gommon/log"
+	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
-	"log"
+	"strings"
 )
 
 type UserService struct {
@@ -30,24 +34,35 @@ type UserService struct {
 //
 //}
 
-func (s *UserService) CreateUserWithEmailAndPassword(ctx context.Context, in *pb.Credentials) (*emptypb.Empty, error) {
-	newUser := models.User{
-		Email:    in.Email,
-		Password: in.Password,
-	}
-	err := repositories.DB.Create(&newUser).Error
+func (s *UserService) CreateUserWithEmailAndPassword(_ context.Context, in *pb.Credentials) (*emptypb.Empty, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
+	newUser := models.User{
+		Email:    in.Email,
+		Password: string(hashedPassword),
+	}
+	err = repositories.DB.Create(&newUser).Error
+	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key") ||
+			strings.Contains(err.Error(), "unique constraint") ||
+			strings.Contains(err.Error(), "UNIQUE constraint failed") {
+			return nil, status.Error(codes.AlreadyExists, "Email already exists")
+		}
+
+		return nil, err
+	}
+
 	return &emptypb.Empty{}, nil
 }
 
-func (s *UserService) GetUserByEmailAndPassword(ctx context.Context, in *pb.Credentials) (*pb.User, error) {
-	var targetUser models.User
-	err := repositories.DB.
-		Where("email = ? AND password = ?", in.Email, in.Password).
-		First(&targetUser).Error
+func (s *UserService) GetUserByEmailAndPassword(_ context.Context, in *pb.Credentials) (*pb.User, error) {
 
+	var user models.User
+	err := repositories.DB.
+		Where("email = ?", in.Email).
+		First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -55,13 +70,17 @@ func (s *UserService) GetUserByEmailAndPassword(ctx context.Context, in *pb.Cred
 		return nil, err
 	}
 
+	if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(in.Password)); err != nil {
+		return &pb.User{Email: user.Email}, nil
+	}
+
 	return &pb.User{
-		UserId: targetUser.ID.String(),
+		UserId: user.ID.String(),
 		Email:  in.Email,
 	}, nil
 }
 
-func (s *UserService) DeleteUserById(ctx context.Context, in *pb.UserId) (*emptypb.Empty, error) {
+func (s *UserService) DeleteUserById(_ context.Context, in *pb.UserId) (*emptypb.Empty, error) {
 	uid, err := uuid.Parse(in.UserId)
 	if err != nil {
 		return nil, fmt.Errorf("invalid uuid: %w", err)
@@ -77,5 +96,5 @@ func (s *UserService) DeleteUserById(ctx context.Context, in *pb.UserId) (*empty
 
 func RegisterService(server *grpc.Server) {
 	pb.RegisterUserServiceServer(server, &UserService{})
-	log.Println("UserService registered")
+	log.Info("UserService registered")
 }

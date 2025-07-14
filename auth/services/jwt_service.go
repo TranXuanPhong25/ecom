@@ -49,7 +49,6 @@ func CreateToken(userId string) (string, error) {
 	defer cancel()
 	r, err := jwtServiceClient.CreateToken(ctx, &pb.CreateTokenRequest{UserId: userId})
 	if err != nil {
-		log.Infof("could not create token: %v", err)
 		return "", err
 	}
 	return r.GetToken(), nil

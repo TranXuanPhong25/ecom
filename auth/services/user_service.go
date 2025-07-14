@@ -54,7 +54,6 @@ func CreateUserWithEmailAndPassword(email, password string) error {
 
 	_, err := userServiceClient.CreateUserWithEmailAndPassword(ctx, &pb.Credentials{Email: email, Password: password})
 	if err != nil {
-		log.Infof("could not create user : %v", err)
 		return err
 	}
 
@@ -75,9 +74,15 @@ func GetUserByEmailAndPassword(email, password string) (*models.UserInfo, error)
 	})
 
 	if err != nil {
-		log.Infof("could not validate user: %v", err)
 		return &models.UserInfo{}, err
 	}
 
-	return &models.UserInfo{UserId: r.UserId, Email: email}, nil
+	if r.GetEmail() == "" {
+		return &models.UserInfo{}, fmt.Errorf("user not found")
+	}
+	if r.GetUserId() == "" {
+		return &models.UserInfo{}, fmt.Errorf("wrong password")
+	}
+
+	return &models.UserInfo{UserId: r.GetUserId(), Email: r.GetEmail()}, nil
 }
