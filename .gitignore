@@ -33,3 +33,7 @@ build/
 ### VS Code ###
 .vscode/
 .env
+/jwt-service/tmp/build-errors.log
+/auth/tmp/main
+/jwt-service/tmp/main
+/user/tmp/main

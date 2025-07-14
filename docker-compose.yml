@@ -17,7 +17,7 @@ x-kong-config: &kong-env
 
 services:
   kong-db:
-    image: postgres:13
+    image: postgres:15-alpine
     container_name: kong-db
     restart: unless-stopped
     volumes:
@@ -80,14 +80,20 @@ services:
       - backend
       - kong-net
   jwt-service:
+    image: cosmtrek/air
+    working_dir: /app
     build:
       context: ./jwt-service
+
     container_name: jwt-service
+    volumes:
+      - ./jwt-service:/app
     restart: on-failure
     ports:
       - "50051:50051"
     networks:
       - kong-net
+      - backend
   postgres-product-review:
     image: postgres:15-alpine
     environment:
@@ -165,21 +171,27 @@ services:
       - backend
   auth:
     container_name: auth
+    working_dir: /app
+    image: cosmtrek/air
     build:
       context: ./auth
     ports:
       - "8202:8202"
     depends_on:
+      - user
+      - jwt-service
       - auth-redis
     environment:
       REDIS_ADDR: auth-redis:6379
       REDIS_PASSWORD: redis-password
     volumes:
-        - ./product-category:/app
+      - ./auth:/app
     networks:
       - backend
   user:
     container_name: user
+    image: cosmtrek/air
+    working_dir: /app
     build:
       context: ./user
     ports:
@@ -187,7 +199,7 @@ services:
     depends_on:
       - postgres-user
     environment:
-      DB_HOST: postgres-product-category
+      DB_HOST: postgres-user
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: mydatabase
