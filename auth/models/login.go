@@ -5,6 +5,5 @@ type LoginResponse struct {
 	User  UserInfo `json:"userInfo"`
 }
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Credentials
 }

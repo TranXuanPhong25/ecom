@@ -37,3 +37,5 @@ build/
 /auth/tmp/main
 /jwt-service/tmp/main
 /user/tmp/main
+/auth/tmp/build-errors.log
+/user/tmp/build-errors.log

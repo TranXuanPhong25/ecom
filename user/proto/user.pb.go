@@ -25,7 +25,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type EmailAndPasswordRequest struct {
+type Credentials struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
@@ -33,20 +33,20 @@ type EmailAndPasswordRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *EmailAndPasswordRequest) Reset() {
-	*x = EmailAndPasswordRequest{}
+func (x *Credentials) Reset() {
+	*x = Credentials{}
 	mi := &file_proto_user_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *EmailAndPasswordRequest) String() string {
+func (x *Credentials) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EmailAndPasswordRequest) ProtoMessage() {}
+func (*Credentials) ProtoMessage() {}
 
-func (x *EmailAndPasswordRequest) ProtoReflect() protoreflect.Message {
+func (x *Credentials) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_user_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -58,46 +58,47 @@ func (x *EmailAndPasswordRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EmailAndPasswordRequest.ProtoReflect.Descriptor instead.
-func (*EmailAndPasswordRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use Credentials.ProtoReflect.Descriptor instead.
+func (*Credentials) Descriptor() ([]byte, []int) {
 	return file_proto_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EmailAndPasswordRequest) GetEmail() string {
+func (x *Credentials) GetEmail() string {
 	if x != nil {
 		return x.Email
 	}
 	return ""
 }
 
-func (x *EmailAndPasswordRequest) GetPassword() string {
+func (x *Credentials) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
 	return ""
 }
 
-type CheckUserExistByEmailAndPasswordResponse struct {
+type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	IsExist       bool                   `protobuf:"varint,1,opt,name=isExist,proto3" json:"isExist,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CheckUserExistByEmailAndPasswordResponse) Reset() {
-	*x = CheckUserExistByEmailAndPasswordResponse{}
+func (x *User) Reset() {
+	*x = User{}
 	mi := &file_proto_user_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CheckUserExistByEmailAndPasswordResponse) String() string {
+func (x *User) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CheckUserExistByEmailAndPasswordResponse) ProtoMessage() {}
+func (*User) ProtoMessage() {}
 
-func (x *CheckUserExistByEmailAndPasswordResponse) ProtoReflect() protoreflect.Message {
+func (x *User) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_user_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -109,16 +110,23 @@ func (x *CheckUserExistByEmailAndPasswordResponse) ProtoReflect() protoreflect.M
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CheckUserExistByEmailAndPasswordResponse.ProtoReflect.Descriptor instead.
-func (*CheckUserExistByEmailAndPasswordResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use User.ProtoReflect.Descriptor instead.
+func (*User) Descriptor() ([]byte, []int) {
 	return file_proto_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CheckUserExistByEmailAndPasswordResponse) GetIsExist() bool {
+func (x *User) GetUserId() string {
 	if x != nil {
-		return x.IsExist
+		return x.UserId
 	}
-	return false
+	return ""
+}
+
+func (x *User) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
 }
 
 type UserId struct {
@@ -169,17 +177,19 @@ var File_proto_user_proto protoreflect.FileDescriptor
 
 const file_proto_user_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/user.proto\x12\x04user\x1a\x1bgoogle/protobuf/empty.proto\"K\n" +
-	"\x17EmailAndPasswordRequest\x12\x14\n" +
+	"\x10proto/user.proto\x12\x04user\x1a\x1bgoogle/protobuf/empty.proto\"?\n" +
+	"\vCredentials\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"D\n" +
-	"(CheckUserExistByEmailAndPasswordResponse\x12\x18\n" +
-	"\aisExist\x18\x01 \x01(\bR\aisExist\"!\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"5\n" +
+	"\x04User\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\"!\n" +
 	"\x06UserId\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId2\x87\x02\n" +
-	"\vUserService\x12M\n" +
-	"\x1eCreateUserWithEmailAndPassword\x12\x1d.user.EmailAndPasswordRequest\x1a\f.user.UserId\x12q\n" +
-	" CheckUserExistByEmailAndPassword\x12\x1d.user.EmailAndPasswordRequest\x1a..user.CheckUserExistByEmailAndPasswordResponse\x126\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId2\xce\x01\n" +
+	"\vUserService\x12K\n" +
+	"\x1eCreateUserWithEmailAndPassword\x12\x11.user.Credentials\x1a\x16.google.protobuf.Empty\x12:\n" +
+	"\x19GetUserByEmailAndPassword\x12\x11.user.Credentials\x1a\n" +
+	".user.User\x126\n" +
 	"\x0eDeleteUserById\x12\f.user.UserId\x1a\x16.google.protobuf.EmptyB,Z*github.com/TranXuanPhong25/ecom/user/protob\x06proto3"
 
 var (
@@ -196,17 +206,17 @@ func file_proto_user_proto_rawDescGZIP() []byte {
 
 var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_user_proto_goTypes = []any{
-	(*EmailAndPasswordRequest)(nil),                  // 0: user.EmailAndPasswordRequest
-	(*CheckUserExistByEmailAndPasswordResponse)(nil), // 1: user.CheckUserExistByEmailAndPasswordResponse
+	(*Credentials)(nil),   // 0: user.Credentials
+	(*User)(nil),          // 1: user.User
 	(*UserId)(nil),        // 2: user.UserId
 	(*emptypb.Empty)(nil), // 3: google.protobuf.Empty
 }
 var file_proto_user_proto_depIdxs = []int32{
-	0, // 0: user.UserService.CreateUserWithEmailAndPassword:input_type -> user.EmailAndPasswordRequest
-	0, // 1: user.UserService.CheckUserExistByEmailAndPassword:input_type -> user.EmailAndPasswordRequest
+	0, // 0: user.UserService.CreateUserWithEmailAndPassword:input_type -> user.Credentials
+	0, // 1: user.UserService.GetUserByEmailAndPassword:input_type -> user.Credentials
 	2, // 2: user.UserService.DeleteUserById:input_type -> user.UserId
-	2, // 3: user.UserService.CreateUserWithEmailAndPassword:output_type -> user.UserId
-	1, // 4: user.UserService.CheckUserExistByEmailAndPassword:output_type -> user.CheckUserExistByEmailAndPasswordResponse
+	3, // 3: user.UserService.CreateUserWithEmailAndPassword:output_type -> google.protobuf.Empty
+	1, // 4: user.UserService.GetUserByEmailAndPassword:output_type -> user.User
 	3, // 5: user.UserService.DeleteUserById:output_type -> google.protobuf.Empty
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type

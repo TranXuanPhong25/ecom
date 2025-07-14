@@ -30,7 +30,7 @@ type UserService struct {
 //
 //}
 
-func (s *UserService) CreateUserWithEmailAndPassword(ctx context.Context, in *pb.EmailAndPasswordRequest) (*pb.UserId, error) {
+func (s *UserService) CreateUserWithEmailAndPassword(ctx context.Context, in *pb.Credentials) (*emptypb.Empty, error) {
 	newUser := models.User{
 		Email:    in.Email,
 		Password: in.Password,
@@ -39,10 +39,10 @@ func (s *UserService) CreateUserWithEmailAndPassword(ctx context.Context, in *pb
 	if err != nil {
 		return nil, err
 	}
-	return &pb.UserId{UserId: newUser.ID.String()}, nil
+	return &emptypb.Empty{}, nil
 }
 
-func (s *UserService) CheckUserExistByEmailAndPassword(ctx context.Context, in *pb.EmailAndPasswordRequest) (*pb.CheckUserExistByEmailAndPasswordResponse, error) {
+func (s *UserService) GetUserByEmailAndPassword(ctx context.Context, in *pb.Credentials) (*pb.User, error) {
 	var targetUser models.User
 	err := repositories.DB.
 		Where("email = ? AND password = ?", in.Email, in.Password).
@@ -50,12 +50,15 @@ func (s *UserService) CheckUserExistByEmailAndPassword(ctx context.Context, in *
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return &pb.CheckUserExistByEmailAndPasswordResponse{IsExist: false}, nil
+			return nil, nil
 		}
 		return nil, err
 	}
 
-	return &pb.CheckUserExistByEmailAndPasswordResponse{IsExist: true}, nil
+	return &pb.User{
+		UserId: targetUser.ID.String(),
+		Email:  in.Email,
+	}, nil
 }
 
 func (s *UserService) DeleteUserById(ctx context.Context, in *pb.UserId) (*emptypb.Empty, error) {

@@ -41,7 +41,7 @@ func CloseJWTServiceConnection() {
 		}
 	}
 }
-func createToken(userId string) (string, error) {
+func CreateToken(userId string) (string, error) {
 	if jwtServiceClient == nil {
 		return "", fmt.Errorf("jwt service client not initialized")
 	}

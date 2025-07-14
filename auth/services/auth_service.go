@@ -1,36 +1,56 @@
 package services
 
 import (
+	"fmt"
 	"github.com/TranXuanPhong25/ecom/auth/models"
-	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
-	"net/mail"
 )
 
-func IsValidEmailFormat(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
-}
+// var (
+//
+//	EmailRegex = `/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm`
+//
+// )
+//
+//	func IsValidEmailFormat(email string) bool {
+//		matched, err := regexp.MatchString(EmailRegex, email)
+//		if err != nil {
+//			return false
+//		}
+//		return matched
+//	}
 func LoginWithEmailAndPassword(email, password string) (models.LoginResponse, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	user, err := GetUserByEmailAndPassword(email, password)
 	if err != nil {
 		return models.LoginResponse{}, err
 	}
-	userInfo, err := createUserWithEmailAndPassword(email, string(hashedPassword))
+	if user == nil {
+		return models.LoginResponse{}, fmt.Errorf("user not found")
+	}
+
+	token, err := CreateToken(user.UserId)
 	if err != nil {
 		return models.LoginResponse{}, err
 	}
 
-	token, err := createToken(userInfo.UserId)
-	if err != nil {
-		return models.LoginResponse{}, err
-	}
 	return models.LoginResponse{
 		Token: token,
-		User:  userInfo,
+		User: models.UserInfo{
+			UserId: user.UserId,
+			Email:  email,
+		},
 	}, nil
 }
 
-func RegisterWithEmailAndPassword(c echo.Context) error {
+func RegisterWithEmailAndPassword(email, password string) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	err = CreateUserWithEmailAndPassword(email, string(hashedPassword))
+	if err != nil {
+		return err
+	}
 	return nil
 }

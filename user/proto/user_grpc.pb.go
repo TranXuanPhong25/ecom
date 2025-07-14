@@ -23,17 +23,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_CreateUserWithEmailAndPassword_FullMethodName   = "/user.UserService/CreateUserWithEmailAndPassword"
-	UserService_CheckUserExistByEmailAndPassword_FullMethodName = "/user.UserService/CheckUserExistByEmailAndPassword"
-	UserService_DeleteUserById_FullMethodName                   = "/user.UserService/DeleteUserById"
+	UserService_CreateUserWithEmailAndPassword_FullMethodName = "/user.UserService/CreateUserWithEmailAndPassword"
+	UserService_GetUserByEmailAndPassword_FullMethodName      = "/user.UserService/GetUserByEmailAndPassword"
+	UserService_DeleteUserById_FullMethodName                 = "/user.UserService/DeleteUserById"
 )
 
 // UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateUserWithEmailAndPassword(ctx context.Context, in *EmailAndPasswordRequest, opts ...grpc.CallOption) (*UserId, error)
-	CheckUserExistByEmailAndPassword(ctx context.Context, in *EmailAndPasswordRequest, opts ...grpc.CallOption) (*CheckUserExistByEmailAndPasswordResponse, error)
+	CreateUserWithEmailAndPassword(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetUserByEmailAndPassword(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*User, error)
 	DeleteUserById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -45,9 +45,9 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateUserWithEmailAndPassword(ctx context.Context, in *EmailAndPasswordRequest, opts ...grpc.CallOption) (*UserId, error) {
+func (c *userServiceClient) CreateUserWithEmailAndPassword(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UserId)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, UserService_CreateUserWithEmailAndPassword_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -55,10 +55,10 @@ func (c *userServiceClient) CreateUserWithEmailAndPassword(ctx context.Context, 
 	return out, nil
 }
 
-func (c *userServiceClient) CheckUserExistByEmailAndPassword(ctx context.Context, in *EmailAndPasswordRequest, opts ...grpc.CallOption) (*CheckUserExistByEmailAndPasswordResponse, error) {
+func (c *userServiceClient) GetUserByEmailAndPassword(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*User, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CheckUserExistByEmailAndPasswordResponse)
-	err := c.cc.Invoke(ctx, UserService_CheckUserExistByEmailAndPassword_FullMethodName, in, out, cOpts...)
+	out := new(User)
+	err := c.cc.Invoke(ctx, UserService_GetUserByEmailAndPassword_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +79,8 @@ func (c *userServiceClient) DeleteUserById(ctx context.Context, in *UserId, opts
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
 type UserServiceServer interface {
-	CreateUserWithEmailAndPassword(context.Context, *EmailAndPasswordRequest) (*UserId, error)
-	CheckUserExistByEmailAndPassword(context.Context, *EmailAndPasswordRequest) (*CheckUserExistByEmailAndPasswordResponse, error)
+	CreateUserWithEmailAndPassword(context.Context, *Credentials) (*emptypb.Empty, error)
+	GetUserByEmailAndPassword(context.Context, *Credentials) (*User, error)
 	DeleteUserById(context.Context, *UserId) (*emptypb.Empty, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -92,11 +92,11 @@ type UserServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserServiceServer struct{}
 
-func (UnimplementedUserServiceServer) CreateUserWithEmailAndPassword(context.Context, *EmailAndPasswordRequest) (*UserId, error) {
+func (UnimplementedUserServiceServer) CreateUserWithEmailAndPassword(context.Context, *Credentials) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUserWithEmailAndPassword not implemented")
 }
-func (UnimplementedUserServiceServer) CheckUserExistByEmailAndPassword(context.Context, *EmailAndPasswordRequest) (*CheckUserExistByEmailAndPasswordResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckUserExistByEmailAndPassword not implemented")
+func (UnimplementedUserServiceServer) GetUserByEmailAndPassword(context.Context, *Credentials) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmailAndPassword not implemented")
 }
 func (UnimplementedUserServiceServer) DeleteUserById(context.Context, *UserId) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserById not implemented")
@@ -123,7 +123,7 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 }
 
 func _UserService_CreateUserWithEmailAndPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmailAndPasswordRequest)
+	in := new(Credentials)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -135,25 +135,25 @@ func _UserService_CreateUserWithEmailAndPassword_Handler(srv interface{}, ctx co
 		FullMethod: UserService_CreateUserWithEmailAndPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateUserWithEmailAndPassword(ctx, req.(*EmailAndPasswordRequest))
+		return srv.(UserServiceServer).CreateUserWithEmailAndPassword(ctx, req.(*Credentials))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_CheckUserExistByEmailAndPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmailAndPasswordRequest)
+func _UserService_GetUserByEmailAndPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Credentials)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CheckUserExistByEmailAndPassword(ctx, in)
+		return srv.(UserServiceServer).GetUserByEmailAndPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_CheckUserExistByEmailAndPassword_FullMethodName,
+		FullMethod: UserService_GetUserByEmailAndPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CheckUserExistByEmailAndPassword(ctx, req.(*EmailAndPasswordRequest))
+		return srv.(UserServiceServer).GetUserByEmailAndPassword(ctx, req.(*Credentials))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -188,8 +188,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_CreateUserWithEmailAndPassword_Handler,
 		},
 		{
-			MethodName: "CheckUserExistByEmailAndPassword",
-			Handler:    _UserService_CheckUserExistByEmailAndPassword_Handler,
+			MethodName: "GetUserByEmailAndPassword",
+			Handler:    _UserService_GetUserByEmailAndPassword_Handler,
 		},
 		{
 			MethodName: "DeleteUserById",

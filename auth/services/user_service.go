@@ -44,40 +44,40 @@ func CloseUserServiceConnection() {
 		}
 	}
 }
-func createUserWithEmailAndPassword(email, password string) (models.UserInfo, error) {
+func CreateUserWithEmailAndPassword(email, password string) error {
 	if userServiceClient == nil {
-		return models.UserInfo{}, fmt.Errorf("user service client not initialized")
+		return fmt.Errorf("user service client not initialized")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
 	defer cancel()
 
-	r, err := userServiceClient.CreateUserWithEmailAndPassword(ctx, &pb.EmailAndPasswordRequest{Email: email, Password: password})
+	_, err := userServiceClient.CreateUserWithEmailAndPassword(ctx, &pb.Credentials{Email: email, Password: password})
 	if err != nil {
 		log.Infof("could not create user : %v", err)
-		return models.UserInfo{}, err
+		return err
 	}
 
-	return models.UserInfo{UserId: r.GetUserId(), Email: email}, nil
+	return nil
 }
 
-func CheckUserExistByEmailAndPassword(email, password string) (bool, error) {
+func GetUserByEmailAndPassword(email, password string) (*models.UserInfo, error) {
 	if userServiceClient == nil {
-		return false, fmt.Errorf("user service client not initialized")
+		return &models.UserInfo{}, fmt.Errorf("user service client not initialized")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(5000)*time.Millisecond)
 	defer cancel()
 
-	r, err := userServiceClient.CheckUserExistByEmailAndPassword(ctx, &pb.EmailAndPasswordRequest{
+	r, err := userServiceClient.GetUserByEmailAndPassword(ctx, &pb.Credentials{
 		Email:    email,
 		Password: password,
 	})
 
 	if err != nil {
 		log.Infof("could not validate user: %v", err)
-		return false, err
+		return &models.UserInfo{}, err
 	}
 
-	return r.GetIsExist(), nil
+	return &models.UserInfo{UserId: r.UserId, Email: email}, nil
 }
