@@ -1,4 +1,4 @@
-module github.com/TranXuanPhong25/ecom/userss
+module github.com/TranXuanPhong25/ecom/users
 
 go 1.23.0
 
