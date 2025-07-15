@@ -19,8 +19,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserService struct {
-	pb.UnimplementedUserServiceServer
+type UsersService struct {
+	pb.UnimplementedUsersServiceServer
 }
 
 //func LoadEnv() {
@@ -35,7 +35,7 @@ type UserService struct {
 //
 //}
 
-func (s *UserService) CreateUserWithEmailAndPassword(_ context.Context, in *pb.Credentials) (*emptypb.Empty, error) {
+func (s *UsersService) CreateUserWithEmailAndPassword(_ context.Context, in *pb.Credentials) (*emptypb.Empty, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (s *UserService) CreateUserWithEmailAndPassword(_ context.Context, in *pb.C
 	return &emptypb.Empty{}, nil
 }
 
-func (s *UserService) GetUserByEmailAndPassword(_ context.Context, in *pb.Credentials) (*pb.User, error) {
+func (s *UsersService) GetUserByEmailAndPassword(_ context.Context, in *pb.Credentials) (*pb.User, error) {
 
 	var user models.User
 	err := repositories.DB.
@@ -81,7 +81,7 @@ func (s *UserService) GetUserByEmailAndPassword(_ context.Context, in *pb.Creden
 	}, nil
 }
 
-func (s *UserService) DeleteUserById(_ context.Context, in *pb.UserId) (*emptypb.Empty, error) {
+func (s *UsersService) DeleteUserById(_ context.Context, in *pb.UserId) (*emptypb.Empty, error) {
 	uid, err := uuid.Parse(in.UserId)
 	if err != nil {
 		return nil, fmt.Errorf("invalid uuid: %w", err)
@@ -96,6 +96,6 @@ func (s *UserService) DeleteUserById(_ context.Context, in *pb.UserId) (*emptypb
 }
 
 func RegisterService(server *grpc.Server) {
-	pb.RegisterUserServiceServer(server, &UserService{})
-	log.Info("UserService registered")
+	pb.RegisterUsersServiceServer(server, &UsersService{})
+	log.Info("UsersService registered")
 }

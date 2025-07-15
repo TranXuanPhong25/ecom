@@ -14,12 +14,12 @@ import (
 )
 
 var (
-	userServiceClient pb.UserServiceClient
+	userServiceClient pb.UsersServiceClient
 	userServiceConn   *grpc.ClientConn
 	userOnce          sync.Once
 )
 
-func InitUserServiceClient(addr string) {
+func InitUsersServiceClient(addr string) {
 	userOnce.Do(func() {
 		var opts []grpc.DialOption
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -30,12 +30,12 @@ func InitUserServiceClient(addr string) {
 			log.Errorf(fmt.Sprintf("failed to dial: %v", err))
 		}
 
-		userServiceClient = pb.NewUserServiceClient(userServiceConn)
+		userServiceClient = pb.NewUsersServiceClient(userServiceConn)
 		log.Infof("Successfully connected to user service at %s", addr)
 
 	})
 }
-func CloseUserServiceConnection() {
+func CloseUsersServiceConnection() {
 	if userServiceConn != nil {
 		if err := userServiceConn.Close(); err != nil {
 			log.Errorf("Error closing user service connection: %v", err)
