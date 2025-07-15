@@ -1,30 +1,27 @@
 
 volumes:
   kong_db_data: {}  # Named volume to persist Postgres data across container restarts
-  postgres_product_review_data: {}  # Named volume for product review Postgres data
-  postgres_product_category_data: {}  # Named volume for product category Postgres data
-  postgres_user_data: {}  # Named volume for user Postgres data
+  postgres_product_reviews_data: {}  # Named volume for product review Postgres data
+  postgres_product_categories_data: {}  # Named volume for product category Postgres data
+  postgres_users_data: {}  # Named volume for user Postgres data
   auth_redis_data: {}  # Named volume for Redis data used by auth service
+  prometheus_data: {}  # Named volume for Prometheus data persistence
+  
 networks:
   backend:
     driver: bridge
   kong-net:      # Custom bridge network for isolated Kong and Postgres communication
     driver: bridge
-# Common environment variables used by Kong services (bootstrap and CP)
-x-kong-config: &kong-env
-  KONG_DATABASE: postgres             # Use Postgres as the backing database
-  KONG_PG_HOST: kong-database      # Hostname of the Postgres service
-  KONG_PG_DATABASE: kong              # Name of the database to connect to
-  KONG_PG_USER: kong                  # Database username
-  KONG_PG_PASSWORD: kong              # Database password
-
 services:
-  jaeger:
-    image: jaegertracing/all-in-one
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     ports:
-      - "16686:16686"  # UI
-      - "6831:6831/udp" # Agent
-      - "14268:14268"  # Collector HTTP
+      - "9090:9090"
     networks:
       - backend
       - kong-net
@@ -106,10 +103,10 @@ services:
     networks:
       - kong-net
       - backend
-  postgres-product-review:
+  postgres-product-reviews:
     image: postgres:15-alpine
     volumes:
-      - postgres_product_review_data:/var/lib/postgresql/data
+      - postgres_product_reviews_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -118,10 +115,10 @@ services:
       - "5433:5432"
     networks:
       - backend
-  postgres-product-category:
+  postgres-product-categories:
     image: postgres:15-alpine
     volumes:
-      - postgres_product_category_data:/var/lib/postgresql/data
+      - postgres_product_categories_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -130,10 +127,10 @@ services:
       - "5434:5432"
     networks:
       - backend
-  postgres-user:
+  postgres-users:
     image: postgres:15-alpine
     volumes:
-      - postgres_user_data:/var/lib/postgresql/data
+      - postgres_users_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -142,38 +139,21 @@ services:
       - "5435:5432"
     networks:
       - backend
-  product-review:
+  product-reviews-service:
+    container_name: product-reviews-service
     build:
-      context: ./product-review
+      context: ./product-reviews
     restart: on-failure
     ports:
       - "8200:8200"
     depends_on:
-      - postgres-product-review
+      - postgres-product-reviews
     environment:
-      DB_HOST: postgres-product-review
+      DB_HOST: postgres-product-reviews
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: mydatabase
       DB_PORT: 5432
-    networks:
-      - backend
-  product-category:
-    build:
-      context: ./product-category
-      target: dev
-    ports:
-      - "8097:8097"
-    depends_on:
-      - postgres-product-category
-    environment:
-      DB_HOST: postgres-product-category
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: mydatabase
-      DB_PORT: 5432
-    volumes:
-        - ./product-category:/app
     networks:
       - backend
   auth-redis:
@@ -188,15 +168,34 @@ services:
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     networks:
       - backend
-  auth:
-    container_name: auth
+  product-categories-service:
+    container_name: product-categories-service
+    build:
+      context: ./product-categories
+      target: dev
+    ports:
+      - "8097:8097"
+    depends_on:
+      - postgres-product-categories
+    environment:
+      DB_HOST: postgres-product-categories
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+        - ./product-categories:/app
+    networks:
+      - backend
+  auth-service:
+    container_name: auth-service
     build:
       context: ./auth
       dockerfile: Dockerfile.dev
     ports:
       - "8202:8202"
     depends_on:
-      - user
+      - users-service
       - jwt-service
       - auth-redis
     environment:
@@ -206,25 +205,26 @@ services:
       - ./auth:/app
     networks:
       - backend
-  user:
-    container_name: user
+      - kong-net
+  users-service:
+    container_name: users-service
     # image: cosmtrek/air
-    working_dir: /app
+    # working_dir: /app
 
     build:
-      context: ./user
+      context: ./users
       dockerfile: Dockerfile.dev
     ports:
       - "50052:50052"
     depends_on:
-      - postgres-user
+      - postgres-users
     environment:
-      DB_HOST: postgres-user
+      DB_HOST: postgres-users
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: mydatabase
       DB_PORT: 5432
     volumes:
-      - ./user:/app
+      - ./users:/app
     networks:
       - backend

@@ -9,20 +9,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>account</module>
-        <module>analytic</module>
-        <module>customer</module>
-        <module>message</module>
-        <module>notification</module>
-        <module>product-category</module>
-        <module>order</module>
-        <module>payment</module>
-        <module>product</module>
-        <module>search</module>
-        <module>shop</module>
-        <module>suggestion</module>
-        <module>user</module>
-        <module>voucher</module>
-
+        <module>product-categories</module>
     </modules>
 </project>

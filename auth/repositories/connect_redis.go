@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"context"
 	"github.com/labstack/gommon/log"
 	"github.com/redis/go-redis/v9"
 	"os"
@@ -21,16 +20,6 @@ func ConnectRedis() {
 		Password: redisPassword, // no password set
 		DB:       0,             // use default DB
 	})
-}
-
-func TestRedis() {
-	err := rdb.Ping(context.Background()).Err()
-	if err != nil {
-		log.Print("Error connecting to redis\n")
-	} else {
-		log.Print("Connected to redis\n")
-	}
-
 }
 
 func CloseRedisConnection() {

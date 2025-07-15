@@ -5,6 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/TranXuanPhong25/ecom/auth/middlewares"
 	"github.com/TranXuanPhong25/ecom/auth/repositories"
 	"github.com/TranXuanPhong25/ecom/auth/routes"
 	"github.com/TranXuanPhong25/ecom/auth/services"
@@ -18,14 +19,14 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-
+	e.Use(middlewares.PrometheusMiddleware())
 	repositories.ConnectRedis()
-	repositories.TestRedis()
 
 	services.InitJWTServiceClient("jwt-service:50051")
-	services.InitUserServiceClient("user:50052")
+	services.InitUserServiceClient("users-service:50052")
 
 	routes.AuthRoute(e)
+	routes.MetricRoute(e)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)

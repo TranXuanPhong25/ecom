@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/TranXuanPhong25/ecom/auth/models"
-	pb "github.com/TranXuanPhong25/ecom/user/proto"
+	pb "github.com/TranXuanPhong25/ecom/users/proto"
 	"github.com/labstack/gommon/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

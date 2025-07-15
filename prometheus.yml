@@ -1,0 +1,59 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          group: 'monitoring'
+
+  - job_name: 'kong'
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['kong:8001']
+        labels:
+          group: 'api-gateway'
+
+  - job_name: 'auth-service'
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['auth-service:8202']
+        labels:
+          group: 'services'
+
+  # - job_name: 'user-service'
+  #   scrape_interval: 5s
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['user:50052']
+  #       labels:
+  #         group: 'services'
+
+  # - job_name: 'jwt-service'
+  #   scrape_interval: 5s
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['jwt-service:50051']
+  #       labels:
+  #         group: 'services'
+
+  # - job_name: 'product-category'
+  #   scrape_interval: 5s
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['product-category:8097']
+  #       labels:
+  #         group: 'services'
+
+  # - job_name: 'product-review'
+  #   scrape_interval: 5s
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['product-review:8200']
+  #       labels:
+  #         group: 'services'
