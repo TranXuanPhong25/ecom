@@ -1,8 +1,9 @@
 FROM maven:3.9-eclipse-temurin-21-alpine AS deps
 
 WORKDIR /app
+COPY pom.xml .
 
-RUN mvn go-offline:resolve-dependencies
+RUN mvn de.qaware.maven:go-offline-maven-plugin:resolve-dependencies -B
 
 FROM maven:3.9-eclipse-temurin-21 AS  build
 WORKDIR /app

@@ -1,7 +1,10 @@
 
 volumes:
   kong_db_data: {}  # Named volume to persist Postgres data across container restarts
-
+  postgres_product_review_data: {}  # Named volume for product review Postgres data
+  postgres_product_category_data: {}  # Named volume for product category Postgres data
+  postgres_user_data: {}  # Named volume for user Postgres data
+  auth_redis_data: {}  # Named volume for Redis data used by auth service
 networks:
   backend:
     driver: bridge
@@ -16,8 +19,17 @@ x-kong-config: &kong-env
   KONG_PG_PASSWORD: kong              # Database password
 
 services:
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - "16686:16686"  # UI
+      - "6831:6831/udp" # Agent
+      - "14268:14268"  # Collector HTTP
+    networks:
+      - backend
+      - kong-net
   kong-db:
-    image: postgres:15-alpine
+    image: postgres:13
     container_name: kong-db
     restart: unless-stopped
     volumes:
@@ -57,7 +69,7 @@ services:
       kong-migrations:
         condition: service_completed_successfully
     volumes:
-      - ./kong/plugins:/usr/local/kong/plugins
+      - ./kong/plugins/bin:/usr/local/kong/plugins/bin
       - ./kong/conf/kong.conf:/etc/kong/kong.conf
     restart: unless-stopped
     environment:
@@ -80,10 +92,10 @@ services:
       - backend
       - kong-net
   jwt-service:
-    image: cosmtrek/air
     working_dir: /app
     build:
       context: ./jwt-service
+      dockerfile: Dockerfile.dev
 
     container_name: jwt-service
     volumes:
@@ -96,6 +108,8 @@ services:
       - backend
   postgres-product-review:
     image: postgres:15-alpine
+    volumes:
+      - postgres_product_review_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -106,6 +120,8 @@ services:
       - backend
   postgres-product-category:
     image: postgres:15-alpine
+    volumes:
+      - postgres_product_category_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -116,6 +132,8 @@ services:
       - backend
   postgres-user:
     image: postgres:15-alpine
+    volumes:
+      - postgres_user_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -166,15 +184,15 @@ services:
       - "6379:6379"
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - auth_redis_data:/data
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     networks:
       - backend
   auth:
     container_name: auth
-    working_dir: /app
-    image: cosmtrek/air
     build:
       context: ./auth
+      dockerfile: Dockerfile.dev
     ports:
       - "8202:8202"
     depends_on:
@@ -190,10 +208,12 @@ services:
       - backend
   user:
     container_name: user
-    image: cosmtrek/air
+    # image: cosmtrek/air
     working_dir: /app
+
     build:
       context: ./user
+      dockerfile: Dockerfile.dev
     ports:
       - "50052:50052"
     depends_on:

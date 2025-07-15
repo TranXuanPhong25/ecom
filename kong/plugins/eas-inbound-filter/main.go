@@ -9,10 +9,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"os"
-	"os/signal"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/Kong/go-pdk"
@@ -24,11 +21,7 @@ import (
 )
 
 func main() {
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	server.StartServer(New, Version, Priority)
-	<-quit
-	close()
 }
 
 var (
@@ -61,7 +54,7 @@ func initClient(addr string) pb.JWTServiceClient {
 
 		conn, err := grpc.NewClient(addr, opts...)
 		if err != nil {
-			panic(fmt.Sprintf("failed to dial: %v", err))
+			fmt.Printf("failed to dial: %v", err)
 		}
 
 		client = pb.NewJWTServiceClient(conn)
@@ -135,8 +128,9 @@ func validateToken(token string, kong *pdk.PDK) {
 }
 
 // Thêm hàm này để clean up kết nối khi plugin bị hủy
-func close() {
+func (conf Config) Close() error {
 	if conn != nil {
-		conn.Close()
+		return conn.Close()
 	}
+	return nil
 }
