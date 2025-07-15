@@ -14,45 +14,45 @@ import (
 )
 
 var (
-	userServiceClient pb.UsersServiceClient
-	userServiceConn   *grpc.ClientConn
-	userOnce          sync.Once
+	usersServiceClient pb.UsersServiceClient
+	usersServiceConn   *grpc.ClientConn
+	usersOnce          sync.Once
 )
 
 func InitUsersServiceClient(addr string) {
-	userOnce.Do(func() {
+	usersOnce.Do(func() {
 		var opts []grpc.DialOption
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 		var err error
-		userServiceConn, err = grpc.NewClient(addr, opts...)
+		usersServiceConn, err = grpc.NewClient(addr, opts...)
 		if err != nil {
 			log.Errorf(fmt.Sprintf("failed to dial: %v", err))
 		}
 
-		userServiceClient = pb.NewUsersServiceClient(userServiceConn)
-		log.Infof("Successfully connected to user service at %s", addr)
+		usersServiceClient = pb.NewUsersServiceClient(usersServiceConn)
+		log.Infof("Successfully connected to users service at %s", addr)
 
 	})
 }
 func CloseUsersServiceConnection() {
-	if userServiceConn != nil {
-		if err := userServiceConn.Close(); err != nil {
-			log.Errorf("Error closing user service connection: %v", err)
+	if usersServiceConn != nil {
+		if err := usersServiceConn.Close(); err != nil {
+			log.Errorf("Error closing users service connection: %v", err)
 		} else {
 			log.Info("User service connection closed successfully")
 		}
 	}
 }
 func CreateUserWithEmailAndPassword(email, password string) error {
-	if userServiceClient == nil {
-		return fmt.Errorf("user service client not initialized")
+	if usersServiceClient == nil {
+		return fmt.Errorf("users service client not initialized")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
 	defer cancel()
 
-	_, err := userServiceClient.CreateUserWithEmailAndPassword(ctx, &pb.Credentials{Email: email, Password: password})
+	_, err := usersServiceClient.CreateUserWithEmailAndPassword(ctx, &pb.Credentials{Email: email, Password: password})
 	if err != nil {
 		return err
 	}
@@ -61,14 +61,14 @@ func CreateUserWithEmailAndPassword(email, password string) error {
 }
 
 func GetUserByEmailAndPassword(email, password string) (*models.UserInfo, error) {
-	if userServiceClient == nil {
-		return &models.UserInfo{}, fmt.Errorf("user service client not initialized")
+	if usersServiceClient == nil {
+		return &models.UserInfo{}, fmt.Errorf("users service client not initialized")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(5000)*time.Millisecond)
 	defer cancel()
 
-	r, err := userServiceClient.GetUserByEmailAndPassword(ctx, &pb.Credentials{
+	r, err := usersServiceClient.GetUserByEmailAndPassword(ctx, &pb.Credentials{
 		Email:    email,
 		Password: password,
 	})

@@ -1,7 +1,11 @@
 github.com/TranXuanPhong25/ecom/jwt-service v0.0.0-20250715104454-a0c2225eb5ad h1:kYPpSS8tJ9/FIDM6SaQMnocZM+uD4QiW7J7QIo7X3Mk=
 github.com/TranXuanPhong25/ecom/jwt-service v0.0.0-20250715104454-a0c2225eb5ad/go.mod h1:FTn7jj+0gh0I+cQ6N0Ph/f2w4067Lhk/j2kbGLrjxtQ=
+github.com/TranXuanPhong25/ecom/jwt-service v0.0.0-20250715105634-81bd693b851c h1:31pEIG40b49tXafyEenlJTuI6tjCRPfD4ofBRZzmyac=
+github.com/TranXuanPhong25/ecom/jwt-service v0.0.0-20250715105634-81bd693b851c/go.mod h1:FTn7jj+0gh0I+cQ6N0Ph/f2w4067Lhk/j2kbGLrjxtQ=
 github.com/TranXuanPhong25/ecom/users v0.0.0-20250715104454-a0c2225eb5ad h1:qGIBuYIRcwfsYBBgoc3iCq+tRaGoIOR9NT7uj+TgSgY=
 github.com/TranXuanPhong25/ecom/users v0.0.0-20250715104454-a0c2225eb5ad/go.mod h1:xENdemSAQo/+Uhk6komfRB+K9BEtzVru4yqucCnb0S0=
+github.com/TranXuanPhong25/ecom/users v0.0.0-20250715105634-81bd693b851c h1:tczmt01aFyObH5/Eep4mzUT+8Dkx7ynne/9MOZKnkM0=
+github.com/TranXuanPhong25/ecom/users v0.0.0-20250715105634-81bd693b851c/go.mod h1:Tp5vG6N/2sHw8B3AEEXuh/rSpoNpgo+45U3veq49rTw=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=

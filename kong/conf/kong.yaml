@@ -21,7 +21,7 @@ services:
     regex_priority: 0
     request_buffering: true
     response_buffering: true
-    strip_path: false
+    strip_path: true
   write_timeout: 60000
 - name: auth_service
   connect_timeout: 60000
@@ -44,7 +44,7 @@ services:
     regex_priority: 0
     request_buffering: true
     response_buffering: true
-    strip_path: false
+    strip_path: true
   write_timeout: 60000
 plugins:
   - name: eas-inbound-filter

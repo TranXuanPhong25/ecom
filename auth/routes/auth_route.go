@@ -6,6 +6,6 @@ import (
 )
 
 func AuthRoute(e *echo.Echo) {
-	e.POST("/api/auth/login", controllers.LoginWithEmailAndPassword)
-	e.POST("/api/auth/register", controllers.RegisterWithEmailAndPassword)
+	e.POST("/login", controllers.LoginWithEmailAndPassword)
+	e.POST("/register", controllers.RegisterWithEmailAndPassword)
 }

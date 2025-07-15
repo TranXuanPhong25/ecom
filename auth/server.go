@@ -23,7 +23,7 @@ func main() {
 	repositories.ConnectRedis()
 
 	services.InitJWTServiceClient("jwt-service:50051")
-	services.InitUserServiceClient("users-service:50052")
+	services.InitUsersServiceClient("users-service:50052")
 
 	routes.AuthRoute(e)
 	routes.MetricRoute(e)
@@ -34,7 +34,7 @@ func main() {
 	e.Logger.Fatal(e.Start(":8202"))
 
 	<-quit
-	services.CloseUserServiceConnection()
+	services.CloseUsersServiceConnection()
 	services.CloseJWTServiceConnection()
 	repositories.CloseRedisConnection()
 

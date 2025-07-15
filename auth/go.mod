@@ -3,8 +3,8 @@ module github.com/TranXuanPhong25/ecom/auth
 go 1.23.10
 
 require (
-	github.com/TranXuanPhong25/ecom/jwt-service v0.0.0-20250715104454-a0c2225eb5ad
-	github.com/TranXuanPhong25/ecom/users v0.0.0-20250715104454-a0c2225eb5ad
+	github.com/TranXuanPhong25/ecom/jwt-service v0.0.0-20250715105634-81bd693b851c
+	github.com/TranXuanPhong25/ecom/users v0.0.0-20250715105634-81bd693b851c
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/labstack/gommon v0.4.2
 	github.com/prometheus/client_golang v1.22.0
