@@ -29,7 +29,7 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
+r
 ### VS Code ###
 .vscode/
 .env
@@ -39,3 +39,4 @@ temp
 /jwt-service/tmp/air.log
 /users/tmp/main
 auth/tmp/main
+kong/conf/decksync.sh

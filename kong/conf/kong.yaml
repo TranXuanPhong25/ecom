@@ -32,6 +32,19 @@ services:
   read_timeout: 60000
   retries: 5
   routes:  
+  - name: auth_user_route
+    https_redirect_status_code: 301
+    path_handling: v0
+    paths:
+    - /api/auth/me
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
   - name: auth_route
     https_redirect_status_code: 301
     path_handling: v0
@@ -44,11 +57,15 @@ services:
     regex_priority: 0
     request_buffering: true
     response_buffering: true
-    strip_path: true
+    strip_path: false
   write_timeout: 60000
 plugins:
   - name: eas-inbound-filter
     config: { }
+    route: auth_user_route
+  - name: eas-inbound-filter
+    config: { }
+    route: product_categories_route
   - name: prometheus
     config: 
       status_code_metrics: true
@@ -60,6 +77,7 @@ plugins:
     config:
       origins:
       - "http://localhost:3000"
+      - "http://localhost:3001"
       - "http://localhost:5173"
       methods:
       - GET
@@ -81,7 +99,8 @@ plugins:
     config:
       origins:
       - "http://localhost:3000"
-      # - "http://localhost:5173"
+      - "http://localhost:3001"
+      - "http://localhost:5173"
       methods:
       - GET
       - POST
