@@ -33,7 +33,8 @@ func LoginWithEmailAndPassword(c echo.Context) error {
 			"error": err.Error(),
 		})
 	}
-	c.Response().Header().Set("Set-Cookie", fmt.Sprintf("access_token=%s; Path=/; HttpOnly; SameSite=Strict", response.Token))
+	c.Response().Header().Set("Set-Cookie", fmt.Sprintf("access_token=%s; Path=/; HttpOnly; SameSite=Lax", response.Token))
+	c.Response().Header().Set("Access-Control-Allow-Credentials", "true")
 	return c.JSON(http.StatusOK, response)
 }
 
@@ -81,6 +82,11 @@ func GetCurrentUser(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return c.JSON(http.StatusOK, &models.LoginResponse{
+		User: models.UserInfo{
+			UserId: user.UserId,
+			Email:  user.Email,
+		},
+	})
 
 }

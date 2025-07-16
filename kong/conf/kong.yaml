@@ -74,7 +74,7 @@ plugins:
       - Content-Type
       - Content-Length
       - Authorization
-      # credentials: true
+      credentials: true
       max_age: 3600
   - name: cors
     service: auth_service
@@ -95,5 +95,5 @@ plugins:
       - Content-Type
       - Content-Length
       - Authorization
-      # credentials: true
+      credentials: true
       max_age: 3600
