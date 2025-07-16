@@ -94,6 +94,23 @@ func (s *UsersService) DeleteUserById(_ context.Context, in *pb.UserId) (*emptyp
 
 	return &emptypb.Empty{}, nil
 }
+func (s *UsersService) GetCurrentUser(_ context.Context, in *pb.UserId) (*pb.User, error) {
+	uid, err := uuid.Parse(in.UserId)
+	if err != nil {
+		return nil, fmt.Errorf("invalid uuid: %w", err)
+	}
+
+	user := &models.User{}
+	err = repositories.DB.First(&user, uid).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.User{
+		UserId: user.ID.String(),
+		Email:  user.Email,
+	}, nil
+}
 
 func RegisterService(server *grpc.Server) {
 	pb.RegisterUsersServiceServer(server, &UsersService{})

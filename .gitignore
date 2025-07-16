@@ -34,4 +34,7 @@ build/
 .vscode/
 .env
 # air go
-tmp
+temp
+/auth/tmp/air.log
+/jwt-service/tmp/air.log
+/users/tmp/main

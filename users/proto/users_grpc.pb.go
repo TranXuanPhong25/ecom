@@ -25,6 +25,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	UsersService_CreateUserWithEmailAndPassword_FullMethodName = "/users.UsersService/CreateUserWithEmailAndPassword"
 	UsersService_GetUserByEmailAndPassword_FullMethodName      = "/users.UsersService/GetUserByEmailAndPassword"
+	UsersService_GetCurrentUser_FullMethodName                 = "/users.UsersService/GetCurrentUser"
 	UsersService_DeleteUserById_FullMethodName                 = "/users.UsersService/DeleteUserById"
 )
 
@@ -34,6 +35,7 @@ const (
 type UsersServiceClient interface {
 	CreateUserWithEmailAndPassword(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetUserByEmailAndPassword(ctx context.Context, in *Credentials, opts ...grpc.CallOption) (*User, error)
+	GetCurrentUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*User, error)
 	DeleteUserById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -65,6 +67,16 @@ func (c *usersServiceClient) GetUserByEmailAndPassword(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *usersServiceClient) GetCurrentUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*User, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(User)
+	err := c.cc.Invoke(ctx, UsersService_GetCurrentUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *usersServiceClient) DeleteUserById(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -81,6 +93,7 @@ func (c *usersServiceClient) DeleteUserById(ctx context.Context, in *UserId, opt
 type UsersServiceServer interface {
 	CreateUserWithEmailAndPassword(context.Context, *Credentials) (*emptypb.Empty, error)
 	GetUserByEmailAndPassword(context.Context, *Credentials) (*User, error)
+	GetCurrentUser(context.Context, *UserId) (*User, error)
 	DeleteUserById(context.Context, *UserId) (*emptypb.Empty, error)
 	mustEmbedUnimplementedUsersServiceServer()
 }
@@ -97,6 +110,9 @@ func (UnimplementedUsersServiceServer) CreateUserWithEmailAndPassword(context.Co
 }
 func (UnimplementedUsersServiceServer) GetUserByEmailAndPassword(context.Context, *Credentials) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmailAndPassword not implemented")
+}
+func (UnimplementedUsersServiceServer) GetCurrentUser(context.Context, *UserId) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentUser not implemented")
 }
 func (UnimplementedUsersServiceServer) DeleteUserById(context.Context, *UserId) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserById not implemented")
@@ -158,6 +174,24 @@ func _UsersService_GetUserByEmailAndPassword_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UsersService_GetCurrentUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServiceServer).GetCurrentUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UsersService_GetCurrentUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServiceServer).GetCurrentUser(ctx, req.(*UserId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UsersService_DeleteUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserId)
 	if err := dec(in); err != nil {
@@ -190,6 +224,10 @@ var UsersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserByEmailAndPassword",
 			Handler:    _UsersService_GetUserByEmailAndPassword_Handler,
+		},
+		{
+			MethodName: "GetCurrentUser",
+			Handler:    _UsersService_GetCurrentUser_Handler,
 		},
 		{
 			MethodName: "DeleteUserById",

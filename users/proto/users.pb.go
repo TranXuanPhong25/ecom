@@ -185,10 +185,11 @@ const file_proto_users_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\"!\n" +
 	"\x06UserId\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId2\xd3\x01\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId2\x81\x02\n" +
 	"\fUsersService\x12L\n" +
 	"\x1eCreateUserWithEmailAndPassword\x12\x12.users.Credentials\x1a\x16.google.protobuf.Empty\x12<\n" +
-	"\x19GetUserByEmailAndPassword\x12\x12.users.Credentials\x1a\v.users.User\x127\n" +
+	"\x19GetUserByEmailAndPassword\x12\x12.users.Credentials\x1a\v.users.User\x12,\n" +
+	"\x0eGetCurrentUser\x12\r.users.UserId\x1a\v.users.User\x127\n" +
 	"\x0eDeleteUserById\x12\r.users.UserId\x1a\x16.google.protobuf.EmptyB-Z+github.com/TranXuanPhong25/ecom/users/protob\x06proto3"
 
 var (
@@ -213,12 +214,14 @@ var file_proto_users_proto_goTypes = []any{
 var file_proto_users_proto_depIdxs = []int32{
 	0, // 0: users.UsersService.CreateUserWithEmailAndPassword:input_type -> users.Credentials
 	0, // 1: users.UsersService.GetUserByEmailAndPassword:input_type -> users.Credentials
-	2, // 2: users.UsersService.DeleteUserById:input_type -> users.UserId
-	3, // 3: users.UsersService.CreateUserWithEmailAndPassword:output_type -> google.protobuf.Empty
-	1, // 4: users.UsersService.GetUserByEmailAndPassword:output_type -> users.User
-	3, // 5: users.UsersService.DeleteUserById:output_type -> google.protobuf.Empty
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	2, // 2: users.UsersService.GetCurrentUser:input_type -> users.UserId
+	2, // 3: users.UsersService.DeleteUserById:input_type -> users.UserId
+	3, // 4: users.UsersService.CreateUserWithEmailAndPassword:output_type -> google.protobuf.Empty
+	1, // 5: users.UsersService.GetUserByEmailAndPassword:output_type -> users.User
+	1, // 6: users.UsersService.GetCurrentUser:output_type -> users.User
+	3, // 7: users.UsersService.DeleteUserById:output_type -> google.protobuf.Empty
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
