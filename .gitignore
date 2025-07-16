@@ -38,3 +38,4 @@ temp
 /auth/tmp/air.log
 /jwt-service/tmp/air.log
 /users/tmp/main
+auth/tmp/main

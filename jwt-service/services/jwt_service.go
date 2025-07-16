@@ -3,9 +3,10 @@ package services
 import (
 	"context"
 	"encoding/base64"
-	"github.com/labstack/gommon/log"
 	"os"
 	"time"
+
+	"github.com/labstack/gommon/log"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"

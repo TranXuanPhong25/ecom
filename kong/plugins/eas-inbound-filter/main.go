@@ -125,6 +125,7 @@ func validateToken(token string, kong *pdk.PDK) {
 			"Content-Type": {"application/json"},
 		})
 	}
+	kong.ServiceRequest.SetHeader("X-User-Id", r.GetUserId())
 }
 
 // Thêm hàm này để clean up kết nối khi plugin bị hủy

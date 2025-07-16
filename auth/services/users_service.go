@@ -86,3 +86,24 @@ func GetUserByEmailAndPassword(email, password string) (*models.UserInfo, error)
 
 	return &models.UserInfo{UserId: r.GetUserId(), Email: r.GetEmail()}, nil
 }
+
+func GetUserById(id string) (*models.UserInfo, error) {
+	if usersServiceClient == nil {
+		return &models.UserInfo{}, fmt.Errorf("users service client not initialized")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(5000)*time.Millisecond)
+	defer cancel()
+
+	r, err := usersServiceClient.GetUserById(ctx, &pb.UserId{UserId: id})
+
+	if err != nil {
+		return &models.UserInfo{}, err
+	}
+
+	if r.GetUserId() == "" {
+		return &models.UserInfo{}, fmt.Errorf("user not found")
+	}
+
+	return &models.UserInfo{UserId: r.GetUserId(), Email: r.GetEmail()}, nil
+}

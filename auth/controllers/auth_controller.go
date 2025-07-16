@@ -66,3 +66,21 @@ func RegisterWithEmailAndPassword(c echo.Context) error {
 		"message": "Successfully registered",
 	})
 }
+
+func GetCurrentUser(c echo.Context) error {
+	userId := c.Request().Header.Get("X-User-Id")
+	if userId == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "No user id found",
+		})
+	}
+	user, err := services.GetCurrentUser(userId)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, user)
+
+}

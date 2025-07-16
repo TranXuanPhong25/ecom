@@ -33,3 +33,12 @@ func RegisterWithEmailAndPassword(email, password string) error {
 
 	return nil
 }
+
+func GetCurrentUser(userId string) (*models.UserInfo, error) {
+	user, err := GetUserById(userId)
+	if err != nil {
+		return &models.UserInfo{}, err
+	}
+
+	return user, nil
+}
