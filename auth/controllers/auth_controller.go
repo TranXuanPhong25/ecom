@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -32,6 +33,7 @@ func LoginWithEmailAndPassword(c echo.Context) error {
 			"error": err.Error(),
 		})
 	}
+	c.Response().Header().Set("Set-Cookie", fmt.Sprintf("access_token=%s; Path=/; HttpOnly; SameSite=Strict", response.Token))
 	return c.JSON(http.StatusOK, response)
 }
 

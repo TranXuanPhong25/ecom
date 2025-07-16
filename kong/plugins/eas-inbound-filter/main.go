@@ -98,7 +98,7 @@ func getTokenFromAuthorizationHeader(authorizationHeader string) string {
 }
 
 func getTokenFromCookieHeader(cookieHeader string) string {
-	tokenField := []string{"token", "Token", "TOKEN"}
+	tokenField := []string{"access_token", "AccessToken", "ACCESS_TOKEN"}
 	// Parse the cookie header to extract the token
 	cookieParts := bytes.Split([]byte(cookieHeader), []byte("; "))
 	for _, part := range cookieParts {
