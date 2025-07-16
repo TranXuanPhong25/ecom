@@ -120,7 +120,7 @@ func validateToken(token string, kong *pdk.PDK) {
 		return
 	}
 
-	if !r.GetValid() {
+	if r.GetUserId() == "" {
 		kong.Response.Exit(401, []byte(`{"error":"Unauthorized"}`), map[string][]string{
 			"Content-Type": {"application/json"},
 		})

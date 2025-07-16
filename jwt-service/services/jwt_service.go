@@ -42,7 +42,7 @@ type JWTService struct {
 
 func (s *JWTService) ValidateToken(ctx context.Context, in *pb.TokenRequest) (*pb.ValidationResponse, error) {
 	response := &pb.ValidationResponse{
-		Valid: false,
+		UserId: "",
 	}
 	parsedToken, err := jwt.Parse(in.Token, func(token *jwt.Token) (interface{}, error) {
 		return keyVault.privateKey, nil
@@ -56,8 +56,11 @@ func (s *JWTService) ValidateToken(ctx context.Context, in *pb.TokenRequest) (*p
 		log.Printf("Token is invalid")
 		return response, nil
 	}
-
-	return &pb.ValidationResponse{Valid: true}, nil
+	userId, err := parsedToken.Claims.GetSubject()
+	if err != nil {
+		log.Printf("Failed to get user id: %v", err)
+	}
+	return &pb.ValidationResponse{UserId: userId}, nil
 }
 
 func (s *JWTService) CreateToken(ctx context.Context, in *pb.CreateTokenRequest) (*pb.CreateTokenResponse, error) {

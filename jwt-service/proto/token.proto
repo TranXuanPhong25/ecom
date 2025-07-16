@@ -14,7 +14,7 @@ message TokenRequest {
 }
 
 message ValidationResponse {
-  bool valid = 1;
+  string userId = 1;
 }
 
 message CreateTokenRequest {
