@@ -9,7 +9,7 @@ import "google/protobuf/empty.proto";
 service UsersService {
   rpc CreateUserWithEmailAndPassword(Credentials) returns (google.protobuf.Empty);
   rpc GetUserByEmailAndPassword(Credentials) returns (User);
-  rpc GetCurrentUser(UserId) returns (User);
+  rpc GetUserById(UserId) returns (User);
   rpc DeleteUserById(UserId) returns (google.protobuf.Empty);
 }
 

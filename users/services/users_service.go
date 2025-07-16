@@ -94,7 +94,7 @@ func (s *UsersService) DeleteUserById(_ context.Context, in *pb.UserId) (*emptyp
 
 	return &emptypb.Empty{}, nil
 }
-func (s *UsersService) GetCurrentUser(_ context.Context, in *pb.UserId) (*pb.User, error) {
+func (s *UsersService) GetUserById(_ context.Context, in *pb.UserId) (*pb.User, error) {
 	uid, err := uuid.Parse(in.UserId)
 	if err != nil {
 		return nil, fmt.Errorf("invalid uuid: %w", err)
