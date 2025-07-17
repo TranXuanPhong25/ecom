@@ -61,11 +61,19 @@ services:
   write_timeout: 60000
 plugins:
   - name: eas-inbound-filter
-    config: { }
     route: auth_user_route
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
   - name: eas-inbound-filter
-    config: { }
     route: product_categories_route
+    protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
   - name: prometheus
     config: 
       status_code_metrics: true
