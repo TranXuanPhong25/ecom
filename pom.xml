@@ -10,5 +10,6 @@
 
     <modules>
         <module>product-categories</module>
+        <module>products</module>
     </modules>
 </project>
