@@ -1,6 +1,6 @@
 {
   "repositoryUrl": "https://github.com/TranXuanPhong25/ecom.git",
-  "branches": ["release"],
+  "branches": ["main"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     ["@semantic-release/release-notes-generator", {
