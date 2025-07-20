@@ -23,7 +23,7 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: pnpm ci
+        run: npm ci
 
       - name: Release
         env:
