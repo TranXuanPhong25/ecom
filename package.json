@@ -1,0 +1,12 @@
+{
+	"name": "ecom",
+	"devDependencies": {
+		"semantic-release": "^24.2.7",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/git": "^10.0.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/TranXuanPhong25/ecom.git"
+	}
+}
