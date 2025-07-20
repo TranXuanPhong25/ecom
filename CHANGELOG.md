@@ -1,3 +1,14 @@
+## [0.5.0](https://github.com/TranXuanPhong25/ecom/compare/v0.4.0...v0.5.0) (2025-07-20)
+
+### 🚀 Features
+
+* change back main as the release branch ([0bef7e7](https://github.com/TranXuanPhong25/ecom/commit/0bef7e7784449dabd67911a9c89c864cabeafe49))
+* product service ([91f8eb8](https://github.com/TranXuanPhong25/ecom/commit/91f8eb85e554372a03becca77954ee0b78b5c054))
+
+### 🐛 Bug Fixes
+
+* change trigger branch in semantic-release.yml ([3651f07](https://github.com/TranXuanPhong25/ecom/commit/3651f074fd5986dd701663c51376091423a30534))
+
 ## [0.4.0](https://github.com/TranXuanPhong25/ecom/compare/v0.3.4...v0.4.0) (2025-07-20)
 
 ### ⚠ BREAKING CHANGES
