@@ -4,7 +4,6 @@ import com.ecom.products.dtos.PageResponse;
 import com.ecom.products.dtos.ProductDTO;
 import com.ecom.products.model.CreateProductRequest;
 import com.ecom.products.services.ProductService;
-import com.ecom.products.validators.ProductValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    private final ProductValidator productValidator;
 
 
     @PostMapping
