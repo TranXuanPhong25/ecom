@@ -30,7 +30,7 @@ This project implements a complete eCommerce ecosystem with multiple services an
 
 ### Frontend Applications
 
-1. **Customer Storefront** ([https://github.com/TranXuanPhong25/shopiew]()):
+1. **Customer Storefront** ([Shopiew](https://github.com/TranXuanPhong25/shopiew)):
    - Built with Next.js 
    - Features:
      - Product discovery grid with filtering
@@ -39,11 +39,11 @@ This project implements a complete eCommerce ecosystem with multiple services an
      - Shopping cart functionality
      - Category-based browsing
 
-2. **Seller Portal** ([https://github.com/TranXuanPhong25/shopiew-seller]()):
+2. **Seller Portal** ([Shopiew Seller](https://github.com/TranXuanPhong25/shopiew-seller)):
    - Built with Next.js
    - Allows sellers to manage products and inventory
 
-3. **Admin Dashboard** ([https://github.com/TranXuanPhong25/shopiew-admin]()):
+3. **Admin Dashboard** ([Shopiew Admin](https://github.com/TranXuanPhong25/shopiew-admin)):
    - Built with Vue 3 + TypeScript + Vite
    - Provides administrative controls for the platform
 
