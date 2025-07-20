@@ -6,7 +6,7 @@ volumes:
   postgres_users_data: {}  # Named volume for user Postgres data
   auth_redis_data: {}  # Named volume for Redis data used by auth service
   prometheus_data: {}  # Named volume for Prometheus data persistence
-  
+  postgres_products_data: {}  # Named volume for product Postgres data
 networks:
   backend:
     driver: bridge
@@ -139,6 +139,18 @@ services:
       - "5435:5432"
     networks:
       - backend
+  postgres-products:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_products_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5436:5432"
+    networks:
+      - backend
   product-reviews-service:
     container_name: product-reviews-service
     build:
@@ -174,7 +186,7 @@ services:
       context: ./product-categories
       target: dev
     ports:
-      - "8097:8097"
+      - "8081:8080"
     depends_on:
       - postgres-product-categories
     environment:
@@ -206,6 +218,7 @@ services:
     networks:
       - backend
       - kong-net
+
   users-service:
     container_name: users-service
     # image: cosmtrek/air
@@ -226,5 +239,44 @@ services:
       DB_PORT: 5432
     volumes:
       - ./users:/app
+    networks:
+      - backend
+  products-service:
+    container_name: products-service
+    build:
+      context: ./products
+      target: dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - products-test
+      - postgres-products
+    environment:
+      DB_HOST: postgres-products
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./products:/app
+    networks:
+      - backend
+  products-test:
+    build:
+      target: test
+      dockerfile: Dockerfile
+      context: ./products
+    depends_on:
+      - postgres-products
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      MAVEN_OPTS: -Xmx1024m
+      DB_HOST: postgres-products
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./products:/app
     networks:
       - backend
