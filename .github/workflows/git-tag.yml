@@ -21,5 +21,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-          TAG_PREFIX: 'v'
+          WITH_V: true
+          # Tự động phát hiện từ commit message
           RELEASE_BRANCHES: main
+          MAJOR_STRING_TOKEN: "BREAKING CHANGE,!:"
+          MINOR_STRING_TOKEN: "feat:"
+          PATCH_STRING_TOKEN: "fix:,docs:,chore:"
