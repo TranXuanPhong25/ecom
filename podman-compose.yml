@@ -1,0 +1,292 @@
+volumes:
+  kong_db_data: {}  # Named volume to persist Postgres data across container restarts
+  postgres_product_reviews_data: {}  # Named volume for product review Postgres data
+  postgres_product_categories_data: {}  # Named volume for product category Postgres data
+  postgres_users_data: {}  # Named volume for user Postgres data
+  auth_redis_data: {}  # Named volume for Redis data used by auth service
+  prometheus_data: {}  # Named volume for Prometheus data persistence
+  postgres_products_data: {}  # Named volume for product Postgres data
+networks:
+  backend:
+    driver: bridge
+  kong-net:      # Custom bridge network for isolated Kong and Postgres communication
+    driver: bridge
+services:
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:Z
+      - prometheus_data:/prometheus:Z
+    ports:
+      - "9090:9090"
+    networks:
+      - backend
+      - kong-net
+  kong-db:
+    image: docker.io/postgres:13
+    container_name: kong-db
+    restart: unless-stopped
+    volumes:
+      - kong_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kong
+    networks:
+      - kong-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kong-migrations:
+    image: docker.io/kong:3.6
+    container_name: kong-migrations
+    depends_on:
+      kong-db:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-db
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PG_DATABASE: kong
+    command: kong migrations bootstrap
+    networks:
+      - kong-net
+
+  kong:
+    image: docker.io/kong:3.6
+    container_name: kong
+    depends_on:
+      kong-migrations:
+        condition: service_completed_successfully
+    volumes:
+      - ./kong/plugins/bin:/usr/local/kong/plugins/bin:Z
+      - ./kong/conf/kong.conf:/etc/kong/kong.conf:Z
+    restart: unless-stopped
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-db.dns.podman
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      KONG_PG_DATABASE: kong
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+    ports:
+      - "8000:8000"  # Proxy HTTP
+      - "8443:8443"  # Proxy HTTPS
+      - "8001:8001"  # Admin API HTTP
+      - "8444:8444"  # Admin API HTTPS
+    networks:
+      - kong-net
+  jwt-service:
+    working_dir: /app
+    build:
+      context: ./jwt-service
+      dockerfile: Dockerfile.dev
+
+    container_name: jwt-service
+    volumes:
+      - ./jwt-service:/app:Z
+    restart: on-failure
+    ports:
+      - "50051:50051"
+    networks:
+      - kong-net
+      - backend
+    security_opt:
+      - label=disable
+  postgres-product-reviews:
+    image: docker.io/postgres:15-alpine
+    volumes:
+      - postgres_product_reviews_data:/var/lib/postgresql/data:z
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+  postgres-product-categories:
+    image: docker.io/postgres:15-alpine
+    volumes:
+      - postgres_product_categories_data:/var/lib/postgresql/data:z
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5434:5432"
+    networks:
+      - backend
+  postgres-users:
+    image: docker.io/postgres:15-alpine
+    volumes:
+      - postgres_users_data:/var/lib/postgresql/data:z
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5435:5432"
+    networks:
+      - backend
+  postgres-products:
+    image: docker.io/postgres:15-alpine
+    volumes:
+      - postgres_products_data:/var/lib/postgresql/data:z
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5436:5432"
+    networks:
+      - backend
+  product-reviews-service:
+    container_name: product-reviews-service
+    build:
+      context: ./product-reviews
+    restart: on-failure
+    ports:
+      - "8200:8200"
+    depends_on:
+      - postgres-product-reviews
+    environment:
+      DB_HOST: postgres-product-reviews
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    networks:
+      - backend
+  auth-redis:
+    image: docker.io/redis:7-alpine
+    container_name: auth-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./auth/repositories/redis.conf:/usr/local/etc/redis/redis.conf:Z
+      - auth_redis_data:/data:Z
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - backend
+  product-categories-service:
+    container_name: product-categories-service
+    build:
+      context: ./product-categories
+      target: dev
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres-product-categories
+    environment:
+      DB_HOST: postgres-product-categories
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./product-categories:/app:z
+    networks:
+      - kong-net
+      - backend
+    security_opt:
+      - label=disable
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8202:8202"
+    depends_on:
+      - users-service
+      - jwt-service
+      - auth-redis
+    environment:
+      REDIS_ADDR: auth-redis:6379
+      REDIS_PASSWORD: redis-password
+    volumes:
+      - ./auth:/app:Z
+    networks:
+      - backend
+      - kong-net
+    security_opt:
+      - label=disable
+
+  users-service:
+    container_name: users-service
+    build:
+      context: ./users
+      dockerfile: Dockerfile.dev
+    ports:
+      - "50052:50052"
+    depends_on:
+      - postgres-users
+    environment:
+      DB_HOST: postgres-users
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./users:/app:Z
+    networks:
+      - backend
+    security_opt:
+      - label=disable
+  products-service:
+    container_name: products-service
+    build:
+      context: ./products
+      target: dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - products-test
+      - postgres-products
+    environment:
+      DB_HOST: postgres-products
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./products:/app:z
+    networks:
+      - kong-net
+      - backend
+    security_opt:
+      - label=disable
+  products-test:
+    build:
+      target: test
+      dockerfile: Dockerfile
+      context: ./products
+    depends_on:
+      - postgres-products
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      MAVEN_OPTS: -Xmx1024m
+      DB_HOST: postgres-products
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./products:/app:z
+    networks:
+      - kong-net
+      - backend
+    security_opt:
+      - label=disable
