@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class ProductService {
     private final ProductVariantService productVariantService;
     private final ProductRepository productRepository;
+    private final BrandService brandService;
 
     public ProductDTO createProduct(CreateProductRequest createProductRequest) {
         Product product = toEntity(createProductRequest.product());
@@ -32,7 +33,9 @@ public class ProductService {
         }
 
         if (createProductRequest.variants() != null) {
+            Product finalProduct = product;
             createProductRequest.variants().forEach(variant -> {
+                variant.setProductId(finalProduct.getId());
                 productVariantService.createVariant(variant);
             });
         }
@@ -53,7 +56,9 @@ public class ProductService {
             product.setName(productDTO.getName());
             product.setDescription(productDTO.getDescription());
             product.setCategoryId(productDTO.getCategoryId());
-            product.setBrandId(productDTO.getBrandId());
+            if (product.getBrand() != null) {
+                product.setBrand(brandService.toEntity(productDTO.getBrand()));
+            }
             product.setActive(productDTO.isActive());
             product = productRepository.save(product);
             return toDTO(product);
@@ -70,7 +75,9 @@ public class ProductService {
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
         dto.setCategoryId(product.getCategoryId());
-        dto.setBrandId(product.getBrandId());
+        if (product.getBrand() != null) {
+            dto.setBrand(brandService.toDTO(product.getBrand()));
+        }
         dto.setActive(product.isActive());
         return dto;
     }
@@ -81,7 +88,9 @@ public class ProductService {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setCategoryId(dto.getCategoryId());
-        product.setBrandId(dto.getBrandId());
+        if (dto.getBrand() != null) {
+            product.setBrand(brandService.toEntity(dto.getBrand()));
+        }
         product.setActive(dto.isActive());
         return product;
     }

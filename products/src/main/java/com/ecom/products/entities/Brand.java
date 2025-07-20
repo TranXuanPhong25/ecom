@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "brands")
+public class Brand {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,14 +19,6 @@ public class Product {
     private String name;
 
     private String description;
-
-    private Long categoryId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
-
-    private boolean isActive;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

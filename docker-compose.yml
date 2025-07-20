@@ -10,8 +10,6 @@ volumes:
 networks:
   backend:
     driver: bridge
-  kong-net:      # Custom bridge network for isolated Kong and Postgres communication
-    driver: bridge
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -24,7 +22,7 @@ services:
       - "9090:9090"
     networks:
       - backend
-      - kong-net
+
   kong-db:
     image: postgres:13
     container_name: kong-db
@@ -36,7 +34,8 @@ services:
       POSTGRES_DB: kong
       POSTGRES_PASSWORD: kong
     networks:
-      - kong-net
+      - backend
+
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "kong"]
       interval: 5s
@@ -57,7 +56,7 @@ services:
       KONG_PG_DATABASE: kong
     command: kong migrations bootstrap
     networks:
-      - kong-net
+      - backend
 
   kong:
     image: kong:3.6
@@ -87,7 +86,7 @@ services:
       - "8444:8444"  # Admin API HTTPS
     networks:
       - backend
-      - kong-net
+
   jwt-service:
     working_dir: /app
     build:
@@ -101,7 +100,7 @@ services:
     ports:
       - "50051:50051"
     networks:
-      - kong-net
+
       - backend
   postgres-product-reviews:
     image: postgres:15-alpine
@@ -217,7 +216,7 @@ services:
       - ./auth:/app
     networks:
       - backend
-      - kong-net
+
 
   users-service:
     container_name: users-service

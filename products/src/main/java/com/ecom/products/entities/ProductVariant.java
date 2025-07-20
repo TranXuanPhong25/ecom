@@ -1,11 +1,11 @@
 package com.ecom.products.entities;
 
-import com.ecom.products.utils.JsonBConverter;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NonNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,9 +23,11 @@ public class ProductVariant {
 
     private BigDecimal price;
 
-    @Convert(converter = JsonBConverter.class)
+    //    @Convert(converter = JsonBConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String, String> attributes;
+
     private Integer stockQuantity;
     private boolean isActive;
 
@@ -35,3 +37,4 @@ public class ProductVariant {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
+
