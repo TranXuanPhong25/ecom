@@ -1,3 +1,13 @@
+## [0.6.0](https://github.com/TranXuanPhong25/ecom/compare/v0.5.0...v0.6.0) (2025-07-20)
+
+### 🚀 Features
+
+* podman-compose.yml for podman ([e0fce96](https://github.com/TranXuanPhong25/ecom/commit/e0fce9696588ae153be2de3d83d604cd84f90c3f))
+
+### 🔨 Technical Changes
+
+* remove validators ([ea7d04e](https://github.com/TranXuanPhong25/ecom/commit/ea7d04e25ac7d9d5642c1bde704e251a0731f95e))
+
 ## [0.5.0](https://github.com/TranXuanPhong25/ecom/compare/v0.4.0...v0.5.0) (2025-07-20)
 
 ### 🚀 Features
