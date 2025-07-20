@@ -40,3 +40,4 @@ temp
 /users/tmp/main
 auth/tmp/main
 kong/conf/decksync.sh
+/node_modules/
