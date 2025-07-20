@@ -4,7 +4,7 @@ services:
   connect_timeout: 60000
   enabled: true
   host: product-categories-service
-  port: 8097
+  port: 8080
   protocol: http
   read_timeout: 60000
   retries: 5
@@ -21,7 +21,7 @@ services:
     regex_priority: 0
     request_buffering: true
     response_buffering: true
-    strip_path: true
+    strip_path: false
   write_timeout: 60000
 - name: auth_service
   connect_timeout: 60000
@@ -58,6 +58,29 @@ services:
     request_buffering: true
     response_buffering: true
     strip_path: false
+  write_timeout: 60000
+- name: products_service
+  connect_timeout: 60000
+  enabled: true
+  host: products-service
+  port: 8080
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  routes:
+    - name: products_route
+      https_redirect_status_code: 301
+      path_handling: v0
+      paths:
+        - /api/products
+      preserve_host: false
+      protocols:
+        - http
+        - https
+      regex_priority: 0
+      request_buffering: true
+      response_buffering: true
+      strip_path: false
   write_timeout: 60000
 plugins:
   - name: eas-inbound-filter
