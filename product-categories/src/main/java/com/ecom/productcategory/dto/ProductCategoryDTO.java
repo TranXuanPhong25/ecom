@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductCategoryDTO extends ProductCategoryEntity {
     private ProductCategoryEntity parent;
     private Integer parentId;
-    private List<ProductCategoryEntity> children;
+    private List<ProductCategoryDTO> children;
     public ProductCategoryDTO(ProductCategoryEntity productCategoryEntity) {
         super(productCategoryEntity.getId(), productCategoryEntity.getName(), productCategoryEntity.getImageUrl());
     }

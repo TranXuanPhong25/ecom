@@ -18,7 +18,7 @@ public interface ProductCategoryRepository  extends JpaRepository<ProductCategor
 
     @Query(value="SELECT pc.id, pc.name, pc.image_url " +
             "FROM product_category pc " +
-            "JOIN product_category_closure pcc ON pc.id = pcc.ancestor_id AND pcc.descendant_id = :id AND depth ==1 " +
+            "JOIN product_category_closure pcc ON pc.id = pcc.ancestor_id AND pcc.descendant_id = :id AND depth = 1 " +
             "LIMIT 1",
             nativeQuery = true)
     ProductCategoryEntity findAncestorById(Integer id);
