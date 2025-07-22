@@ -16,9 +16,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
-    ProductCategoryRepository productCategoryRepository;
-
-    ProductCategoryClosureService productCategoryClosureService;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final ProductCategoryClosureService productCategoryClosureService;
 
     @Override
     public List<ProductCategoryEntity> getALlRootProductCategories() {
