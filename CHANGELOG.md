@@ -1,3 +1,10 @@
+## [0.7.0](https://github.com/TranXuanPhong25/ecom/compare/v0.6.0...v0.7.0) (2025-07-22)
+
+### 🚀 Features
+
+* **authZ:** use opa as authZ server ([80d078d](https://github.com/TranXuanPhong25/ecom/commit/80d078dca6d736cc35b44a6f6ce4293616aac3d4))
+* integrated create product ([3100649](https://github.com/TranXuanPhong25/ecom/commit/3100649a3065c88814902b678063e22d57983b31))
+
 ## [0.6.0](https://github.com/TranXuanPhong25/ecom/compare/v0.5.0...v0.6.0) (2025-07-20)
 
 ### 🚀 Features
