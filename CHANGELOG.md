@@ -1,3 +1,13 @@
+## [1.1.0](https://github.com/TranXuanPhong25/ecom/compare/v1.0.0...v1.1.0) (2025-07-22)
+
+### 🚀 Features
+
+* **eas:** use Open Policy Agent for validate endpoint access ([785ea26](https://github.com/TranXuanPhong25/ecom/commit/785ea26efcfe4e67239d06e7c8de1030cefcdbf6))
+
+### 🐛 Bug Fixes
+
+* correction use of @RequiredArgConstructor ([33b328d](https://github.com/TranXuanPhong25/ecom/commit/33b328d28975ddf2d5d85b0784c6427543e29723))
+
 ## [1.0.0](https://github.com/TranXuanPhong25/ecom/compare/v0.7.0...v1.0.0) (2025-07-22)
 
 ### ⚠ BREAKING CHANGES
