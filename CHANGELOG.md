@@ -1,3 +1,15 @@
+## [1.0.0](https://github.com/TranXuanPhong25/ecom/compare/v0.7.0...v1.0.0) (2025-07-22)
+
+### ⚠ BREAKING CHANGES
+
+* use materialized path for categories
+* create product-categories logic changed
+
+### 🚀 Features
+
+* create product-categories logic changed ([28879ad](https://github.com/TranXuanPhong25/ecom/commit/28879ad3957bcde5a87984a06686342eebbe3ca9))
+* product-categories v2 ([256a8ee](https://github.com/TranXuanPhong25/ecom/commit/256a8ee6ae310a9394de0a75091ecafe5ba36459))
+
 ## [0.7.0](https://github.com/TranXuanPhong25/ecom/compare/v0.6.0...v0.7.0) (2025-07-22)
 
 ### 🚀 Features
