@@ -2,17 +2,15 @@ package com.ecom.productcategory.services;
 
 import com.ecom.productcategory.dto.ProductCategoryDTO;
 import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
-import com.ecom.productcategory.entities.ProductCategoryClosureEntity;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.exceptions.ResourceNotFoundException;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.repositories.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,7 +69,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product category not found with id: " + id));
         ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO(productCategoryEntity);
         List<ProductCategoryEntity> children = productCategoryRepository.findAllChildrenById(id);
-        productCategoryDTO.setChildren(children);
+        productCategoryDTO.setChildren(children.stream().map(ProductCategoryDTO::new).collect(Collectors.toList()));
 
         ProductCategoryEntity parentCategory = productCategoryRepository.findAncestorById(id);
         if( parentCategory != null) {
@@ -101,6 +99,12 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 parentCategoryId,
                 productCategoryEntity.getId()
         );
+        if (productCategoryDTO.getChildren() != null && !productCategoryDTO.getChildren().isEmpty()) {
+            for (ProductCategoryDTO child : productCategoryDTO.getChildren()) {
+                child.setParentId(productCategoryEntity.getId());
+                createProductCategory(child);
+            }
+        }
         return productCategoryEntity;
     }
 

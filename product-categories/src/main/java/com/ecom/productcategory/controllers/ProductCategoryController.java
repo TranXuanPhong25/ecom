@@ -3,10 +3,8 @@ package com.ecom.productcategory.controllers;
 import com.ecom.productcategory.dto.ProductCategoryDTO;
 import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
-import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/api/product-categories")
 public class ProductCategoryController {
     @Autowired
     private ProductCategoryService productCategoryService;

@@ -35,6 +35,6 @@ ENV SPRING_DEVTOOLS_LIVERELOAD_ENABLED=false
 
 RUN addgroup --system app && adduser -S -s /bin/false -G app app
 RUN chown -R app:app /
-EXPOSE 8097
+EXPOSE 8081
 USER app
 ENTRYPOINT [ "java", "-jar", "app.jar" ]
