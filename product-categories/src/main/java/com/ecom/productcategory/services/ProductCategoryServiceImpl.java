@@ -6,7 +6,7 @@ import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.exceptions.ResourceNotFoundException;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.repositories.ProductCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +14,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
-    @Autowired
     ProductCategoryRepository productCategoryRepository;
 
-    @Autowired
     ProductCategoryClosureService productCategoryClosureService;
 
     @Override
