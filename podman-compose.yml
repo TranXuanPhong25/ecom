@@ -6,6 +6,7 @@ volumes:
   auth_redis_data: {}  # Named volume for Redis data used by auth service
   prometheus_data: {}  # Named volume for Prometheus data persistence
   postgres_products_data: {}  # Named volume for product Postgres data
+  opa_data: { }
 networks:
   backend:
     driver: bridge

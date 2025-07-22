@@ -26,13 +26,13 @@ scrape_configs:
         labels:
           group: 'services'
 
-  # - job_name: 'user-service'
-  #   scrape_interval: 5s
-  #   metrics_path: /metrics
-  #   static_configs:
-  #     - targets: ['user:50052']
-  #       labels:
-  #         group: 'services'
+  #   - job_name: 'user-service'
+  #     scrape_interval: 5s
+  #     metrics_path: /metrics
+  #     static_configs:
+  #       - targets: ['user:50052']
+  #         labels:
+  #           group: 'services'
 
   # - job_name: 'jwt-service'
   #   scrape_interval: 5s
@@ -57,3 +57,10 @@ scrape_configs:
   #     - targets: ['product-review:8200']
   #       labels:
   #         group: 'services'
+#  - job_name: 'products-service'
+#    scrape_interval: 5s
+#    metrics_path: /metrics
+#    static_configs:
+#      - targets: ['products-service:8080']
+#        labels:
+#          group: 'services'

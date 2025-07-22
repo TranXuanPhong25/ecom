@@ -174,7 +174,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./auth/repositories/redis.conf:/usr/local/etc/redis/redis.conf:Z
       - auth_redis_data:/data
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     networks:
@@ -277,5 +277,15 @@ services:
       DB_PORT: 5432
     volumes:
       - ./products:/app
+    networks:
+      - backend
+  opa-server:
+    image: openpolicyagent/opa:latest
+    container_name: opa-server
+    ports:
+      - "8181:8181"
+    volumes:
+      - ./opa/policies:/policies
+    command: [ "run", "--server", "--addr=:8181", "--log-level=debug", "/policies" ]
     networks:
       - backend
