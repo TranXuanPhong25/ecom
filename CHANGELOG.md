@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/TranXuanPhong25/ecom/compare/v1.5.0...v1.5.1) (2025-07-23)
+
+### 🐛 Bug Fixes
+
+* **eas:** refine opa query ([bf3d9cd](https://github.com/TranXuanPhong25/ecom/commit/bf3d9cd85b63ea545f8ba8e9a93a96f0305a1085))
+* **products:** change timezone ([f908a5a](https://github.com/TranXuanPhong25/ecom/commit/f908a5af41c8c148cc3d4ab7187f69d3054870c9))
+
 ## [1.5.0](https://github.com/TranXuanPhong25/ecom/compare/v1.4.0...v1.5.0) (2025-07-23)
 
 ### 🚀 Features
