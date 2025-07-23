@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS brands
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(255)                NOT NULL UNIQUE,
     description TEXT,
-    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS products
 (
@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS products
     category_id BIGINT,
     brand_id BIGINT REFERENCES brands (id),
     is_active   BOOLEAN                              DEFAULT TRUE,
-    created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS product_variants
 (
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS product_variants
     price          DECIMAL(10, 2)              NOT NULL,
     attributes     JSONB,
     is_active      BOOLEAN                              DEFAULT TRUE,
-    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     stock_quantity INT                         NOT NULL
 
 );
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS product_variant_skus
     variant_id BIGSERIAL                   NOT NULL REFERENCES product_variants (id) ON DELETE CASCADE,
     sku        VARCHAR(100)                NOT NULL UNIQUE,
 
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS variant_images
 (
@@ -45,6 +45,6 @@ CREATE TABLE IF NOT EXISTS variant_images
     variant_id BIGSERIAL                   NOT NULL REFERENCES product_variants (id) ON DELETE CASCADE,
     image_url  TEXT                        NOT NULL,
     is_primary BOOLEAN                              DEFAULT FALSE,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

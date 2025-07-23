@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Data
@@ -32,9 +32,9 @@ public class ProductVariant {
     private boolean isActive;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt;
 }
 

@@ -73,7 +73,7 @@ public class ProductService {
 
     private ProductDTO toDTO(Product product) {
         ProductDTO dto = new ProductDTO();
-        dto.setShopId(product.getShopId());
+        dto.setShopId(product.getShopId().toString());
         dto.setId(product.getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
@@ -82,12 +82,14 @@ public class ProductService {
             dto.setBrand(brandService.toDTO(product.getBrand()));
         }
         dto.setActive(product.isActive());
+        dto.setCreatedAt(product.getCreatedAt());
+        dto.setUpdatedAt(product.getUpdatedAt());
         return dto;
     }
 
     private Product toEntity(ProductDTO dto) {
         Product product = new Product();
-        product.setShopId(dto.getShopId());
+        product.setShopId(UUID.fromString(dto.getShopId()));
         product.setId(dto.getId());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
