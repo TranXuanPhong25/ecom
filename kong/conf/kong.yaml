@@ -31,20 +31,7 @@ services:
   protocol: http
   read_timeout: 60000
   retries: 5
-  routes:  
-  - name: auth_user_route
-    https_redirect_status_code: 301
-    path_handling: v0
-    paths:
-    - /api/auth/me
-    preserve_host: false
-    protocols:
-    - http
-    - https
-    regex_priority: 0
-    request_buffering: true
-    response_buffering: true
-    strip_path: false
+  routes:
   - name: auth_route
     https_redirect_status_code: 301
     path_handling: v0
@@ -86,6 +73,29 @@ services:
       path_handling: v0
       paths:
         - /api/brands
+      preserve_host: false
+      protocols:
+        - http
+        - https
+      regex_priority: 0
+      request_buffering: true
+      response_buffering: true
+      strip_path: false
+  write_timeout: 60000
+- name: shops_service
+  connect_timeout: 60000
+  enabled: true
+  host: shops-service
+  port: 8203
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  routes:
+    - name: shops_route
+      https_redirect_status_code: 301
+      path_handling: v0
+      paths:
+        - /api/shops
       preserve_host: false
       protocols:
         - http

@@ -51,3 +51,9 @@ allow if {
     regex.match(private_products_service_get_product_of_shop_pattern, input.path)
 #    input.authenticated == false
 }
+
+allow if {
+    input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET" }
+    regex.match(`\/api\/shops`, input.path)
+    input.authenticated == true
+}

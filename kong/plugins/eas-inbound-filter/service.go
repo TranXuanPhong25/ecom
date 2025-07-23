@@ -36,7 +36,7 @@ func validateToken(token string, kong *pdk.PDK) {
 			kong.Log.Err("could not set X-User-Id: %v", err)
 			return
 		}
-		isValidToken = r.GetUserId() == ""
+		isValidToken = r.GetUserId() != ""
 	}
 
 	hasAccess, err := authorizeAccess(kong, isValidToken)
