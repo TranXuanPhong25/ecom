@@ -2,6 +2,7 @@ package com.ecom.productcategory.services;
 
 import com.ecom.productcategory.dto.ProductCategoryDTO;
 import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
+import com.ecom.productcategory.dto.ProductCategoryPathNode;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.exceptions.ResourceNotFoundException;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
@@ -131,5 +132,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         }
         productCategoryRepository.deleteAllById(productCategoriesNeedDeleted);
         productCategoryClosureService.deleteByCategoryIds(productCategoriesNeedDeleted);
+    }
+
+    @Override
+    public List<ProductCategoryPathNode> getCategoryPath(Integer id) {
+        List<ProductCategoryPathNode> productCategoryEntities = productCategoryRepository.getCategoryPath(id);
+        if (productCategoryEntities.isEmpty()) {
+            throw new ResourceNotFoundException("Product category not found with id: " + id);
+        }
+        return productCategoryEntities;
     }
 }

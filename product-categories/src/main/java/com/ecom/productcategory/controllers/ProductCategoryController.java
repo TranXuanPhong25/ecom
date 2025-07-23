@@ -2,6 +2,7 @@ package com.ecom.productcategory.controllers;
 
 import com.ecom.productcategory.dto.ProductCategoryDTO;
 import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
+import com.ecom.productcategory.dto.ProductCategoryPathNode;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class ProductCategoryController {
     @GetMapping
     public List<ProductCategoryEntity> getAllProductCategories() {
         return productCategoryService.getALlRootProductCategories();
+    }
+
+
+    @GetMapping(value = "/path", params = "id")
+    public List<ProductCategoryPathNode> getAllProductCategories(@RequestParam(value = "id") Integer id) {
+        return productCategoryService.getCategoryPath(id);
     }
 
     @GetMapping("/hierarchy")
