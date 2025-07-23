@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/TranXuanPhong25/ecom/compare/v1.4.0...v1.5.0) (2025-07-23)
+
+### 🚀 Features
+
+* **product-categories:** new endpoint for find category path ([64ec266](https://github.com/TranXuanPhong25/ecom/commit/64ec2668c50a912f0e235e64889241ab37c58320))
+
 ## [1.4.0](https://github.com/TranXuanPhong25/ecom/compare/v1.3.0...v1.4.0) (2025-07-23)
 
 ### 🚀 Features
