@@ -2,7 +2,7 @@ package com.ecom.products.services;
 
 import com.ecom.products.dtos.ProductDTO;
 import com.ecom.products.entities.Product;
-import com.ecom.products.model.CreateProductRequest;
+import com.ecom.products.models.CreateProductRequest;
 import com.ecom.products.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
@@ -11,6 +11,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -71,6 +73,7 @@ public class ProductService {
 
     private ProductDTO toDTO(Product product) {
         ProductDTO dto = new ProductDTO();
+        dto.setShopId(product.getShopId());
         dto.setId(product.getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
@@ -84,6 +87,7 @@ public class ProductService {
 
     private Product toEntity(ProductDTO dto) {
         Product product = new Product();
+        product.setShopId(dto.getShopId());
         product.setId(dto.getId());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
@@ -93,5 +97,9 @@ public class ProductService {
         }
         product.setActive(dto.isActive());
         return product;
+    }
+
+    public Page<ProductDTO> getProductsByShopId(UUID shopId, Pageable pageable) {
+        return productRepository.findByShopId(shopId, pageable).map(this::toDTO);
     }
 }

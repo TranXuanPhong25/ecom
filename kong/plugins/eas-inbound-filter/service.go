@@ -20,7 +20,7 @@ var (
 func validateToken(token string, kong *pdk.PDK) {
 	isValidToken := false
 
-	if token == "" {
+	if token != "" {
 		ctx, cancel := context.WithTimeout(context.Background(), TimeOut)
 		defer cancel()
 		r, err := client.ValidateToken(ctx, &pb.TokenRequest{Token: token})

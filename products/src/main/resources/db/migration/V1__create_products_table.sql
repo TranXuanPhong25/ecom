@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS brands
 CREATE TABLE IF NOT EXISTS products
 (
     id          BIGSERIAL PRIMARY KEY,
+    shop_id  uuid NOT NULL,
     name        VARCHAR(255)                NOT NULL UNIQUE,
     description TEXT,
     category_id BIGINT,

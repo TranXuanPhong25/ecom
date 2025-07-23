@@ -2,15 +2,16 @@ package com.ecom.products.controllers;
 
 import com.ecom.products.dtos.PageResponse;
 import com.ecom.products.dtos.ProductDTO;
-import com.ecom.products.model.CreateProductRequest;
+import com.ecom.products.models.CreateProductRequest;
 import com.ecom.products.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
@@ -28,6 +29,12 @@ public class ProductController {
     @GetMapping
     public PageResponse<ProductDTO> getProducts(Pageable pageable) {
         return new PageResponse<>(productService.getProducts(pageable));
+    }
+
+    @GetMapping(params = "shop_id")
+    public PageResponse<ProductDTO> getProductsByShopId(@RequestParam(name = "shop_id") UUID shopId, Pageable pageable) {
+
+        return new PageResponse<>(productService.getProductsByShopId(shopId, pageable));
     }
 
     @GetMapping("/{id}")
