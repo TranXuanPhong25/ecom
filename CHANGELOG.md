@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/TranXuanPhong25/ecom/compare/v1.1.0...v1.2.0) (2025-07-23)
+
+### 🚀 Features
+
+* **product-service:** add shopId field to table and model ([5b648a7](https://github.com/TranXuanPhong25/ecom/commit/5b648a787840f34afc214c344c6bda2de9d5bbd7))
+
 ## [1.1.0](https://github.com/TranXuanPhong25/ecom/compare/v1.0.0...v1.1.0) (2025-07-22)
 
 ### 🚀 Features
