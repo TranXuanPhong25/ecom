@@ -7,6 +7,7 @@ volumes:
   auth_redis_data: {}  # Named volume for Redis data used by auth service
   prometheus_data: {}  # Named volume for Prometheus data persistence
   postgres_products_data: {}  # Named volume for product Postgres data
+  postgres_shops_data: { }  # Named volume for shop Postgres data
 networks:
   backend:
     driver: bridge
@@ -150,6 +151,18 @@ services:
       - "5436:5432"
     networks:
       - backend
+  postgres-shops:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_shops_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5437:5432"
+    networks:
+      - backend
   product-reviews-service:
     container_name: product-reviews-service
     build:
@@ -277,6 +290,25 @@ services:
       DB_PORT: 5432
     volumes:
       - ./products:/app
+    networks:
+      - backend
+  shops-service:
+    working_dir: /app
+    build:
+      context: ./shops
+      dockerfile: Dockerfile.dev
+    container_name: shops-service
+    volumes:
+      - ./shops:/app
+    restart: on-failure
+    environment:
+      DB_HOST: postgres-shops
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    ports:
+      - "8203:8203"
     networks:
       - backend
   opa-server:
