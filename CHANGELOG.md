@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/TranXuanPhong25/ecom/compare/v1.3.0...v1.4.0) (2025-07-23)
+
+### 🚀 Features
+
+* **shops:** create and get single shop ([698ca95](https://github.com/TranXuanPhong25/ecom/commit/698ca9539b1e28880f6314ba34c37f5dbb364c3c))
+
 ## [1.3.0](https://github.com/TranXuanPhong25/ecom/compare/v1.2.0...v1.3.0) (2025-07-23)
 
 ### 🚀 Features
