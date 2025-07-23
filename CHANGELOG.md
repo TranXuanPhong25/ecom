@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/TranXuanPhong25/ecom/compare/v1.2.0...v1.3.0) (2025-07-23)
+
+### 🚀 Features
+
+* **shops:** init project ([20d8a8d](https://github.com/TranXuanPhong25/ecom/commit/20d8a8d82baac3cf5128d660e3a088f4d18c64a4))
+
 ## [1.2.0](https://github.com/TranXuanPhong25/ecom/compare/v1.1.0...v1.2.0) (2025-07-23)
 
 ### 🚀 Features
