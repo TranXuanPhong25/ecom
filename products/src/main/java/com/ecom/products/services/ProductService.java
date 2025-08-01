@@ -41,7 +41,7 @@ public class ProductService {
                 productVariantService.createVariant(variant);
             });
         }
-
+        ;
         return toDTO(product);
     }
 
@@ -61,7 +61,7 @@ public class ProductService {
             if (product.getBrand() != null) {
                 product.setBrand(brandService.toEntity(productDTO.getBrand()));
             }
-            product.setActive(productDTO.isActive());
+            product.setStatus(productDTO.getStatus());
             product = productRepository.save(product);
             return toDTO(product);
         }).orElse(null);
@@ -78,10 +78,11 @@ public class ProductService {
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
         dto.setCategoryId(product.getCategoryId());
+        dto.setSpecs(product.getSpecs());
         if (product.getBrand() != null) {
             dto.setBrand(brandService.toDTO(product.getBrand()));
         }
-        dto.setActive(product.isActive());
+        dto.setStatus(product.getStatus());
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
         return dto;
@@ -91,13 +92,14 @@ public class ProductService {
         Product product = new Product();
         product.setShopId(UUID.fromString(dto.getShopId()));
         product.setId(dto.getId());
+        product.setSpecs(dto.getSpecs());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setCategoryId(dto.getCategoryId());
         if (dto.getBrand() != null) {
             product.setBrand(brandService.toEntity(dto.getBrand()));
         }
-        product.setActive(dto.isActive());
+        product.setStatus(dto.getStatus());
         return product;
     }
 

@@ -1,11 +1,13 @@
 package com.ecom.products.dtos;
 
+import com.ecom.products.enums.ProductStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 @Data
 public class ProductDTO {
@@ -28,6 +30,10 @@ public class ProductDTO {
     private String categoryPath;
     private BrandDTO brand;
     private boolean isActive;
+
+    private Map<String, String> specs;
+
+    private ProductStatus status;
 
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

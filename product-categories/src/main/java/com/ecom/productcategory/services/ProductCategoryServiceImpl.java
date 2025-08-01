@@ -9,6 +9,7 @@ import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.repositories.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,9 @@ import java.util.stream.Collectors;
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductCategoryClosureService productCategoryClosureService;
-
+    private final WebClient webClient = WebClient.builder()
+            .baseUrl("http://user-service:50052")
+            .build();
     @Override
     public List<ProductCategoryEntity> getALlRootProductCategories() {
         return productCategoryRepository.findAllRootCategories();
