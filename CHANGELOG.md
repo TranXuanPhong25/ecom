@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/TranXuanPhong25/ecom/compare/v1.5.1...v1.6.0) (2025-08-01)
+
+### 🚀 Features
+
+* **product:** jsonb for specs and enum ProductStatus ([f5c79d3](https://github.com/TranXuanPhong25/ecom/commit/f5c79d3b45fabe5fc642ad36880a18f2ff0798c8))
+
 ## [1.5.1](https://github.com/TranXuanPhong25/ecom/compare/v1.5.0...v1.5.1) (2025-07-23)
 
 ### 🐛 Bug Fixes
