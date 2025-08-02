@@ -1,3 +1,13 @@
+## [2.0.0](https://github.com/TranXuanPhong25/ecom/compare/v1.7.0...v2.0.0) (2025-08-02)
+
+### ⚠ BREAKING CHANGES
+
+* **product:** remove product_variant_skus then add sku to column definitions of variants table
+
+### 🚀 Features
+
+* **product:** change database schema ([7bfd004](https://github.com/TranXuanPhong25/ecom/commit/7bfd004112d568022c32f683503a058b4212843c))
+
 ## [1.7.0](https://github.com/TranXuanPhong25/ecom/compare/v1.6.0...v1.7.0) (2025-08-02)
 
 ### 🚀 Features
