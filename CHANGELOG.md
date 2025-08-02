@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/TranXuanPhong25/ecom/compare/v1.6.0...v1.7.0) (2025-08-02)
+
+### 🚀 Features
+
+* **metrics:** integrate prometheus to product-service ([6aa37dd](https://github.com/TranXuanPhong25/ecom/commit/6aa37dd50d9cdd151339565cdbc23b3b33b0e9de))
+
 ## [1.6.0](https://github.com/TranXuanPhong25/ecom/compare/v1.5.1...v1.6.0) (2025-08-01)
 
 ### 🚀 Features
