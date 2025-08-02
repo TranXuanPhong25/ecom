@@ -1,8 +1,8 @@
 package com.ecom.products.services;
 
 import com.ecom.products.dtos.VariantDTO;
+import com.ecom.products.dtos.VariantImageDTO;
 import com.ecom.products.entities.ProductVariant;
-import com.ecom.products.entities.ProductVariantSku;
 import com.ecom.products.entities.VariantImage;
 import com.ecom.products.repositories.ProductVariantRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductVariantService {
 
     private final ProductVariantRepository variantRepository;
-    private final ProductVariantSkuService productVariantSkuService;
     private final VariantImageService variantImageService;
 
     public VariantDTO createVariant(VariantDTO variantDTO) {
@@ -33,20 +31,16 @@ public class ProductVariantService {
             });
         }
 
-        if(variantDTO.getSku() != null) {
-            ProductVariantSku productVariantSku = new ProductVariantSku();
-            productVariantSku.setVariantId(variantId);
-            productVariantSku.setSku(variantDTO.getSku());
-            productVariantSkuService.createProductVariantSku(productVariantSku);
-        }
-
         return toDTO(variant);
     }
 
     public List<VariantDTO> getVariantsByProductId(Long productId) {
-        return variantRepository.findByProductId(productId).stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        List<VariantDTO> variantDTOList = variantRepository.findByProductId(productId);
+        variantDTOList.forEach(variantDTO -> {
+            List<VariantImageDTO> images = variantImageService.getImagesByVariantId(variantDTO.getId());
+            variantDTO.setImages(images);
+        });
+        return variantDTOList;
     }
 
     public VariantDTO getVariantById(Long id) {
@@ -77,6 +71,7 @@ public class ProductVariantService {
         dto.setStockQuantity(variant.getStockQuantity());
         dto.setAttributes(variant.getAttributes());
         dto.setActive(variant.isActive());
+        dto.setSku(variant.getSku());
         return dto;
     }
 
@@ -88,6 +83,7 @@ public class ProductVariantService {
         variant.setStockQuantity(dto.getStockQuantity());
         variant.setAttributes(dto.getAttributes());
         variant.setActive(dto.isActive());
+        variant.setSku(dto.getSku());
         return variant;
     }
 }

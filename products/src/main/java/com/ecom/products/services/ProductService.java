@@ -1,6 +1,7 @@
 package com.ecom.products.services;
 
 import com.ecom.products.dtos.ProductDTO;
+import com.ecom.products.dtos.VariantDTO;
 import com.ecom.products.entities.Product;
 import com.ecom.products.models.CreateProductRequest;
 import com.ecom.products.repositories.ProductRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,7 +52,14 @@ public class ProductService {
     }
 
     public ProductDTO getProductById(Long id) {
-        return productRepository.findById(id).map(this::toDTO).orElse(null);
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            return null;
+        }
+
+        List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(id);
+        return toDTO(product, variantDTOs);
+
     }
 
     public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
@@ -85,6 +94,12 @@ public class ProductService {
         dto.setStatus(product.getStatus());
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
+        return dto;
+    }
+
+    private ProductDTO toDTO(Product product, List<VariantDTO> variantDTOs) {
+        ProductDTO dto = toDTO(product);
+        dto.setVariants(variantDTOs);
         return dto;
     }
 

@@ -6,6 +6,8 @@ import com.ecom.products.repositories.VariantImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class VariantImageService {
@@ -13,6 +15,19 @@ public class VariantImageService {
 
     public VariantImage createVariantImage(VariantImage variantImage) {
         return variantImageRepository.save(variantImage);
+    }
+
+    public List<VariantImageDTO> getImagesByVariantId(Long id) {
+        return variantImageRepository.findVariantImagesByVariantId((id))
+                .stream()
+                .map(obj -> {
+                    if (obj instanceof VariantImage variantImage) {
+                        return toDTO(variantImage);
+                    }
+                    return null; // Handle the case where obj is not a VariantImage
+                })
+                .toList();
+
     }
 
     public VariantImageDTO toDTO(VariantImage variantImage) {

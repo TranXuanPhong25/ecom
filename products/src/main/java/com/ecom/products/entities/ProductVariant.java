@@ -30,7 +30,7 @@ public class ProductVariant {
 
     private Integer stockQuantity;
     private boolean isActive;
-
+    private String sku;
     @CreationTimestamp
     private ZonedDateTime createdAt;
 

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -32,7 +33,7 @@ public class ProductDTO {
     private boolean isActive;
 
     private Map<String, String> specs;
-
+    private List<VariantDTO> variants;
     private ProductStatus status;
 
     private ZonedDateTime createdAt;

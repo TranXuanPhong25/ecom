@@ -26,21 +26,14 @@ CREATE TABLE IF NOT EXISTS product_variants
     product_id     BIGSERIAL      NOT NULL REFERENCES products (id) ON DELETE CASCADE,
     price          DECIMAL(10, 2) NOT NULL,
     attributes     JSONB,
+    sku VARCHAR(255) UNIQUE,
     is_active      BOOLEAN                 DEFAULT TRUE,
     created_at     TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
     updated_at     TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
     stock_quantity INT            NOT NULL
 
 );
-CREATE TABLE IF NOT EXISTS product_variant_skus
-(
-    id         BIGSERIAL PRIMARY KEY,
-    variant_id BIGSERIAL    NOT NULL REFERENCES product_variants (id) ON DELETE CASCADE,
-    sku        VARCHAR(100) NOT NULL UNIQUE,
 
-    created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
-);
 CREATE TABLE IF NOT EXISTS variant_images
 (
     id         BIGSERIAL PRIMARY KEY,

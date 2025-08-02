@@ -42,6 +42,7 @@ public class Product {
     @Column(name = "status", columnDefinition = "product_status")
     private ProductStatus status;
 
+
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
