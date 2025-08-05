@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/TranXuanPhong25/ecom/image-upload/controllers"
+	"github.com/TranXuanPhong25/ecom/upload-service/controllers"
 	"github.com/labstack/echo/v4"
 )
 

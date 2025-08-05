@@ -321,3 +321,15 @@ services:
     command: [ "run", "--server", "--addr=:8181", "--log-level=debug", "/policies" ]
     networks:
       - backend
+  upload-service:
+    build:
+      context: ./upload
+      dockerfile: Dockerfile.dev
+    container_name: upload-service
+    volumes:
+      - ./upload:/app
+    restart: on-failure
+    ports:
+      - "8204:8204"
+    networks:
+      - backend
