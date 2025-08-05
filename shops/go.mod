@@ -3,7 +3,6 @@ module github.com/TranXuanPhong25/ecom/shops
 go 1.23.10
 
 require (
-	github.com/TranXuanPhong25/ecom/auth v0.0.0-20250723032440-c48fc23847a9
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/prometheus/client_golang v1.22.0

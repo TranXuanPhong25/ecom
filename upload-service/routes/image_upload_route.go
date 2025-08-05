@@ -6,5 +6,5 @@ import (
 )
 
 func ImageUploadRoutes(e *echo.Echo) {
-	e.GET("/api/image-upload", controllers.ImageUpload)
+	e.POST("/api/upload/presigned-url/image", controllers.GeneratePresignedURLUploadImage)
 }

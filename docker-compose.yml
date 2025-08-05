@@ -8,6 +8,8 @@ volumes:
   prometheus_data: {}  # Named volume for Prometheus data persistence
   postgres_products_data: {}  # Named volume for product Postgres data
   postgres_shops_data: { }  # Named volume for shop Postgres data
+  minio_data: {}  # Named volume for MinIO object storage data
+
 networks:
   backend:
     driver: bridge
@@ -323,13 +325,26 @@ services:
       - backend
   upload-service:
     build:
-      context: ./upload
+      context: ./upload-service
       dockerfile: Dockerfile.dev
     container_name: upload-service
     volumes:
-      - ./upload:/app
+      - ./upload-service:/app
     restart: on-failure
     ports:
       - "8204:8204"
+    networks:
+      - backend
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=admin1234
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
     networks:
       - backend
