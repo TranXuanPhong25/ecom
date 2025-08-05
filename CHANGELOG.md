@@ -1,3 +1,9 @@
+## [2.1.0](https://github.com/TranXuanPhong25/ecom/compare/v2.0.0...v2.1.0) (2025-08-05)
+
+### 🚀 Features
+
+* **product:** add more details to get product response ([2a333f1](https://github.com/TranXuanPhong25/ecom/commit/2a333f1dae7d0a277a09d44db544f2efc1f02ae1))
+
 ## [2.0.0](https://github.com/TranXuanPhong25/ecom/compare/v1.7.0...v2.0.0) (2025-08-02)
 
 ### ⚠ BREAKING CHANGES
