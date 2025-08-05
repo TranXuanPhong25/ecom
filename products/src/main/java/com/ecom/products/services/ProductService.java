@@ -119,6 +119,11 @@ public class ProductService {
     }
 
     public Page<ProductDTO> getProductsByShopId(UUID shopId, Pageable pageable) {
-        return productRepository.findByShopId(shopId, pageable).map(this::toDTO);
+        Page<ProductDTO> products = productRepository.findByShopId(shopId, pageable).map(this::toDTO);
+        products.forEach(product -> {
+            List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(product.getId());
+            product.setVariants(variantDTOs);
+        });
+        return products;
     }
 }
