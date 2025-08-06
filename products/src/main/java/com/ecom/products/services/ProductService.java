@@ -3,6 +3,7 @@ package com.ecom.products.services;
 import com.ecom.products.dtos.ProductDTO;
 import com.ecom.products.dtos.VariantDTO;
 import com.ecom.products.entities.Product;
+import com.ecom.products.entities.ProductVariant;
 import com.ecom.products.models.CreateProductRequest;
 import com.ecom.products.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +40,11 @@ public class ProductService {
         if (createProductRequest.variants() != null) {
             Product finalProduct = product;
             createProductRequest.variants().forEach(variant -> {
-                variant.setProductId(finalProduct.getId());
-                productVariantService.createVariant(variant);
+                ProductVariant newVariant = productVariantService.toEntity(variant);
+                newVariant.setProductId(finalProduct.getId());
+                productVariantService.createVariant(newVariant);
             });
         }
-        ;
         return toDTO(product);
     }
 
@@ -91,6 +92,7 @@ public class ProductService {
         if (product.getBrand() != null) {
             dto.setBrand(brandService.toDTO(product.getBrand()));
         }
+        dto.setImages(product.getImages());
         dto.setStatus(product.getStatus());
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
@@ -109,6 +111,7 @@ public class ProductService {
         product.setId(dto.getId());
         product.setSpecs(dto.getSpecs());
         product.setName(dto.getName());
+        product.setImages(dto.getImages());
         product.setDescription(dto.getDescription());
         product.setCategoryId(dto.getCategoryId());
         if (dto.getBrand() != null) {
@@ -120,10 +123,10 @@ public class ProductService {
 
     public Page<ProductDTO> getProductsByShopId(UUID shopId, Pageable pageable) {
         Page<ProductDTO> products = productRepository.findByShopId(shopId, pageable).map(this::toDTO);
-        products.forEach(product -> {
-            List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(product.getId());
-            product.setVariants(variantDTOs);
-        });
+//        products.forEach(product -> {
+//            List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(product.getId());
+//            product.setVariants(variantDTOs);
+//        });
         return products;
     }
 }

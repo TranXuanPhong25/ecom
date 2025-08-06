@@ -9,6 +9,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -22,6 +23,8 @@ public class ProductVariant {
     private Long productId;
 
     private BigDecimal price;
+
+    private List<String> images;
 
     //    @Convert(converter = JsonBConverter.class)
     @JdbcTypeCode(SqlTypes.JSON)

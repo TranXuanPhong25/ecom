@@ -1,45 +1,30 @@
 package com.ecom.products.services;
 
 import com.ecom.products.dtos.VariantDTO;
-import com.ecom.products.dtos.VariantImageDTO;
 import com.ecom.products.entities.ProductVariant;
-import com.ecom.products.entities.VariantImage;
 import com.ecom.products.repositories.ProductVariantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductVariantService {
 
     private final ProductVariantRepository variantRepository;
-    private final VariantImageService variantImageService;
 
-    public VariantDTO createVariant(VariantDTO variantDTO) {
-        ProductVariant variant = toEntity(variantDTO);
-        variant = variantRepository.save(variant);
-        Long variantId = variant.getId();
-
-        if (variantDTO.getImages() != null) {
-            variantDTO.getImages().forEach(imageDTO -> {
-                VariantImage variantImage = variantImageService.toEntity(imageDTO);
-                variantImage.setVariantId(variantId);
-                variantImageService.createVariantImage(variantImage);
-            });
-        }
-
-        return toDTO(variant);
+    public ProductVariant createVariant(ProductVariant variant) {
+        return variantRepository.save(variant);
     }
 
     public List<VariantDTO> getVariantsByProductId(Long productId) {
-        List<VariantDTO> variantDTOList = variantRepository.findByProductId(productId);
-        variantDTOList.forEach(variantDTO -> {
-            List<VariantImageDTO> images = variantImageService.getImagesByVariantId(variantDTO.getId());
-            variantDTO.setImages(images);
-        });
+        List<VariantDTO> variantDTOList = variantRepository.findByProductId(productId)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
         return variantDTOList;
     }
 
@@ -66,19 +51,19 @@ public class ProductVariantService {
     private VariantDTO toDTO(ProductVariant variant) {
         VariantDTO dto = new VariantDTO();
         dto.setId(variant.getId());
-        dto.setProductId(variant.getProductId());
         dto.setPrice(variant.getPrice());
         dto.setStockQuantity(variant.getStockQuantity());
         dto.setAttributes(variant.getAttributes());
         dto.setActive(variant.isActive());
         dto.setSku(variant.getSku());
+        dto.setImages(variant.getImages());
         return dto;
     }
 
-    private ProductVariant toEntity(VariantDTO dto) {
+    ProductVariant toEntity(VariantDTO dto) {
         ProductVariant variant = new ProductVariant();
         variant.setId(dto.getId());
-        variant.setProductId(dto.getProductId());
+        variant.setImages(dto.getImages());
         variant.setPrice(dto.getPrice());
         variant.setStockQuantity(dto.getStockQuantity());
         variant.setAttributes(dto.getAttributes());

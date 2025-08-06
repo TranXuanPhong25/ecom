@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,6 +33,8 @@ public class Product {
     private String description;
 
     private Long categoryId;
+
+    private List<String> images;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")

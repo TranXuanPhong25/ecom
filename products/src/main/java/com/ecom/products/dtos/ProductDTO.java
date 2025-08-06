@@ -28,6 +28,8 @@ public class ProductDTO {
     @NotNull(message = "Category is required")
     private Long categoryId;
 
+    private List<String> images;
+
     private String categoryPath;
     private BrandDTO brand;
     private boolean isActive;
