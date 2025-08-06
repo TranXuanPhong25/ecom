@@ -1,3 +1,13 @@
+## [2.2.0](https://github.com/TranXuanPhong25/ecom/compare/v2.1.0...v2.2.0) (2025-08-05)
+
+### 🚀 Features
+
+* **upload:** basic presign url logic for image ([4c08482](https://github.com/TranXuanPhong25/ecom/commit/4c08482172e25cf6a57880e81d5c4add9438a791))
+
+### 🔨 Technical Changes
+
+* **upload-service:** change from image-upload service to uploadservice ([4cf4b32](https://github.com/TranXuanPhong25/ecom/commit/4cf4b325d4ed6ecbb15147c75b0f7acd2e6fa008))
+
 ## [2.1.0](https://github.com/TranXuanPhong25/ecom/compare/v2.0.0...v2.1.0) (2025-08-05)
 
 ### 🚀 Features
