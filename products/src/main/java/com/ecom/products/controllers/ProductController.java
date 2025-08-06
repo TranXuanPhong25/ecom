@@ -3,6 +3,7 @@ package com.ecom.products.controllers;
 import com.ecom.products.dtos.PageResponse;
 import com.ecom.products.dtos.ProductDTO;
 import com.ecom.products.models.CreateProductRequest;
+import com.ecom.products.models.DeleteProductsPayload;
 import com.ecom.products.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,12 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Void> deleteProductsByIds(@RequestBody DeleteProductsPayload deleteProductsPayload) {
+        productService.deleteProductsByIds(deleteProductsPayload.ids());
         return ResponseEntity.noContent().build();
     }
 }

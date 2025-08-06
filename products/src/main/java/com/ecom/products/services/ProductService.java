@@ -129,4 +129,15 @@ public class ProductService {
 //        });
         return products;
     }
+
+    public void deleteProductsByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return;
+        }
+        try {
+            productRepository.deleteAllById(ids);
+        } catch (DataIntegrityViolationException ex) {
+            throw new RuntimeException("Error occur when deleting products: " + ex.getMessage(), ex);
+        }
+    }
 }
