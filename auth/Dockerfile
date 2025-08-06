@@ -28,7 +28,5 @@ WORKDIR /root/
 # Copy binary từ stage build
 COPY --from=builder /app/main .
 
-EXPOSE 8201
-
 # Lệnh chạy app
 CMD ["./main"]

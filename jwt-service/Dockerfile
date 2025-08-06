@@ -27,8 +27,6 @@ WORKDIR /root/
 
 # Copy binary từ stage build
 COPY --from=builder /app/main .
-COPY --from=builder /app/.env.* ./ 
-EXPOSE 50051
-
+COPY --from=builder /app/.env.* ./
 # Lệnh chạy app
 CMD ["./main"]

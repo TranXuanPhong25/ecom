@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	RpcPort = ":50052" // gRPC server port
+	RpcPort = ":50050" // gRPC server port
 )
 
 func main() {

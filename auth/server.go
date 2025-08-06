@@ -22,8 +22,8 @@ func main() {
 	e.Use(middlewares.PrometheusMiddleware())
 	repositories.ConnectRedis()
 
-	services.InitJWTServiceClient("jwt-service:50051")
-	services.InitUsersServiceClient("users-service:50052")
+	services.InitJWTServiceClient("jwt-service:50050")
+	services.InitUsersServiceClient("users-service:50050")
 
 	routes.AuthRoute(e)
 	routes.MetricRoute(e)
@@ -31,7 +31,7 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	e.Logger.Fatal(e.Start(":8202"))
+	e.Logger.Fatal(e.Start(":8080"))
 
 	<-quit
 	services.CloseUsersServiceConnection()

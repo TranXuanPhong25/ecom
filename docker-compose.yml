@@ -1,19 +1,20 @@
-
 volumes:
-  kong_db_data: {}  # Named volume to persist Postgres data across container restarts
-  postgres_product_reviews_data: {}  # Named volume for product review Postgres data
-  postgres_product_categories_data: {}  # Named volume for product category Postgres data
-  postgres_users_data: {}  # Named volume for user Postgres data
-  auth_redis_data: {}  # Named volume for Redis data used by auth service
-  prometheus_data: {}  # Named volume for Prometheus data persistence
-  postgres_products_data: {}  # Named volume for product Postgres data
-  postgres_shops_data: { }  # Named volume for shop Postgres data
-  minio_data: {}  # Named volume for MinIO object storage data
+  kong_db_data: {}
+  postgres_product_reviews_data: {}
+  postgres_product_categories_data: {}
+  postgres_users_data: {}
+  auth_redis_data: {}
+  prometheus_data: {}
+  postgres_products_data: {}
+  postgres_shops_data: {}
+  minio_data: {}
 
 networks:
   backend:
     driver: bridge
+
 services:
+  # Infrastructure services
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -26,6 +27,7 @@ services:
     networks:
       - backend
 
+  # Kong API Gateway and related services
   kong-db:
     image: postgres:13
     container_name: kong-db
@@ -38,7 +40,6 @@ services:
       POSTGRES_PASSWORD: kong
     networks:
       - backend
-
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "kong"]
       interval: 5s
@@ -90,21 +91,7 @@ services:
     networks:
       - backend
 
-  jwt-service:
-    working_dir: /app
-    build:
-      context: ./jwt-service
-      dockerfile: Dockerfile.dev
-
-    container_name: jwt-service
-    volumes:
-      - ./jwt-service:/app
-    restart: on-failure
-    ports:
-      - "50051:50051"
-    networks:
-
-      - backend
+  # Database services
   postgres-product-reviews:
     image: postgres:15-alpine
     volumes:
@@ -117,6 +104,7 @@ services:
       - "5433:5432"
     networks:
       - backend
+
   postgres-product-categories:
     image: postgres:15-alpine
     volumes:
@@ -129,6 +117,7 @@ services:
       - "5434:5432"
     networks:
       - backend
+
   postgres-users:
     image: postgres:15-alpine
     volumes:
@@ -141,6 +130,7 @@ services:
       - "5435:5432"
     networks:
       - backend
+
   postgres-products:
     image: postgres:15-alpine
     volumes:
@@ -153,6 +143,7 @@ services:
       - "5436:5432"
     networks:
       - backend
+
   postgres-shops:
     image: postgres:15-alpine
     volumes:
@@ -165,23 +156,8 @@ services:
       - "5437:5432"
     networks:
       - backend
-  product-reviews-service:
-    container_name: product-reviews-service
-    build:
-      context: ./product-reviews
-    restart: on-failure
-    ports:
-      - "8200:8200"
-    depends_on:
-      - postgres-product-reviews
-    environment:
-      DB_HOST: postgres-product-reviews
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: mydatabase
-      DB_PORT: 5432
-    networks:
-      - backend
+
+  # Redis cache for auth service
   auth-redis:
     image: redis:7-alpine
     container_name: auth-redis
@@ -194,55 +170,53 @@ services:
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     networks:
       - backend
-  product-categories-service:
-    container_name: product-categories-service
-    build:
-      context: ./product-categories
-      target: dev
+
+  # MinIO object storage
+  minio:
+    container_name: minio
+    image: minio/minio
     ports:
-      - "8081:8080"
-    depends_on:
-      - postgres-product-categories
+      - "9001:9000"
+      - "9002:9001"
     environment:
-      DB_HOST: postgres-product-categories
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: mydatabase
-      DB_PORT: 5432
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=admin1234
     volumes:
-        - ./product-categories:/app
-    networks:
-      - backend
-  auth-service:
-    container_name: auth-service
-    build:
-      context: ./auth
-      dockerfile: Dockerfile.dev
-    ports:
-      - "8202:8202"
-    depends_on:
-      - users-service
-      - jwt-service
-      - auth-redis
-    environment:
-      REDIS_ADDR: auth-redis:6379
-      REDIS_PASSWORD: redis-password
-    volumes:
-      - ./auth:/app
+      - minio_data:/data
+    command: server /data --console-address ":9001"
     networks:
       - backend
 
+  minio-proxy:
+    container_name: minio-proxy
+    image: nginx:latest
+    ports:
+      - "9000:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - backend
+    depends_on:
+      - minio
+
+  # gRPC services
+  jwt-service:
+    working_dir: /app
+    build:
+      context: ./jwt-service
+      dockerfile: Dockerfile.dev
+    container_name: jwt-service
+    volumes:
+      - ./jwt-service:/app
+    restart: on-failure
+    networks:
+      - backend
 
   users-service:
     container_name: users-service
-    # image: cosmtrek/air
-    # working_dir: /app
-
     build:
       context: ./users
       dockerfile: Dockerfile.dev
-    ports:
-      - "50052:50052"
     depends_on:
       - postgres-users
     environment:
@@ -255,13 +229,13 @@ services:
       - ./users:/app
     networks:
       - backend
+
+  # REST API services (starting from 8081)
   products-service:
     container_name: products-service
     build:
       context: ./products
       target: dev
-    ports:
-      - "8080:8080"
     depends_on:
       - products-test
       - postgres-products
@@ -275,6 +249,101 @@ services:
       - ./products:/app
     networks:
       - backend
+
+  product-reviews-service:
+    container_name: product-reviews-service
+    build:
+      context: ./product-reviews
+    restart: on-failure
+    depends_on:
+      - postgres-product-reviews
+    environment:
+      DB_HOST: postgres-product-reviews
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    networks:
+      - backend
+
+  product-categories-service:
+    container_name: product-categories-service
+    build:
+      context: ./product-categories
+      target: dev
+    depends_on:
+      - postgres-product-categories
+    environment:
+      DB_HOST: postgres-product-categories
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    volumes:
+      - ./product-categories:/app
+    networks:
+      - backend
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - users-service
+      - jwt-service
+      - auth-redis
+    environment:
+      REDIS_ADDR: auth-redis:6379
+      REDIS_PASSWORD: redis-password
+    volumes:
+      - ./auth:/app
+    networks:
+      - backend
+
+  shops-service:
+    working_dir: /app
+    build:
+      context: ./shops
+      dockerfile: Dockerfile.dev
+    container_name: shops-service
+    volumes:
+      - ./shops:/app
+    restart: on-failure
+    environment:
+      DB_HOST: postgres-shops
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+      DB_PORT: 5432
+    networks:
+      - backend
+
+  upload-service:
+    build:
+      context: ./upload-service
+      dockerfile: Dockerfile.dev
+    container_name: upload-service
+    volumes:
+      - ./upload-service:/app
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+  # Other services
+  opa-server:
+    image: openpolicyagent/opa:latest
+    container_name: opa-server
+    ports:
+      - "8181:8181"
+    volumes:
+      - ./opa/policies:/policies
+    command: ["run", "--server", "--addr=:8181", "--log-level=debug", "/policies"]
+    networks:
+      - backend
+
   products-test:
     build:
       target: test
@@ -294,70 +363,3 @@ services:
       - ./products:/app
     networks:
       - backend
-  shops-service:
-    working_dir: /app
-    build:
-      context: ./shops
-      dockerfile: Dockerfile.dev
-    container_name: shops-service
-    volumes:
-      - ./shops:/app
-    restart: on-failure
-    environment:
-      DB_HOST: postgres-shops
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: mydatabase
-      DB_PORT: 5432
-    ports:
-      - "8203:8203"
-    networks:
-      - backend
-  opa-server:
-    image: openpolicyagent/opa:latest
-    container_name: opa-server
-    ports:
-      - "8181:8181"
-    volumes:
-      - ./opa/policies:/policies
-    command: [ "run", "--server", "--addr=:8181", "--log-level=debug", "/policies" ]
-    networks:
-      - backend
-  upload-service:
-    build:
-      context: ./upload-service
-      dockerfile: Dockerfile.dev
-    container_name: upload-service
-    volumes:
-      - ./upload-service:/app
-    restart: on-failure
-    ports:
-      - "8204:8204"
-    networks:
-      - backend
-  minio:
-    container_name: minio
-    image: minio/minio
-    ports:
-      - "9001:9000"
-      - "9002:9001"
-    environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=admin1234
-#      - MINIO_SERVER_URL=http://localhost:9000
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
-    networks:
-      - backend
-  minio-proxy:
-    container_name: minio-proxy
-    image: nginx:latest
-    ports:
-      - "9000:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    networks:
-      - backend
-    depends_on:
-      - minio

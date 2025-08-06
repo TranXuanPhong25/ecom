@@ -20,5 +20,5 @@ func main() {
 	} // Tự tạo bảng nếu chưa có
 
 	routes.ReviewRoutes(e) // Add các route
-	e.Logger.Fatal(e.Start(":8200"))
+	e.Logger.Fatal(e.Start(":8080"))
 }

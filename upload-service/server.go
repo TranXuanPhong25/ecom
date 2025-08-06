@@ -14,5 +14,5 @@ func main() {
 	services.InitMinIOClient()
 
 	routes.ImageUploadRoutes(e)
-	e.Logger.Fatal(e.Start(":8204"))
+	e.Logger.Fatal(e.Start(":8080"))
 }

@@ -23,6 +23,6 @@ func main() {
 		e.Logger.Fatal("Failed to migrate database:", err)
 	}
 	routes.ShopsRoute(e)
-	e.Logger.Fatal(e.Start(":8203"))
+	e.Logger.Fatal(e.Start(":8080"))
 
 }
