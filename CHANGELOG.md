@@ -1,3 +1,13 @@
+## [2.3.1](https://github.com/TranXuanPhong25/ecom/compare/v2.3.0...v2.3.1) (2025-08-06)
+
+### 🐛 Bug Fixes
+
+* kong relevant port use ([39bf979](https://github.com/TranXuanPhong25/ecom/commit/39bf979185bdba2b95022a7c83252f384c156a37))
+
+### 🔨 Technical Changes
+
+* don't expose port of each service, set all service to open at default port ([4e4608e](https://github.com/TranXuanPhong25/ecom/commit/4e4608e69be3056e6830438a5e500287ce9d0269))
+
 ## [2.3.0](https://github.com/TranXuanPhong25/ecom/compare/v2.2.0...v2.3.0) (2025-08-06)
 
 ### 🚀 Features
