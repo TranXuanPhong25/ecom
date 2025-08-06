@@ -1,3 +1,9 @@
+## [2.3.0](https://github.com/TranXuanPhong25/ecom/compare/v2.2.0...v2.3.0) (2025-08-06)
+
+### 🚀 Features
+
+* **minio:** use nginx as minio-proxy ([9bc2a1e](https://github.com/TranXuanPhong25/ecom/commit/9bc2a1e8edcd55454c2a36652eb44430246c3529))
+
 ## [2.2.0](https://github.com/TranXuanPhong25/ecom/compare/v2.1.0...v2.2.0) (2025-08-05)
 
 ### 🚀 Features
