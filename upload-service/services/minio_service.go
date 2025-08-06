@@ -15,24 +15,28 @@ var (
 )
 
 func InitMinIOClient() {
-	endpoint := "minio:9000"             // MinIO server endpoint
-	accessKeyID := "myuseraccesskey"     // MinIO access key
-	secretAccessKey := "myusersecretkey" // MinIO secret key
-	useSSL := false                      // Set to true if using HTTPS
+	endpoint := "minio:9000"       // MinIO server endpoint
+	accessKeyID := "admin"         // MinIO access key
+	secretAccessKey := "admin1234" // MinIO secret key
+	useSSL := false                // Set to true if using HTTPS
 
 	client, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
 		Secure: useSSL,
 	})
-	MinIOClient = client
 	if err != nil {
 		log.Errorf("%v\n", err)
 		return
 	}
+	if client == nil {
+		log.Error("MinIO client is nil")
+		return
+	}
+	MinIOClient = client
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
 	defer cancel()
 	listBuckets, err := MinIOClient.ListBuckets(ctx)
-	log.Printf("%v\n", listBuckets)
+	log.Printf("%v", listBuckets)
 }
 
 func GeneratePresignedURLUploadImage(objectName string) (string, error) {
@@ -47,7 +51,7 @@ func GeneratePresignedURLUploadImage(objectName string) (string, error) {
 		log.Errorf("%v\n", err)
 		return "", err
 	}
-	// For local development, we need to set the host to localhost:9000 - this is because MinIO runs on localhost in a Docker container
+	// Modify host to point to minio proxy server
 	presignedURL.Host = "localhost:9000"
 	return presignedURL.String(), nil
 }
