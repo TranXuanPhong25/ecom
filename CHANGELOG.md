@@ -1,3 +1,15 @@
+## [3.0.0](https://github.com/TranXuanPhong25/ecom/compare/v2.3.1...v3.0.0) (2025-08-06)
+
+### ⚠ BREAKING CHANGES
+
+* **products:** - remove variant_images
+- add images field to products and product_variants schema
+- insert default branch on flyway migration
+
+### 🚀 Features
+
+* **products:** Change Product and Variant schema ([cc1544f](https://github.com/TranXuanPhong25/ecom/commit/cc1544f0d7ead22890749a48b299e8a6b8fc9903))
+
 ## [2.3.1](https://github.com/TranXuanPhong25/ecom/compare/v2.3.0...v2.3.1) (2025-08-06)
 
 ### 🐛 Bug Fixes
