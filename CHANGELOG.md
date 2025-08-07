@@ -1,3 +1,10 @@
+## [3.1.0](https://github.com/TranXuanPhong25/ecom/compare/v3.0.0...v3.1.0) (2025-08-07)
+
+### 🚀 Features
+
+* **product:** create product-categories client and make a REST call when get categoryPath ([cb853a3](https://github.com/TranXuanPhong25/ecom/commit/cb853a3270c19bcd19440a83135329af794a9038))
+* **product:** new endpoint for delete multiple products ([7ce0e63](https://github.com/TranXuanPhong25/ecom/commit/7ce0e63990a1cc1a09e6cc436933248b5824ac6d))
+
 ## [3.0.0](https://github.com/TranXuanPhong25/ecom/compare/v2.3.1...v3.0.0) (2025-08-06)
 
 ### ⚠ BREAKING CHANGES
