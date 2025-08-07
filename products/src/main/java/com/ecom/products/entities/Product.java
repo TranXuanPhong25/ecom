@@ -36,7 +36,7 @@ public class Product {
 
     private List<String> images;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
