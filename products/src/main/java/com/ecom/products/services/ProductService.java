@@ -13,6 +13,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class ProductService {
     private final ProductVariantService productVariantService;
     private final ProductRepository productRepository;
     private final BrandService brandService;
+    private final CategoryService categoryService;
 
     public ProductDTO createProduct(CreateProductRequest createProductRequest) {
         Product product = toEntity(createProductRequest.product());
@@ -59,7 +61,12 @@ public class ProductService {
         }
 
         List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(id);
-        return toDTO(product, variantDTOs);
+        ProductDTO productDTO = toDTO(product, variantDTOs);
+        if (product.getCategoryId() != null) {
+            Mono<String> categoryPathMono = categoryService.getCategoryPath(product.getCategoryId());
+            productDTO.setCategoryPath(categoryPathMono.block());
+        }
+        return productDTO;
 
     }
 
@@ -122,12 +129,7 @@ public class ProductService {
     }
 
     public Page<ProductDTO> getProductsByShopId(UUID shopId, Pageable pageable) {
-        Page<ProductDTO> products = productRepository.findByShopId(shopId, pageable).map(this::toDTO);
-//        products.forEach(product -> {
-//            List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(product.getId());
-//            product.setVariants(variantDTOs);
-//        });
-        return products;
+        return productRepository.findByShopId(shopId, pageable).map(this::toDTO);
     }
 
     public void deleteProductsByIds(List<Long> ids) {

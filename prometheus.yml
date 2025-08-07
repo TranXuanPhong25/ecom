@@ -6,7 +6,7 @@ scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: [ 'localhost:9090' ]
         labels:
           group: 'monitoring'
 
@@ -14,7 +14,7 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: /metrics
     static_configs:
-      - targets: ['kong:8001']
+      - targets: [ 'kong:8001' ]
         labels:
           group: 'api-gateway'
 
@@ -22,7 +22,7 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: /metrics
     static_configs:
-      - targets: ['auth-service:8080']
+      - targets: [ 'auth-service:8080' ]
         labels:
           group: 'services'
 
@@ -63,4 +63,4 @@ scrape_configs:
     static_configs:
       - targets: [ 'products-service:8080' ]
         labels:
-          group: 'services'x
+          group: 'services'

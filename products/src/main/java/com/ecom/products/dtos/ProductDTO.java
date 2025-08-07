@@ -32,7 +32,6 @@ public class ProductDTO {
 
     private String categoryPath;
     private BrandDTO brand;
-    private boolean isActive;
 
     private Map<String, String> specs;
     private List<VariantDTO> variants;

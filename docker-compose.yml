@@ -245,6 +245,7 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: mydatabase
       DB_PORT: 5432
+      PRODUCT_CATEGORIES_SERVICE_URL: http://product-categories-service:8080/api/product-categories
     volumes:
       - ./products:/app
     networks:
