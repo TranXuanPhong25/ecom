@@ -46,6 +46,29 @@ services:
         response_buffering: true
         strip_path: false
     write_timeout: 60000
+  - name: upload_service
+    connect_timeout: 60000
+    enabled: true
+    host: upload-service
+    port: 8080
+    protocol: http
+    read_timeout: 60000
+    retries: 5
+    routes:
+      - name: upload_route
+        https_redirect_status_code: 301
+        path_handling: v0
+        paths:
+          - /api/upload
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        strip_path: false
+    write_timeout: 60000
   - name: products_service
     connect_timeout: 60000
     enabled: true

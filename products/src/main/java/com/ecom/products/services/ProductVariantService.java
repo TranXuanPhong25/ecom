@@ -38,6 +38,7 @@ public class ProductVariantService {
             variant.setPrice(variantDTO.getPrice());
             variant.setStockQuantity(variantDTO.getStockQuantity());
             variant.setAttributes(variantDTO.getAttributes());
+            variant.setImages(variantDTO.getImages());
             variant.setActive(variantDTO.isActive());
             variant = variantRepository.save(variant);
             return toDTO(variant);
@@ -48,7 +49,7 @@ public class ProductVariantService {
         variantRepository.deleteById(id);
     }
 
-    private VariantDTO toDTO(ProductVariant variant) {
+    VariantDTO toDTO(ProductVariant variant) {
         VariantDTO dto = new VariantDTO();
         dto.setId(variant.getId());
         dto.setPrice(variant.getPrice());

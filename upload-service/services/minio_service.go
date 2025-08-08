@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"net/url"
 	"time"
 )
 
@@ -39,19 +40,23 @@ func InitMinIOClient() {
 	log.Printf("%v", listBuckets)
 }
 
-func GeneratePresignedURLUploadImage(objectName string) (string, error) {
+func GeneratePresignedURLUploadImage(objectName string) (*url.URL, error) {
 	if MinIOClient == nil {
 		log.Errorf("MinIO client is not initialized\n")
-		return "", nil
+		return &url.URL{}, nil
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
 	defer cancel()
 	presignedURL, err := MinIOClient.PresignedPutObject(ctx, ProductImageBucketName, objectName, PresignedURLExpiration)
 	if err != nil {
 		log.Errorf("%v\n", err)
-		return "", err
+		return &url.URL{}, err
 	}
 	// Modify host to point to minio proxy server
 	presignedURL.Host = "localhost:9000"
-	return presignedURL.String(), nil
+	return presignedURL, nil
+}
+
+func TruncateUrl(url *url.URL) string {
+	return url.Scheme + "://" + url.Host + url.Path
 }

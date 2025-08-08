@@ -6,6 +6,7 @@ import com.ecom.products.entities.Product;
 import com.ecom.products.entities.ProductVariant;
 import com.ecom.products.models.CreateProductRequest;
 import com.ecom.products.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ public class ProductService {
     private final BrandService brandService;
     private final CategoryService categoryService;
 
+    @Transactional
     public ProductDTO createProduct(CreateProductRequest createProductRequest) {
         Product product = toEntity(createProductRequest.product());
         try {
@@ -38,16 +41,16 @@ public class ProductService {
             }
             throw new RuntimeException("Error occur when creating new product: " + ex.getMessage(), ex);
         }
-
-        if (createProductRequest.variants() != null) {
-            Product finalProduct = product;
-            createProductRequest.variants().forEach(variant -> {
-                ProductVariant newVariant = productVariantService.toEntity(variant);
-                newVariant.setProductId(finalProduct.getId());
-                productVariantService.createVariant(newVariant);
-            });
-        }
-        return toDTO(product);
+        List<VariantDTO> variantDTOs = new ArrayList<>();
+        Product finalProduct = product;
+        createProductRequest.variants().forEach(variant -> {
+            ProductVariant newVariant = productVariantService.toEntity(variant);
+            newVariant.setProductId(finalProduct.getId());
+            newVariant = productVariantService.createVariant(newVariant);
+            VariantDTO variantDTO = productVariantService.toDTO(newVariant);
+            variantDTOs.add(variantDTO);
+        });
+        return toDTO(product, variantDTOs);
     }
 
     public Page<ProductDTO> getProducts(Pageable pageable) {
@@ -70,18 +73,26 @@ public class ProductService {
 
     }
 
-    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
-        return productRepository.findById(id).map(product -> {
+    public ProductDTO updateProduct(Long id, CreateProductRequest updateProductRequest) {
+        ProductDTO productDTO = updateProductRequest.product();
+        ProductDTO updatedProduct =  productRepository.findById(id).map(product -> {
             product.setName(productDTO.getName());
             product.setDescription(productDTO.getDescription());
             product.setCategoryId(productDTO.getCategoryId());
-            if (product.getBrand() != null) {
-                product.setBrand(brandService.toEntity(productDTO.getBrand()));
-            }
+            product.setImages(productDTO.getImages());
+            product.setBrand(brandService.toEntity(productDTO.getBrand()));
             product.setStatus(productDTO.getStatus());
             product = productRepository.save(product);
             return toDTO(product);
         }).orElse(null);
+
+        // Update variants
+        if (updatedProduct != null) {
+            updateProductRequest.variants().forEach(variant -> {
+                productVariantService.updateVariant(variant.getId(), variant);
+            });
+        }
+        return updatedProduct;
     }
 
     public void deleteProduct(Long id) {

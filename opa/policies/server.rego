@@ -15,6 +15,14 @@ allow if {
 }
 
 allow if {
+    presigned_url_pattern := [
+    "/api/upload/presigned-url"
+    ]
+    input.method in [ "POST", "GET" , "PUT", "DELETE", "OPTIONS" ]
+    regex.match(presigned_url_pattern[_], input.path)
+}
+
+allow if {
     public_auth_pattern := [
     "/api/auth/login",
     "/api/auth/register",
@@ -39,17 +47,19 @@ allow if {
 
 # restrict access to products for authenticated users
 allow if {
+    pattern := `\/api\/products`
+    regex.match(pattern, input.path)
+
     input.method in { "POST", "PUT", "DELETE", "OPTIONS" }
-    input.path == "/api/products"
     input.authenticated == true
 }
 
 #restrict access to seller's products
 allow if {
-    private_products_service_get_product_of_shop_pattern := `\/api\/products`
-    input.method == "GET"
-    regex.match(private_products_service_get_product_of_shop_pattern, input.path)
+    pattern := `\/api\/products`
+    regex.match(pattern, input.path)
 #    input.authenticated == false
+    input.method == "GET"
 }
 
 allow if {
