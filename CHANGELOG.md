@@ -1,3 +1,9 @@
+## [3.2.0](https://github.com/TranXuanPhong25/ecom/compare/v3.1.2...v3.2.0) (2025-08-08)
+
+### 🚀 Features
+
+* cover image for product ([c0e4854](https://github.com/TranXuanPhong25/ecom/commit/c0e4854a31e219cacf448df2bc6f8692aa138674))
+
 ## [3.1.2](https://github.com/TranXuanPhong25/ecom/compare/v3.1.1...v3.1.2) (2025-08-08)
 
 ### 🐛 Bug Fixes
