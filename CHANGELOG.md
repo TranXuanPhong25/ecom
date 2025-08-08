@@ -1,3 +1,9 @@
+## [3.1.1](https://github.com/TranXuanPhong25/ecom/compare/v3.1.0...v3.1.1) (2025-08-07)
+
+### 🐛 Bug Fixes
+
+* auto fetch brand when get product ([c79a4e5](https://github.com/TranXuanPhong25/ecom/commit/c79a4e5918a55e5eb61ec44341f2189b3a74f6ee))
+
 ## [3.1.0](https://github.com/TranXuanPhong25/ecom/compare/v3.0.0...v3.1.0) (2025-08-07)
 
 ### 🚀 Features
