@@ -32,7 +32,7 @@ public class ProductDTO {
 
     private String categoryPath;
     private BrandDTO brand;
-
+    private String coverImage;
     private Map<String, String> specs;
     private List<VariantDTO> variants;
     private ProductStatus status;

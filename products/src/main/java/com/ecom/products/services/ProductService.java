@@ -104,6 +104,7 @@ public class ProductService {
         dto.setShopId(product.getShopId().toString());
         dto.setId(product.getId());
         dto.setName(product.getName());
+        dto.setCoverImage(product.getCoverImage());
         dto.setDescription(product.getDescription());
         dto.setCategoryId(product.getCategoryId());
         dto.setSpecs(product.getSpecs());
@@ -124,9 +125,11 @@ public class ProductService {
     }
 
     private Product toEntity(ProductDTO dto) {
+
         Product product = new Product();
         product.setShopId(UUID.fromString(dto.getShopId()));
         product.setId(dto.getId());
+        product.setCoverImage(dto.getCoverImage());
         product.setSpecs(dto.getSpecs());
         product.setName(dto.getName());
         product.setImages(dto.getImages());

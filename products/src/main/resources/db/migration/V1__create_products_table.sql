@@ -9,17 +9,18 @@ CREATE TABLE IF NOT EXISTS brands
 );
 CREATE TABLE IF NOT EXISTS products
 (
-    id          BIGSERIAL PRIMARY KEY,
-    shop_id     uuid           NOT NULL,
-    name        VARCHAR(255)   NOT NULL UNIQUE,
-    description TEXT,
-    specs       JSONB,
-    images      TEXT ARRAY,
-    category_id BIGINT,
-    brand_id    BIGINT REFERENCES brands (id),
-    status      product_status NOT NULL DEFAULT 'DRAFT',
-    created_at  TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMPTZ    NOT NULL DEFAULT NOW()
+    id              BIGSERIAL PRIMARY KEY,
+    shop_id         uuid           NOT NULL,
+    name            VARCHAR(255)   NOT NULL UNIQUE,
+    description     TEXT,
+    cover_image TEXT           NOT NULL,
+    specs           JSONB,
+    images          TEXT ARRAY,
+    category_id     BIGINT,
+    brand_id        BIGINT REFERENCES brands (id),
+    status          product_status NOT NULL DEFAULT 'DRAFT',
+    created_at      TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ    NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS product_variants
 (

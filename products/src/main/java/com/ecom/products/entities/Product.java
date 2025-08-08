@@ -33,7 +33,7 @@ public class Product {
     private String description;
 
     private Long categoryId;
-
+    private String coverImage;
     private List<String> images;
 
     @OneToOne(fetch = FetchType.EAGER)
