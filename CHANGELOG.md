@@ -1,3 +1,9 @@
+## [3.1.2](https://github.com/TranXuanPhong25/ecom/compare/v3.1.1...v3.1.2) (2025-08-08)
+
+### 🐛 Bug Fixes
+
+* product creation and modification tuned ([acf56fd](https://github.com/TranXuanPhong25/ecom/commit/acf56fda1bd6d55e0c69065ca339be11f8674d00))
+
 ## [3.1.1](https://github.com/TranXuanPhong25/ecom/compare/v3.1.0...v3.1.1) (2025-08-07)
 
 ### 🐛 Bug Fixes
