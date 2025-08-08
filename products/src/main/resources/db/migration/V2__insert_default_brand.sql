@@ -1,7 +1,47 @@
-INSERT INTO brands VALUES (
-    1,
-    'Default Brand',
-    'This is the default brand for products.',
-    NOW(),
-    NOW()
-);
+INSERT INTO brands VALUES ('CeraVe', 'CeraVe is a skincare brand offering dermatologist-developed products.');
+INSERT INTO brands VALUES ('e.l.f. Cosmetics', 'e.l.f. Cosmetics provides affordable makeup products.');
+INSERT INTO brands VALUES ('NIVEA', 'NIVEA is a global body care brand with viral lotion campaigns.');
+INSERT INTO brands VALUES ('Maybelline', 'Maybelline offers trendy cosmetics.');
+INSERT INTO brands VALUES ('L''Oréal', 'L''Oréal is a leading beauty brand with makeup and skincare products.');
+INSERT INTO brands VALUES ('Rimmel London', 'Rimmel London provides affordable makeup.');
+INSERT INTO brands VALUES ('Revolution Beauty', 'Revolution Beauty offers budget-friendly cosmetics.');
+INSERT INTO brands VALUES ('Olipop', 'Olipop is a functional beverage brand with viral mocktails.');
+INSERT INTO brands VALUES ('Beast Health', 'Beast Health sells stylish blenders and hydration products.');
+INSERT INTO brands VALUES ('GroovyLED', 'GroovyLED offers trendy LED strip lights.');
+INSERT INTO brands VALUES ('Lily''s Kitchen', 'Lily''s Kitchen provides premium pet food.');
+INSERT INTO brands VALUES ('Whiskas', 'Whiskas is a pet food brand.');
+INSERT INTO brands VALUES ('Dieux', 'Dieux is a modern skincare brand with sustainable products.');
+INSERT INTO brands VALUES ('Like Air', 'Like Air is a popcorn brand with exclusive flavors.');
+INSERT INTO brands VALUES ('Seasum', 'Seasum offers viral yoga pants and activewear.');
+INSERT INTO brands VALUES ('The Ordinary', 'The Ordinary offers affordable, science-backed skincare products.');
+INSERT INTO brands VALUES ('Glow Recipe', 'Glow Recipe is a skincare brand with viral serums.');
+INSERT INTO brands VALUES ('Drunk Elephant', 'Drunk Elephant provides clean skincare products.');
+INSERT INTO brands VALUES ('Shein', 'Shein is a fast-fashion brand offering trendy clothing.');
+INSERT INTO brands VALUES ('Tarte Cosmetics', 'Tarte Cosmetics sells eco-friendly makeup.');
+INSERT INTO brands VALUES ('Pop Sonic', 'Pop Sonic offers ultrasonic skincare devices.');
+INSERT INTO brands VALUES ('Gymshark', 'Gymshark is a fitness apparel brand with activewear.');
+INSERT INTO brands VALUES ('ColourPop', 'ColourPop provides affordable, vibrant cosmetics.');
+INSERT INTO brands VALUES ('Anker', 'Anker sells portable chargers and tech accessories.');
+INSERT INTO brands VALUES ('Fenty Beauty', 'Fenty Beauty offers inclusive makeup products.');
+INSERT INTO brands VALUES ('Olaplex', 'Olaplex is a haircare brand with repair treatments.');
+INSERT INTO brands VALUES ('Zulily', 'Zulily offers daily deals on clothing and home goods.');
+INSERT INTO brands VALUES ('Burt''s Bees', 'Burt''s Bees sells natural lip balms and skincare.');
+INSERT INTO brands VALUES ('Aesthetic Room', 'Aesthetic Room offers trendy home decor items.');
+INSERT INTO brands VALUES ('Skims', 'Skims is a shapewear and loungewear brand.');
+INSERT INTO brands VALUES ('Huda Beauty', 'Huda Beauty provides luxury cosmetics.');
+INSERT INTO brands VALUES ('Revlon', 'Revlon offers classic cosmetics and beauty tools.');
+INSERT INTO brands VALUES ('Lush', 'Lush is a handmade cosmetics brand with bath bombs and skincare.');
+INSERT INTO brands VALUES ('Glossier', 'Glossier is a skincare and makeup brand with minimalist products.');
+INSERT INTO brands VALUES ('Too Faced', 'Too Faced offers playful cosmetics.');
+INSERT INTO brands VALUES ('Pixi Beauty', 'Pixi Beauty provides skincare-infused makeup.');
+INSERT INTO brands VALUES ('Essence', 'Essence is a budget-friendly cosmetics brand.');
+INSERT INTO brands VALUES ('Wet n Wild', 'Wet n Wild offers affordable makeup products.');
+INSERT INTO brands VALUES ('NYX Professional Makeup', 'NYX provides professional-quality makeup at affordable prices.');
+INSERT INTO brands VALUES ('e.l.f. Beauty', 'e.l.f. Beauty is a cosmetics brand known for its affordable products.');
+INSERT INTO brands VALUES ('Maybelline New York', 'Maybelline New York is a global cosmetics brand known for its innovative products.');
+INSERT INTO brands VALUES ('L''Oréal Paris', 'L''Oréal Paris is a leading beauty brand offering a wide range of cosmetics and skincare products.');
+INSERT INTO brands VALUES ('Rimmel', 'Rimmel is a British cosmetics brand known for its trendy makeup products.');
+INSERT INTO brands VALUES ('Revolution', 'Revolution is a cosmetics brand offering a wide range of affordable makeup products.');
+INSERT INTO brands VALUES ('Olive & June', 'Olive & June is a nail care brand offering at-home manicure kits and nail polish.');
+INSERT INTO brands VALUES ('Beast', 'Beast is a health and wellness brand offering a range of products including supplements and fitness gear.');
+INSERT INTO brands VALUES ('Groovy', 'Groovy is a lifestyle brand offering a range of products including home decor and accessories.');
