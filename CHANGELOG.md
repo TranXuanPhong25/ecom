@@ -1,3 +1,9 @@
+## [3.4.0](https://github.com/TranXuanPhong25/ecom/compare/v3.3.0...v3.4.0) (2025-08-08)
+
+### 🚀 Features
+
+* add some default brands ([307cd25](https://github.com/TranXuanPhong25/ecom/commit/307cd2556055d055110d346000b85d599b4f7973))
+
 ## [3.3.0](https://github.com/TranXuanPhong25/ecom/compare/v3.2.0...v3.3.0) (2025-08-08)
 
 ### 🚀 Features
