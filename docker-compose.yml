@@ -201,11 +201,14 @@ services:
 
   # gRPC services
   jwt-service:
+    image: rengumin/jwt-servcice:latest
     working_dir: /app
     build:
       context: ./jwt-service
       dockerfile: Dockerfile.dev
     container_name: jwt-service
+    environment:
+      JWT_SECRET_KEY: 5RNWhpC3kHEpw0LHUnj8Z5jYcC6JYUphNGL13eUMSUnQ
     volumes:
       - ./jwt-service:/app
     restart: on-failure

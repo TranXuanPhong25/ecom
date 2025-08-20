@@ -16,7 +16,6 @@ var (
 )
 
 func main() {
-	//services.LoadEnv()
 	runServer()
 }
 func runServer() {

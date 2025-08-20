@@ -9,7 +9,6 @@ import (
 	"github.com/labstack/gommon/log"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 
 	pb "github.com/TranXuanPhong25/ecom/jwt-service/proto"
@@ -24,8 +23,6 @@ var (
 )
 
 func LoadEnv() {
-	_ = godotenv.Load(".env.example")
-	_ = godotenv.Overload(".env")
 	secretKeyBase64 := os.Getenv("JWT_SECRET_KEY")
 	if secretKeyBase64 == "" {
 		log.Fatal("JWT_SECRET_KEY environment variable is not set")

@@ -23,18 +23,6 @@ type UsersService struct {
 	pb.UnimplementedUsersServiceServer
 }
 
-//func LoadEnv() {
-//	err := godotenv.Load(".env")
-//	if err != nil {
-//		log.Fatal("Error loading .env file")
-//	}
-//	err = godotenv.Load(".env.example")
-//	if err != nil {
-//		log.Fatal("Error loading .env.example file")
-//	}
-//
-//}
-
 func (s *UsersService) CreateUserWithEmailAndPassword(_ context.Context, in *pb.Credentials) (*emptypb.Empty, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.DefaultCost)
 	if err != nil {
