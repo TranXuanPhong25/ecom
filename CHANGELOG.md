@@ -1,3 +1,9 @@
+## [3.5.1](https://github.com/TranXuanPhong25/ecom/compare/v3.5.0...v3.5.1) (2025-08-24)
+
+### 🐛 Bug Fixes
+
+* use declarative config for Kong ([6d11bc5](https://github.com/TranXuanPhong25/ecom/commit/6d11bc58d111d10ea506f1848c92192f4c8f2a3f))
+
 ## [3.5.0](https://github.com/TranXuanPhong25/ecom/compare/v3.4.0...v3.5.0) (2025-08-24)
 
 ### 🚀 Features
