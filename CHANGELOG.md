@@ -1,3 +1,10 @@
+## [3.5.0](https://github.com/TranXuanPhong25/ecom/compare/v3.4.0...v3.5.0) (2025-08-24)
+
+### 🚀 Features
+
+* upload container pull image from hub ([f556fc1](https://github.com/TranXuanPhong25/ecom/commit/f556fc1125efdc10fbb1dc15b61db0fd3dc48d35))
+* upload container pull image from hub ([b1ed60b](https://github.com/TranXuanPhong25/ecom/commit/b1ed60b3b990955373cbaf1ce81002774ea4ca44))
+
 ## [3.4.0](https://github.com/TranXuanPhong25/ecom/compare/v3.3.0...v3.4.0) (2025-08-08)
 
 ### 🚀 Features
