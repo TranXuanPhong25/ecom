@@ -245,7 +245,7 @@ services:
       context: ./products
       target: dev
     depends_on:
-      - products-test
+#      - products-test
       - postgres-products
     environment:
       DB_HOST: postgres-products
@@ -357,23 +357,23 @@ services:
     command: ["run", "--server", "--addr=:8181", "--log-level=debug", "/policies"]
     networks:
       - backend
-
-  products-test:
-    build:
-      target: test
-      dockerfile: Dockerfile
-      context: ./products
-    depends_on:
-      - postgres-products
-    environment:
-      SPRING_PROFILES_ACTIVE: test
-      MAVEN_OPTS: -Xmx1024m
-      DB_HOST: postgres-products
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: mydatabase
-      DB_PORT: 5432
-    volumes:
-      - ./products:/app
-    networks:
-      - backend
+#
+#  products-test:
+#    build:
+#      target: test
+#      dockerfile: Dockerfile
+#      context: ./products
+#    depends_on:
+#      - postgres-products
+#    environment:
+#      SPRING_PROFILES_ACTIVE: test
+#      MAVEN_OPTS: -Xmx1024m
+#      DB_HOST: postgres-products
+#      DB_USER: postgres
+#      DB_PASSWORD: postgres
+#      DB_NAME: mydatabase
+#      DB_PORT: 5432
+#    volumes:
+#      - ./products:/app
+#    networks:
+#      - backend

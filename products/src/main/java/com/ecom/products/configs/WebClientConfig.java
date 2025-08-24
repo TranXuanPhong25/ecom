@@ -9,8 +9,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
     @Bean
-    @Qualifier("categoryServiceClient")
-    public WebClient auth0WebClient(@Value("${services.product.categories.url}") String baseUrl) {
+    @Qualifier("ProductCategoryServiceClient")
+    public WebClient categoryWebClient(@Value("${services.product.categories.url}") String baseUrl) {
         return WebClient.builder()
                 .baseUrl(baseUrl)
                 .build();

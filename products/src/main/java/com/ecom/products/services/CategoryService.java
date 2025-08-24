@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 public class CategoryService {
     private final WebClient categoryServiceClient;
 
-    public CategoryService(@Qualifier("categoryServiceClient") WebClient categoryServiceClient) {
+    public CategoryService(@Qualifier("ProductCategoryServiceClient") WebClient categoryServiceClient) {
         this.categoryServiceClient = categoryServiceClient;
     }
 
