@@ -4,11 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.IdGeneratorType;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.List;
-import java.util.UUID;
 @Entity
 @Table(name = "product_category")
 @Data

@@ -1,7 +1,5 @@
 package com.ecom.productcategory.services;
 
-import com.ecom.productcategory.dto.ProductCategoryDTO;
-import com.ecom.productcategory.entities.ProductCategoryClosureEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
