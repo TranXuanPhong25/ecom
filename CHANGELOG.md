@@ -1,3 +1,9 @@
+## [3.6.0](https://github.com/TranXuanPhong25/ecom/compare/v3.5.1...v3.6.0) (2025-08-24)
+
+### 🚀 Features
+
+* upload decksync.sh for convenient ([83a3b73](https://github.com/TranXuanPhong25/ecom/commit/83a3b7340649fdca4c2412056a0bd1cd1160eb90))
+
 ## [3.5.1](https://github.com/TranXuanPhong25/ecom/compare/v3.5.0...v3.5.1) (2025-08-24)
 
 ### 🐛 Bug Fixes
