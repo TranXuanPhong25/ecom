@@ -201,7 +201,7 @@ services:
 
   # gRPC services
   jwt-service:
-    image: rengumin/jwt-servcice:latest
+    image: rengumin/jwt-service:latest
     working_dir: /app
     build:
       context: ./jwt-service
@@ -216,6 +216,7 @@ services:
       - backend
 
   users-service:
+    image: rengumin/users-service:latest
     container_name: users-service
     build:
       context: ./users
@@ -235,6 +236,7 @@ services:
 
   # REST API services (starting from 8081)
   products-service:
+    image: rengumin/products-service:latest
     container_name: products-service
     build:
       context: ./products
@@ -255,6 +257,7 @@ services:
       - backend
 
   product-reviews-service:
+    image: rengumin/product-reviews-service:latest
     container_name: product-reviews-service
     build:
       context: ./product-reviews
@@ -271,6 +274,7 @@ services:
       - backend
 
   product-categories-service:
+    image: rengumin/product-categories-service:latest
     container_name: product-categories-service
     build:
       context: ./product-categories
@@ -289,6 +293,7 @@ services:
       - backend
 
   auth-service:
+    image: rengumin/auth-service:latest
     container_name: auth-service
     build:
       context: ./auth
@@ -306,6 +311,7 @@ services:
       - backend
 
   shops-service:
+    image: rengumin/shops-service:latest
     working_dir: /app
     build:
       context: ./shops
@@ -324,6 +330,7 @@ services:
       - backend
 
   upload-service:
+    image: rengumin/upload-service:latest
     build:
       context: ./upload-service
       dockerfile: Dockerfile.dev
