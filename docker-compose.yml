@@ -1,5 +1,4 @@
 volumes:
-  kong_db_data: {}
   postgres_product_reviews_data: {}
   postgres_product_categories_data: {}
   postgres_users_data: {}
@@ -26,59 +25,15 @@ services:
       - "9090:9090"
     networks:
       - backend
-
-  # Kong API Gateway and related services
-  kong-db:
-    image: postgres:13
-    container_name: kong-db
-    restart: unless-stopped
-    volumes:
-      - kong_db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: kong
-      POSTGRES_DB: kong
-      POSTGRES_PASSWORD: kong
-    networks:
-      - backend
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  kong-migrations:
-    image: kong:3.6
-    container_name: kong-migrations
-    depends_on:
-      kong-db:
-        condition: service_healthy
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: kong-db
-      KONG_PG_USER: kong
-      KONG_PG_PASSWORD: kong
-      KONG_PG_DATABASE: kong
-    command: kong migrations bootstrap
-    networks:
-      - backend
-
   kong:
     image: kong:3.6
     container_name: kong
-    depends_on:
-      kong-migrations:
-        condition: service_completed_successfully
     volumes:
       - ./kong/plugins/bin:/usr/local/kong/plugins/bin
       - ./kong/conf/kong.conf:/etc/kong/kong.conf
       - ./kong/conf/kong.yaml:/usr/local/kong/declarative/kong.yml
     restart: unless-stopped
     environment:
-#      KONG_DATABASE: postgres
-      KONG_PG_HOST: kong-db
-      KONG_PG_USER: kong
-      KONG_PG_PASSWORD: kong
-      KONG_PG_DATABASE: kong
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
