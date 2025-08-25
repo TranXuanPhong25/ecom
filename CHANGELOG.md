@@ -1,3 +1,9 @@
+## [3.8.0](https://github.com/TranXuanPhong25/ecom/compare/v3.7.0...v3.8.0) (2025-08-25)
+
+### 🚀 Features
+
+* use custom kong image ([f472831](https://github.com/TranXuanPhong25/ecom/commit/f4728316df432da0981c2c728f7e00dad49d5b4e))
+
 ## [3.7.0](https://github.com/TranXuanPhong25/ecom/compare/v3.6.0...v3.7.0) (2025-08-24)
 
 ### 🚀 Features
