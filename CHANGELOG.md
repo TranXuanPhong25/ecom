@@ -1,3 +1,13 @@
+## [3.7.0](https://github.com/TranXuanPhong25/ecom/compare/v3.6.0...v3.7.0) (2025-08-24)
+
+### 🚀 Features
+
+* use kong db-less mode ([4bf0076](https://github.com/TranXuanPhong25/ecom/commit/4bf007654ff633d7cf22d1cdd06051cab78b229b))
+
+### 🔨 Technical Changes
+
+* remove product test ([fb732ee](https://github.com/TranXuanPhong25/ecom/commit/fb732ee28d8bb9924934ce5187398e308dd7420f))
+
 ## [3.6.0](https://github.com/TranXuanPhong25/ecom/compare/v3.5.1...v3.6.0) (2025-08-24)
 
 ### 🚀 Features
