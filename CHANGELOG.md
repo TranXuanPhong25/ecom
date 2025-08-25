@@ -1,3 +1,9 @@
+## [3.9.0](https://github.com/TranXuanPhong25/ecom/compare/v3.8.0...v3.9.0) (2025-08-25)
+
+### 🚀 Features
+
+* init k8s with Kong Ingress controller ([0567d6d](https://github.com/TranXuanPhong25/ecom/commit/0567d6db0016d55d6fda01f31d8d86b9dadf892e))
+
 ## [3.8.0](https://github.com/TranXuanPhong25/ecom/compare/v3.7.0...v3.8.0) (2025-08-25)
 
 ### 🚀 Features
