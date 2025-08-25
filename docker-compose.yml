@@ -31,7 +31,7 @@ services:
     volumes:
       - ./kong/plugins/bin:/usr/local/kong/plugins/bin
       - ./kong/conf/kong.conf:/etc/kong/kong.conf
-      - ./kong/conf/kong.yaml:/usr/local/kong/declarative/kong.yml
+      - ./kong/conf/kong.yml:/usr/local/kong/declarative/kong.yml
     restart: unless-stopped
     environment:
       KONG_PROXY_ACCESS_LOG: /dev/stdout
