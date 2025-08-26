@@ -157,7 +157,6 @@ services:
 
   # gRPC services
   jwt-service:
-    image: rengumin/jwt-service:latest
     working_dir: /app
     build:
       context: ./jwt-service
