@@ -1,3 +1,9 @@
+## [3.10.0](https://github.com/TranXuanPhong25/ecom/compare/v3.9.0...v3.10.0) (2025-08-26)
+
+### 🚀 Features
+
+* **k8s:** worked manifest for users and products service ([e2f6d0c](https://github.com/TranXuanPhong25/ecom/commit/e2f6d0c572a88122b2239b18884a1adfefca68f0))
+
 ## [3.9.0](https://github.com/TranXuanPhong25/ecom/compare/v3.8.0...v3.9.0) (2025-08-25)
 
 ### 🚀 Features
