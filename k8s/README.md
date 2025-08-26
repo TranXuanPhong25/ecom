@@ -10,3 +10,6 @@ kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/downloa
 ```
 kubectl apply -f k8s/gateway/gateway-api-setup.yaml
 ```
+```
+kubectl create configmap opa-server-policy --from-file=opa/policies/server.rego -n opa
+```
