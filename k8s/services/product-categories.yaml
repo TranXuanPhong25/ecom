@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-categories-service
+  namespace: services
+  labels:
+    app: product-categories
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-categories
+  template:
+    metadata:
+      labels:
+        app: product-categories
+    spec:
+      containers:
+      - name: product-categories
+        image: rengumin/product-categories-svc:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+          - name: DB_HOST
+            value: product-categories-pg-db.storages
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: postgres
+          - name: DB_PASSWORD
+            value: postgres
+          - name: DB_NAME
+            value: mydatabase
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-categories-loadbalancer
+  namespace: services
+spec:
+  selector:
+    app: product-categories
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8080
+  type: LoadBalancer
