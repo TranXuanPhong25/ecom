@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-service
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+      - name: users
+        image: rengumin/users-svc:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 50050
+        env:
+          - name: DB_HOST
+            value: users-pg-db.storages
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: postgres
+          - name: DB_PASSWORD
+            value: postgres
+          - name: DB_NAME
+            value: mydatabase
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-loadbalancer
+  namespace: services
+spec:
+  selector:
+    app: users
+  ports:
+    - protocol: TCP
+      port: 50050
+      targetPort: 50050
+  type: LoadBalancer

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kong-deployment
-  namespace: shopiew
+  namespace: gateway
   labels:
     app: kong
 spec:
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       name: kong-deployment
-      namespace: shopiew
+      namespace: gateway
       labels:
         app: kong
     spec:
@@ -43,3 +43,28 @@ spec:
               value: "0.0.0.0:8000, 0.0.0.0:8443 ssl"
             - name: KONG_ADMIN_LISTEN
               value: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-svc-lb
+  namespace: gateway
+  labels:
+    app: kong
+spec:
+  selector:
+    app: kong
+  ports:
+    - name: proxy
+      port: 8000
+      targetPort: 8000
+    - name: proxy-ssl
+      port: 8443
+      targetPort: 8443
+    - name: admin
+      port: 8001
+      targetPort: 8001
+    - name: admin-ssl
+      port: 8444
+      targetPort: 8444
+  type: LoadBalancer

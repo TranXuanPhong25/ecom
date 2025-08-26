@@ -20,7 +20,7 @@ COPY . .
 RUN go build -o main .
 
 # ===== STAGE 2: Build a minimal image =====
-FROM alpine:latest
+FROM alpine:latest AS release
 
 # Tạo thư mục app
 WORKDIR /root/

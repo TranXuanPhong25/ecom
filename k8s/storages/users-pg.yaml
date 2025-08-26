@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: storages
+  name: users-pg-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-pg
+  namespace: storages
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-pg
+  template:
+    metadata:
+      labels:
+        app: users-pg
+    spec:
+      containers:
+      - name: users-pg
+        image: postgres:15-alpine
+        env:
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: postgres
+          - name: POSTGRES_DB
+            value: mydatabase
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: db-storage
+        persistentVolumeClaim:
+          claimName: users-pg-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-pg-db
+  namespace: storages
+spec:
+  clusterIP: None
+  selector:
+    app: users-pg
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  namespace: storages
+  name: allow-users-service-to-db
+spec:
+  podSelector:
+    matchLabels:
+      app: users-pg
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: services
+    ports:
+    - protocol: TCP
+      port: 5432
