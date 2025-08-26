@@ -30,7 +30,7 @@ spec:
         image:  redis:7-alpine
         volumeMounts:
         - name: db-storage
-          mountPath: /var/lib/redis/data
+          mountPath: /data
       volumes:
       - name: db-storage
         persistentVolumeClaim:
