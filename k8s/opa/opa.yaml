@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opa-server
+  namespace: opa
+  labels:
+    app: opa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opa
+  template:
+    metadata:
+      labels:
+        app: opa
+      name: opa
+    spec:
+      containers:
+      - name: opa
+        image: openpolicyagent/opa:1.7.0
+        ports:
+          - containerPort: 8181
+        args:
+        - "run"
+        - "--ignore=.*" # exclude hidden dirs created by Kubernetes
+        - "--server"
+        - "--addr=:8181"
+        - "--log-level=debug"
+        - "/policies"
+        volumeMounts:
+        - readOnly: true
+          mountPath: /policies
+          name: opa-server-policy
+      volumes:
+      - name: opa-server-policy
+        configMap:
+          name: opa-server-policy
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opa-server
+  namespace: opa
+spec:
+  clusterIP: None
+  selector:
+    app: opa
+  ports:
+  - protocol: TCP
+    port: 8181
+    targetPort: 8181
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opa-loadbalancer
+  namespace: opa
+spec:
+  selector:
+    app: opa
+  ports:
+    - protocol: TCP
+      port: 8181
+      targetPort: 8181
+  type: LoadBalancer

@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: storages
+  name: product-categories-pg-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-categories-pg
+  namespace: storages
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-categories-pg
+  template:
+    metadata:
+      labels:
+        app: product-categories-pg
+    spec:
+      containers:
+      - name: product-categories-pg
+        image: postgres:15-alpine
+        env:
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: postgres
+          - name: POSTGRES_DB
+            value: mydatabase
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: db-storage
+        persistentVolumeClaim:
+          claimName: product-categories-pg-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-categories-pg-db
+  namespace: storages
+spec:
+  clusterIP: None
+  selector:
+    app: product-categories-pg
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  namespace: storages
+  name: allow-product-categories-service-to-db
+spec:
+  podSelector:
+    matchLabels:
+      app: product-categories-pg
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: services
+    ports:
+    - protocol: TCP
+      port: 5432
