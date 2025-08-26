@@ -1,0 +1,21 @@
+gateway:
+  image:
+    repository: rengumin/kong
+    tag: "1.5"
+    pullPolicy: Always
+  deployment:
+    userDefinedVolumes:
+      - name: "plugin-bin"
+        emptyDir: {}
+    userDefinedVolumeMounts:
+      - name: "plugin-bin"
+        mountPath: "/opt/kong/plugins/bin"
+    initContainers:
+    - name: copy-plugin-bin
+      image: rengumin/kong:1.5
+      command: ["sh", "-c"]
+      args:
+        - cp /usr/local/kong/plugins/bin/* /opt/kong/plugins/bin/;
+      volumeMounts:
+        - name: plugin-bin
+          mountPath: /opt/kong/plugins/bin

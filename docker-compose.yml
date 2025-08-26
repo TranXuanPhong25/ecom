@@ -26,12 +26,12 @@ services:
     networks:
       - backend
   kong:
-    image: kong:3.6
+    image: rengumin/kong:1.3
     container_name: kong
-    volumes:
-      - ./kong/plugins/bin:/usr/local/kong/plugins/bin
-      - ./kong/conf/kong.conf:/etc/kong/kong.conf
-      - ./kong/conf/kong.yml:/usr/local/kong/declarative/kong.yml
+#    volumes:
+#      - ./kong/plugins/bin:/usr/local/kong/plugins/bin
+#      - ./kong/conf/kong.conf:/etc/kong/kong.conf
+#      - ./kong/conf/kong.yml:/usr/local/kong/declarative/kong.yml
     restart: unless-stopped
     environment:
       KONG_PROXY_ACCESS_LOG: /dev/stdout
