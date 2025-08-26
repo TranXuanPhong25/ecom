@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload-service
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: upload
+  template:
+    metadata:
+      labels:
+        app: upload
+    spec:
+      containers:
+      - name: upload
+        image: rengumin/upload-svc:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: upload-loadbalancer
+  namespace: services
+spec:
+  selector:
+    app: upload
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: upload-svc
+  namespace: services
+spec:
+  clusterIP: None
+  selector:
+    app: upload
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
