@@ -44,3 +44,17 @@ spec:
       port: 50050
       targetPort: 50050
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-svc
+  namespace: services
+spec:
+  type: ClusterIP
+  selector:
+    app: users
+  ports:
+  - protocol: TCP
+    port: 50050  
+    targetPort: 50050
