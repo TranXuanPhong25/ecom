@@ -1,0 +1,18 @@
+kind: GatewayClass
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: gateway-class
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway 
+  namespace: default  # Đảm bảo Gateway được tạo trong namespace default hoặc điều chỉnh theo namespace mong muốn
+spec:
+  gatewayClassName: gateway-class
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
