@@ -17,8 +17,8 @@ import (
 var (
 	Priority          = 1
 	Version           = "0.2"
-	JWTServiceAddr    = "jwt-service:50050"
-	OPAServerRouteURL = "http://opa-server:8181/v1/data/route"
+	JWTServiceAddr    = "jwt-svc.services:50050"
+	OPAServerRouteURL = "http://opa-server.opa:8181/v1/data/route"
 	client            pb.JWTServiceClient
 	conn              *grpc.ClientConn
 	once              sync.Once
