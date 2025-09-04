@@ -1,0 +1,16 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: auth-route
+spec:
+  parentRefs:
+    - name: gateway
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/api/auth"
+      backendRefs:
+        - name: auth-svc
+          namespace: services
+          port: 8080
