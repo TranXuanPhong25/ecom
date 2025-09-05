@@ -21,8 +21,8 @@ func LoadEnv() {
 	AppConfig.DBHost = getEnv("DB_HOST", "localhost")
 	AppConfig.DBPort = getEnv("DB_PORT", "5432")
 	AppConfig.DBUser = getEnv("DB_USER", "postgres")
-	AppConfig.DBPassword = getEnv("DB_PASSWORD", "password")
-	AppConfig.DBName = getEnv("DB_NAME", "users_db")
+	AppConfig.DBPassword = getEnv("DB_PASSWORD", "postgres")
+	AppConfig.DBName = getEnv("DB_NAME", "mydatabase")
 
 	log.Printf("Users Config loaded - RPC Port: %s, DB: %s:%s",
 		AppConfig.RpcPort, AppConfig.DBHost, AppConfig.DBPort)

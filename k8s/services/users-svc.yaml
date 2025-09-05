@@ -21,7 +21,7 @@ spec:
         - containerPort: 50050
         env:
           - name: DB_HOST
-            value: users-pg-db.storages
+            value: "users-pg-db.storages"
           - name: DB_PORT
             value: "5432"
           - name: DB_USER
@@ -30,6 +30,8 @@ spec:
             value: postgres
           - name: DB_NAME
             value: mydatabase
+          - name: RPC_PORT
+            value: "50050"
 ---
 apiVersion: v1
 kind: Service

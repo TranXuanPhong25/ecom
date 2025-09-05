@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/TranXuanPhong25/ecom/users/configs"
 	"github.com/TranXuanPhong25/ecom/users/models"
 	"github.com/TranXuanPhong25/ecom/users/repositories"
 	"github.com/TranXuanPhong25/ecom/users/services"
@@ -11,15 +12,13 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var (
-	RpcPort = ":50050" // gRPC server port
-)
-
 func main() {
+	configs.LoadEnv()
 	runServer()
 }
 func runServer() {
-	lis, err := net.Listen("tcp", RpcPort)
+
+	lis, err := net.Listen("tcp", configs.AppConfig.RpcPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -32,7 +31,7 @@ func runServer() {
 	}
 	services.RegisterService(s)
 	reflection.Register(s)
-	log.Printf("gRPC server listening on %v\n", RpcPort)
+	log.Printf("gRPC server listening on %v\n", configs.AppConfig.RpcPort)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
