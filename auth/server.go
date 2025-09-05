@@ -5,6 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/TranXuanPhong25/ecom/auth/configs"
 	"github.com/TranXuanPhong25/ecom/auth/middlewares"
 	"github.com/TranXuanPhong25/ecom/auth/repositories"
 	"github.com/TranXuanPhong25/ecom/auth/routes"
@@ -14,16 +15,17 @@ import (
 )
 
 func main() {
+	configs.LoadEnv()
 	e := echo.New()
 
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middlewares.PrometheusMiddleware())
-	repositories.ConnectRedis()
+	repositories.ConnectRedis(configs.AppConfig.RedisHost)
 
-	services.InitJWTServiceClient("jwt-service:50050")
-	services.InitUsersServiceClient("users-service:50050")
+	services.InitJWTServiceClient(configs.AppConfig.JWTServiceAddr)
+	services.InitUsersServiceClient(configs.AppConfig.UsersServiceAddr)
 
 	routes.AuthRoute(e)
 	routes.MetricRoute(e)
@@ -31,7 +33,7 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + configs.AppConfig.ServerPort))
 
 	<-quit
 	services.CloseUsersServiceConnection()
