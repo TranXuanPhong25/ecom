@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/TranXuanPhong25/ecom/shops/configs"
 	"github.com/TranXuanPhong25/ecom/shops/middlewares"
 	"github.com/TranXuanPhong25/ecom/shops/models"
 	"github.com/TranXuanPhong25/ecom/shops/repositories"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	configs.LoadEnv()
 	e := echo.New()
 
 	// Middleware
@@ -23,6 +25,6 @@ func main() {
 		e.Logger.Fatal("Failed to migrate database:", err)
 	}
 	routes.ShopsRoute(e)
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + configs.AppConfig.ServerPort))
 
 }
