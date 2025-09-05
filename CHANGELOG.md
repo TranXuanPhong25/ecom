@@ -1,3 +1,41 @@
+## [3.11.0](https://github.com/TranXuanPhong25/ecom/compare/v3.10.0...v3.11.0) (2025-09-05)
+
+### 🚀 Features
+
+* add ClusterIP services for auth, product-categories, products, and users ([cefc8bd](https://github.com/TranXuanPhong25/ecom/commit/cefc8bd93e62bf2901754e1e7fd7f839b0600d13))
+* add cors policy ([27dd026](https://github.com/TranXuanPhong25/ecom/commit/27dd0260f680f4d2843c09af8359fe4dab0cb55f))
+* add Dockerfile for eas-inbound-filter plugin and update service addresses ([22a8131](https://github.com/TranXuanPhong25/ecom/commit/22a8131235531e5e0716b83c4fa515e384040ee1))
+* add gateway-wide auth policy and inbound filter service configurations ([94d521d](https://github.com/TranXuanPhong25/ecom/commit/94d521de810315aa78a1c2f51c218b8ec650f832))
+* add HTTPRoute configurations for auth, brands, product-categories, product-reviews, products, shops, and upload services ([5c1b507](https://github.com/TranXuanPhong25/ecom/commit/5c1b5077c5e79c1955c5c27ebdb20d2a9d344fb1))
+* auth config integrated ([0dffa5a](https://github.com/TranXuanPhong25/ecom/commit/0dffa5a2a086b1f89258cda158eb65c7d2d6fe3f))
+* configs go modules ([7b2887e](https://github.com/TranXuanPhong25/ecom/commit/7b2887e92eb0b6e143524dadf42434349332d9a1))
+* implement inbound filter service ([d93ecdf](https://github.com/TranXuanPhong25/ecom/commit/d93ecdfad4e2a26225a9db10cf633025ec8b57f6))
+* integrated shops config ([d637c84](https://github.com/TranXuanPhong25/ecom/commit/d637c8448fc897871fff2736e692c4a9ffe2fb7d))
+* jwt config integrated ([1054fce](https://github.com/TranXuanPhong25/ecom/commit/1054fce934b960e802a22a62e7726b2b0616f53d))
+* jwt-service ([d756145](https://github.com/TranXuanPhong25/ecom/commit/d756145dd16458ce34397ec451c80491ea588bde))
+* merge cors and extAuth into one sec-policy ([158d283](https://github.com/TranXuanPhong25/ecom/commit/158d2835413b5f17c7f793d5d0a003852216fdaa))
+* minio server ([19b4889](https://github.com/TranXuanPhong25/ecom/commit/19b4889ee43cc9f4e0469f102b68ca4f45d457ad))
+* opa-server ([83f957a](https://github.com/TranXuanPhong25/ecom/commit/83f957adecc0c33805688423c33deba052878c06))
+* ran auth and product-categories service ([912a294](https://github.com/TranXuanPhong25/ecom/commit/912a294108beba4b2c47fcb7e9394360c7ea3994))
+* upload service ([dc5b38c](https://github.com/TranXuanPhong25/ecom/commit/dc5b38ca43749c31a71c1c8f25f285f9d4a4338c))
+* upload-svc config integrated ([2837985](https://github.com/TranXuanPhong25/ecom/commit/2837985f3ba00cd8f0a9106223a05f7716ad2d04))
+* users config integrated ([5bbaedd](https://github.com/TranXuanPhong25/ecom/commit/5bbaedd169c623ac650b0d9c082471de327645a1))
+
+### 🐛 Bug Fixes
+
+* correct listen on port users service ([395b2f5](https://github.com/TranXuanPhong25/ecom/commit/395b2f526a01d536d6e26215f435cb129a99a13a))
+* namespace headless service correction ([a01e4a4](https://github.com/TranXuanPhong25/ecom/commit/a01e4a495b841efb896214128ab4878c5ce0f629))
+
+### 🔨 Technical Changes
+
+* change dns name of product-categories pass to products service ([9a1e276](https://github.com/TranXuanPhong25/ecom/commit/9a1e276c900142f3640cdfc6f774a5717c058487))
+* consistently use 8080 load balancer port ([2cce82b](https://github.com/TranXuanPhong25/ecom/commit/2cce82bdf3a72047a7189f4db6aa5dfe9c7a100d))
+* **k8s:** always pull image ([eed40df](https://github.com/TranXuanPhong25/ecom/commit/eed40df1d939c24a0b38d55513885c5a43b57b25))
+* **k8s:** remove deployments manifest ([6764027](https://github.com/TranXuanPhong25/ecom/commit/6764027a1a1f7f4913412a5453f083d236df7ac4))
+* **k8s:** tidy load balancer service ([386b380](https://github.com/TranXuanPhong25/ecom/commit/386b380f9b981ebe48659811fcb4f736482f32bd))
+* rename configs folder ([c85227f](https://github.com/TranXuanPhong25/ecom/commit/c85227f852dad9244426581679aace69d28188ce))
+* use other cookies extraction logic for eas inbound service ([7be9ad6](https://github.com/TranXuanPhong25/ecom/commit/7be9ad6c65e75ffb015577a6fe2e132f1273b791))
+
 ## [3.10.0](https://github.com/TranXuanPhong25/ecom/compare/v3.9.0...v3.10.0) (2025-08-26)
 
 ### 🚀 Features
