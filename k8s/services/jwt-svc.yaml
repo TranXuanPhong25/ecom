@@ -30,20 +30,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jwt-loadbalancer
-  namespace: services
-spec:
-  selector:
-    app: jwt
-  ports:
-    - protocol: TCP
-      port: 50050
-      targetPort: 50050
-  type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
   name: jwt-svc
   namespace: services
 spec:
