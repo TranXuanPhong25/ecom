@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"net/http"
 	"os"
 )
@@ -16,13 +15,14 @@ func ExtractToken(r *http.Request) string {
 		}
 	}
 
-	cookieHeader := r.Header.Get("Cookie")
-	if cookieHeader != "" {
+	cookieHeader := r.Cookies()
+	if cookieHeader != nil {
 		token = getTokenFromCookieHeader(cookieHeader)
 		if token != "" {
 			return token
 		}
 	}
+
 	return token
 }
 
@@ -33,14 +33,13 @@ func getTokenFromAuthorizationHeader(authorizationHeader string) string {
 	return ""
 }
 
-func getTokenFromCookieHeader(cookieHeader string) string {
+func getTokenFromCookieHeader(cookies []*http.Cookie) string {
 	tokenField := []string{"access_token", "AccessToken", "ACCESS_TOKEN"}
 	// Parse the cookie header to extract the token
-	cookieParts := bytes.Split([]byte(cookieHeader), []byte("; "))
-	for _, part := range cookieParts {
+	for _, cookie := range cookies {
 		for _, field := range tokenField {
-			if bytes.HasPrefix(part, []byte(field+"=")) {
-				return string(part[len(field)+1:])
+			if cookie.Name == field {
+				return cookie.Value
 			}
 		}
 	}

@@ -28,7 +28,7 @@ func validateToken(token string) (string, error) {
 		log.Printf("could not validate token: %v", err)
 		return "", err
 	}
-	return response.GetUserId(), err
+	return response.GetUserId(), nil
 
 }
 

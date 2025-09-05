@@ -30,12 +30,10 @@ type JWTClaims struct {
 
 // Handler cho Envoy ExtAuth endpoint
 func extAuthHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Received request: %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 
 	// Extract JWT token từ header
 	token := ExtractToken(r)
-
 	// Step 1: Verify JWT với external service
 	userId, err := validateToken(token)
 	if err != nil {
@@ -71,10 +69,10 @@ func extAuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Success
+	w.Header().Set("X-User-Id", userId)
+
 	sendResponse(w, http.StatusOK, true, "")
 }
-
-// Extract token từ headers
 
 // Send standardized response
 func sendResponse(w http.ResponseWriter, statusCode int, allowed bool, reason string) {
@@ -82,9 +80,10 @@ func sendResponse(w http.ResponseWriter, statusCode int, allowed bool, reason st
 		Allow:  allowed,
 		Reason: reason,
 	}
-	log.Printf("Status: %d, Allowed: %v, Reason: %s", statusCode, allowed, reason)
 	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(response)
+	if !allowed {
+		json.NewEncoder(w).Encode(response)
+	}
 }
 
 // Health check handler
