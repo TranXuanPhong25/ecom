@@ -9,16 +9,16 @@ spec:
       kind: Gateway
       name: gateway # Apply to entire gateway
   extAuth:
+    headersToExtAuth:
+      - "Cookie"
+      - "Authorization"
     http:
       backendRef:
         name: inbound-filter-svc  # Tên service ở trên
         namespace: default
         port: 8080
       # Headers to forward to auth service
-      headersToBackend:
-        - "Authorization"
-        - "x-user-id"
-        - "Cookie"
+      headersToBackend: ["X-User-Id"]
   cors:
     allowOrigins:
       - "http://localhost:3000"

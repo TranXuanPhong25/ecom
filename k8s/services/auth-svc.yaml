@@ -16,7 +16,7 @@ spec:
       containers:
       - name: auth
         image: rengumin/auth-svc:1.0
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -25,7 +25,7 @@ spec:
           - name: REDIS_PORT
             value: "6379"
           - name: USERS_SERVICE_ADDR
-            value: "users-svc.services:8080"
+            value: "users-svc.services:50050"
           - name: JWT_SERVICE_ADDR
             value: "jwt-svc.services:50050"
           - name: SEVER_PORT
