@@ -18,7 +18,7 @@ func main() {
 }
 func runServer() {
 
-	lis, err := net.Listen("tcp", configs.AppConfig.RpcPort)
+	lis, err := net.Listen("tcp", ":"+configs.AppConfig.RpcPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
