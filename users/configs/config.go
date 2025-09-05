@@ -1,4 +1,4 @@
-package config
+package configs
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	ServerPort string
+	RpcPort    string
 	DBHost     string
 	DBPort     string
 	DBUser     string
@@ -17,15 +17,15 @@ type Config struct {
 var AppConfig Config
 
 func LoadEnv() {
-	AppConfig.ServerPort = getEnv("SERVER_PORT", ":8080")
+	AppConfig.RpcPort = getEnv("RPC_PORT", ":50050")
 	AppConfig.DBHost = getEnv("DB_HOST", "localhost")
 	AppConfig.DBPort = getEnv("DB_PORT", "5432")
 	AppConfig.DBUser = getEnv("DB_USER", "postgres")
 	AppConfig.DBPassword = getEnv("DB_PASSWORD", "password")
-	AppConfig.DBName = getEnv("DB_NAME", "shops_db")
+	AppConfig.DBName = getEnv("DB_NAME", "users_db")
 
-	log.Printf("Shops Config loaded - Server Port: %s, DB: %s:%s",
-		AppConfig.ServerPort, AppConfig.DBHost, AppConfig.DBPort)
+	log.Printf("Users Config loaded - RPC Port: %s, DB: %s:%s",
+		AppConfig.RpcPort, AppConfig.DBHost, AppConfig.DBPort)
 }
 
 func getEnv(key, defaultValue string) string {
