@@ -2,24 +2,26 @@ package services
 
 import (
 	"context"
+	"net/url"
+	"strconv"
+	"time"
+
+	"github.com/TranXuanPhong25/ecom/upload-service/configs"
 	"github.com/labstack/gommon/log"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"net/url"
-	"time"
 )
 
 var (
 	MinIOClient            *minio.Client
-	ProductImageBucketName = "product-images"
 	PresignedURLExpiration = 15 * time.Minute
 )
 
 func InitMinIOClient() {
-	endpoint := "minio:9000"       // MinIO server endpoint
-	accessKeyID := "admin"         // MinIO access key
-	secretAccessKey := "admin1234" // MinIO secret key
-	useSSL := false                // Set to true if using HTTPS
+	endpoint := configs.AppConfig.MinIOEndpoint                   // MinIO server endpoint
+	accessKeyID := configs.AppConfig.MinIOAccessKey               // MinIO access key
+	secretAccessKey := configs.AppConfig.MinIOSecretKey           // MinIO secret key
+	useSSL, _ := strconv.ParseBool(configs.AppConfig.MinIOUseSSL) // Set to true if using HTTPS
 
 	client, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
@@ -47,7 +49,7 @@ func GeneratePresignedURLUploadImage(objectName string) (*url.URL, error) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(10000)*time.Millisecond)
 	defer cancel()
-	presignedURL, err := MinIOClient.PresignedPutObject(ctx, ProductImageBucketName, objectName, PresignedURLExpiration)
+	presignedURL, err := MinIOClient.PresignedPutObject(ctx, configs.AppConfig.MinIOBucketName, objectName, PresignedURLExpiration)
 	if err != nil {
 		log.Errorf("%v\n", err)
 		return &url.URL{}, err

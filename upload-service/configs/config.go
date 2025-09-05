@@ -17,7 +17,7 @@ type Config struct {
 var AppConfig Config
 
 func LoadEnv() {
-	AppConfig.ServerPort = getEnv("SERVER_PORT", ":8080")
+	AppConfig.ServerPort = getEnv("SERVER_PORT", "8080")
 	AppConfig.MinIOEndpoint = getEnv("MINIO_ENDPOINT", "localhost:9000")
 	AppConfig.MinIOAccessKey = getEnv("MINIO_ACCESS_KEY", "minioadmin")
 	AppConfig.MinIOSecretKey = getEnv("MINIO_SECRET_KEY", "minioadmin")

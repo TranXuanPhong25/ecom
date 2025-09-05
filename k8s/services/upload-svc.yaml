@@ -19,6 +19,19 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+        env:
+          - name: ServerPort
+            value: "8080"
+          - name: MinIOEndpoint
+            value: "minio.storages:9000"
+          - name: MinIOAccessKey
+            value: "admin"
+          - name: MinIOSecretKey
+            value: "admin1234"
+          - name: MinIOBucketName
+            value: "products-images"
+          - name: MinIOUseSSL
+            value: "false"
 ---
 apiVersion: v1
 kind: Service
