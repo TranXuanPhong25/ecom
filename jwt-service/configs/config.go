@@ -1,4 +1,4 @@
-package services
+package configs
 
 import (
 	"encoding/base64"

@@ -25,6 +25,7 @@ spec:
               secretKeyRef:
                 name: app-secrets
                 key: JWT_SECRET_KEY
+
 ---
 apiVersion: v1
 kind: Service
