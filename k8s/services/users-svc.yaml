@@ -1,29 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: products-service
+  name: users-service
   namespace: services
-  labels:
-    app: products
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: products
+      app: users
   template:
     metadata:
       labels:
-        app: products
+        app: users
     spec:
       containers:
-      - name: products
-        image: rengumin/products-svc:1.0
-        imagePullPolicy: IfNotPresent
+      - name: users
+        image: rengumin/users-svc:1.0
+        imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 50050
         env:
           - name: DB_HOST
-            value: products-pg-db.storages
+            value: "users-pg-db.storages"
           - name: DB_PORT
             value: "5432"
           - name: DB_USER
@@ -32,19 +30,19 @@ spec:
             value: postgres
           - name: DB_NAME
             value: mydatabase
-          - name: PRODUCT_CATEGORIES_SERVICE_URL
-            value: http://product-categories-service:8080/api/product-categories
+          - name: RPC_PORT
+            value: "50050"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: products-loadbalancer
+  name: users-svc
   namespace: services
 spec:
+  type: ClusterIP
   selector:
-    app: products
+    app: users
   ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer
+  - protocol: TCP
+    port: 50050  
+    targetPort: 50050

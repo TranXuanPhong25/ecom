@@ -1,5 +1,5 @@
 # ===== STAGE 1: Build the Go binary =====
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # Install git (nếu dùng go get lấy module từ github)
 RUN apk add --no-cache git
@@ -20,7 +20,7 @@ COPY . .
 RUN go build -o main .
 
 # ===== STAGE 2: Build a minimal image =====
-FROM alpine:latest as release
+FROM alpine:latest AS release
 
 # Tạo thư mục app
 WORKDIR /root/

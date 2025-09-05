@@ -3,22 +3,18 @@ package repositories
 import (
 	"github.com/labstack/gommon/log"
 	"github.com/redis/go-redis/v9"
-	"os"
 )
 
 var (
 	rdb *redis.Client
 )
 
-func ConnectRedis() {
-
-	redisAddr := os.Getenv("REDIS_ADDR")
-	redisPassword := os.Getenv("REDIS_PASSWORD")
+func ConnectRedis(host string) {
 
 	rdb = redis.NewClient(&redis.Options{
-		Addr:     redisAddr,
-		Password: redisPassword, // no password set
-		DB:       0,             // use default DB
+		Addr:     host,
+		Password: "", // no password set
+		DB:       0,  // use default DB
 	})
 }
 

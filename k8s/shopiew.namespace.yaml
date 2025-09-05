@@ -11,3 +11,17 @@ metadata:
     name: services
     labels:
         name: services
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: minio
+    labels:
+        name: minio        
+--- 
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: gateway
+    labels:
+        name: gateway        

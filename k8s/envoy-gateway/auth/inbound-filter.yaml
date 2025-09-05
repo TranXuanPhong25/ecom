@@ -1,0 +1,65 @@
+# apiVersion: gateway.envoyproxy.io/v1alpha1
+# kind: EnvoyExtensionPolicy
+# metadata:
+#   name: inbound-filter-ext
+# spec:
+#   targetRefs:
+#     - group: gateway.networking.k8s.io
+#       kind: HTTPRoute
+#       name: backend-route
+#   wasm:
+#     - name: inbound-filter
+#       rootID: inbound_filter
+#       code:
+#         type: HTTP
+#         http:
+#           # URL tới file .wasm của bạn
+#           uri: "https://githu/filters/cookie_extractor.wasm"
+#       config:
+#         # Thông số cấu hình module (nếu cần)
+#         cookie_name: "jwt-token"
+#         header_name: "x-auth-token"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inbound-filter
+  # namespace: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inbound-filter
+  template:
+    metadata:
+      labels:
+        app: inbound-filter
+    spec:
+      containers:
+      - name: inbound-filter
+        image: rengumin/envoy-inbound-filter:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+          - name: PORT
+            value: "8080"
+          - name: JWT_SERVICE_ADDR
+            value: "jwt-svc.services:50050"  # Cập nhật URL của dịch vụ JWT
+          - name: OPA_SERVER_ROUTE_URL
+            value: "http://opa-server.opa:8181/v1/data/route"  # Cập nhật URL của dịch vụ OPA
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inbound-filter-svc
+  # namespace: gateway
+spec:
+  selector:
+    app: inbound-filter
+  ports:
+  - port: 8080
+    targetPort: 8080

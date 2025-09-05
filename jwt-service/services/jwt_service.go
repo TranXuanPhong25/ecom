@@ -2,10 +2,9 @@ package services
 
 import (
 	"context"
-	"encoding/base64"
-	"os"
 	"time"
 
+	"github.com/TranXuanPhong25/ecom/jwt-service/configs"
 	"github.com/labstack/gommon/log"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -23,15 +22,10 @@ var (
 )
 
 func LoadEnv() {
-	secretKeyBase64 := os.Getenv("JWT_SECRET_KEY")
-	if secretKeyBase64 == "" {
-		log.Fatal("JWT_SECRET_KEY environment variable is not set")
-	}
-	decodedSecretKey, err := base64.StdEncoding.DecodeString(secretKeyBase64)
-	if err != nil {
-		log.Fatalf("Failed to decode JWT secret key: %v", err)
-	}
-	keyVault.privateKey = decodedSecretKey
+	configs.LoadEnv()
+	keyVault.privateKey = configs.AppConfig.SecretKey
+	SigningMethod = jwt.SigningMethodHS256
+	ExpireTime = time.Duration(36)
 }
 
 type JWTService struct {
