@@ -1,3 +1,13 @@
+## [3.12.0](https://github.com/TranXuanPhong25/ecom/compare/v3.11.0...v3.12.0) (2025-09-05)
+
+### 🚀 Features
+
+* architecture overview ([8bc8b49](https://github.com/TranXuanPhong25/ecom/commit/8bc8b49d58195b5cdb28bbe251d272f857eb1865))
+
+### 🔨 Technical Changes
+
+* **shops:** return correct status code for entity notfound ([1704bb2](https://github.com/TranXuanPhong25/ecom/commit/1704bb2402f151c0814561b5de34a95a39f6f733))
+
 ## [3.11.0](https://github.com/TranXuanPhong25/ecom/compare/v3.10.0...v3.11.0) (2025-09-05)
 
 ### 🚀 Features
