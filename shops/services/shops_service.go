@@ -12,21 +12,25 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateShop(request *models.CreateShopRequest) (models.Shop, echo.HTTPError) {
+func CreateShop(request *models.CreateShopRequest) (*dtos.ShopDTO, *echo.HTTPError) {
 	shop := &models.Shop{
-		Name:        request.Name,
-		Description: request.Description,
-		OwnerID:     request.OwnerID,
-		Location:    request.Location,
+		Name:         request.Name,
+		OwnerID:      request.OwnerID,
+		Location:     request.Location,
+		Logo:         request.Logo,
+		Banner:       request.Banner,
+		Email:        request.Email,
+		Phone:        request.Phone,
+		BusinessType: request.BusinessType,
 	}
 	tx := repositories.DB.Create(shop)
 	if tx.Error != nil {
 		if strings.Contains(tx.Error.Error(), "unique constraint") {
-			return models.Shop{}, *echo.NewHTTPError(http.StatusBadRequest, "Shop with this owner already exists")
+			return &dtos.ShopDTO{}, echo.NewHTTPError(http.StatusBadRequest, "Shop with this owner already exists")
 		}
-		return models.Shop{}, *echo.NewHTTPError(http.StatusInternalServerError, "Error while creating shop")
+		return &dtos.ShopDTO{}, echo.NewHTTPError(http.StatusInternalServerError, "Error while creating shop")
 	}
-	return *shop, echo.HTTPError{}
+	return toShopDTO(shop), nil
 
 }
 
@@ -48,11 +52,15 @@ func GetShop(ownerId string) (*dtos.ShopDTO, *echo.HTTPError) {
 
 func toShopDTO(shop *models.Shop) *dtos.ShopDTO {
 	return &dtos.ShopDTO{
-		ID:          shop.ID,
-		Name:        shop.Name,
-		Description: shop.Description,
-		OwnerID:     shop.OwnerID,
-		Location:    shop.Location,
-		Rating:      shop.Rating,
+		ID:           shop.ID,
+		Name:         shop.Name,
+		OwnerID:      shop.OwnerID,
+		Location:     shop.Location,
+		Rating:       shop.Rating,
+		Logo:         shop.Logo,
+		Banner:       shop.Banner,
+		Email:        shop.Email,
+		Phone:        shop.Phone,
+		BusinessType: shop.BusinessType,
 	}
 }

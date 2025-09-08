@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/TranXuanPhong25/ecom/shops/models"
 	"github.com/TranXuanPhong25/ecom/shops/services"
 	"github.com/TranXuanPhong25/ecom/shops/validators"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"net/http"
-	"strconv"
 )
 
 func CreateShop(c echo.Context) error {
@@ -29,7 +30,7 @@ func CreateShop(c echo.Context) error {
 	}
 
 	res, err := services.CreateShop(req)
-	if err.Error() != "" {
+	if err != nil {
 		return c.JSON(err.Code, err)
 	}
 	return c.JSON(http.StatusOK, res)

@@ -18,7 +18,6 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middlewares.PrometheusMiddleware())
-
 	repositories.ConnectDB()
 	err := repositories.DB.AutoMigrate(&models.Shop{})
 	if err != nil {

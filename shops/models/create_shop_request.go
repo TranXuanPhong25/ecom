@@ -3,8 +3,12 @@ package models
 import "github.com/google/uuid"
 
 type CreateShopRequest struct {
-	Name        string    `json:"name" validate:"required,min=3,max=100"`
-	Description string    `json:"description" validate:"required,min=10,max=500"`
-	OwnerID     uuid.UUID `json:"ownerId" validate:"required,uuid"`
-	Location    string    `json:"location" validate:"required,min=3,max=255"`
+	Name         string    `json:"name" validate:"required,min=3,max=100"`
+	OwnerID      uuid.UUID `json:"ownerId" validate:"required,uuid"`
+	Location     string    `json:"location" validate:"required,min=3,max=255"`
+	Logo         string    `json:"logo" validate:"omitempty,url"`
+	Banner       string    `json:"banner" validate:"omitempty,url"`
+	Email        string    `json:"email" validate:"required,email"`
+	Phone        string    `json:"phone" validate:"omitempty,number"`
+	BusinessType string    `json:"businessType"`
 }
