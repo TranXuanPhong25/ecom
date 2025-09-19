@@ -25,3 +25,10 @@ metadata:
     name: gateway
     labels:
         name: gateway        
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: opa
+  labels:
+    name: opa

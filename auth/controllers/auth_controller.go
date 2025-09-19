@@ -90,3 +90,11 @@ func GetCurrentUser(c echo.Context) error {
 	})
 
 }
+
+func Logout(c echo.Context) error {
+	c.Response().Header().Set("Set-Cookie", "access_token=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0")
+	c.Response().Header().Set("Access-Control-Allow-Credentials", "true")
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": "Successfully logged out",
+	})
+}
