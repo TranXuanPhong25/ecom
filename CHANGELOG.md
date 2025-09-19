@@ -1,3 +1,13 @@
+## [3.13.0](https://github.com/TranXuanPhong25/ecom/compare/v3.12.0...v3.13.0) (2025-09-19)
+
+### 🚀 Features
+
+* **auth:** logout endpoint ([0daf2c5](https://github.com/TranXuanPhong25/ecom/commit/0daf2c587c0da3fe5892b374ef7f31abb598c768))
+
+### 🔨 Technical Changes
+
+* **shops:** shops model refined ([c67fd8f](https://github.com/TranXuanPhong25/ecom/commit/c67fd8f225a088942f9b45a61169264876bb4ed2))
+
 ## [3.12.0](https://github.com/TranXuanPhong25/ecom/compare/v3.11.0...v3.12.0) (2025-09-05)
 
 ### 🚀 Features
