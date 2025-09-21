@@ -13,6 +13,10 @@ allow if {
     input.method == "GET"
     regex.match(public_get_pattern[_], input.path)
 }
+allow if {
+    input.method == "POST"
+    input.path == "/api/product-categories"
+}
 
 allow if {
     presigned_url_pattern := [

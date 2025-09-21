@@ -1,6 +1,7 @@
 package com.ecom.products.dtos;
 
 import com.ecom.products.enums.ProductStatus;
+import com.ecom.products.models.ProductCategoriesModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -30,7 +31,7 @@ public class ProductDTO {
 
     private List<String> images;
 
-    private String categoryPath;
+    private ProductCategoriesModel categoryPath;
     private BrandDTO brand;
     private String coverImage;
     private Map<String, String> specs;
