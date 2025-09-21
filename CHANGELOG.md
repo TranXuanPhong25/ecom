@@ -1,3 +1,15 @@
+## [3.14.0](https://github.com/TranXuanPhong25/ecom/compare/v3.13.0...v3.14.0) (2025-09-21)
+
+### 🚀 Features
+
+* chatbot with Tavily search tool ([4e39753](https://github.com/TranXuanPhong25/ecom/commit/4e39753633e573f21fc9e9b36c3a0a30523bbf1a))
+* parse category path to object ([845ef51](https://github.com/TranXuanPhong25/ecom/commit/845ef51b18705076b801377815eb0e3b23fb1acb))
+
+### 🔨 Technical Changes
+
+* remove docker-compose ([a14079c](https://github.com/TranXuanPhong25/ecom/commit/a14079cc39894509b02ba2de8eceb4fa0f81c78e))
+* temporary allow post product-categories ([9dab403](https://github.com/TranXuanPhong25/ecom/commit/9dab403b645f9c1a28542af25ff3d2eecf3c32df))
+
 ## [3.13.0](https://github.com/TranXuanPhong25/ecom/compare/v3.12.0...v3.13.0) (2025-09-19)
 
 ### 🚀 Features
