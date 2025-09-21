@@ -1,5 +1,6 @@
 package com.ecom.products.services;
 
+import com.ecom.products.models.ProductCategoriesModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,10 +14,10 @@ public class CategoryService {
         this.categoryServiceClient = categoryServiceClient;
     }
 
-    public Mono<String> getCategoryPath(Long categoryId) {
+    public Mono<ProductCategoriesModel> getCategoryPath(Long categoryId) {
         return categoryServiceClient.get()
                 .uri("/path?id={categoryId}", categoryId)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(ProductCategoriesModel.class);
     }
 }
