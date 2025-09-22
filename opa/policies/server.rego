@@ -16,7 +16,8 @@ allow if {
 
 allow if {
     presigned_url_pattern := [
-    "/api/upload/presigned-url"
+    "/api/upload/presigned-url",
+    "/products-images"
     ]
     input.method in [ "POST", "GET" , "PUT", "DELETE", "OPTIONS" ]
     regex.match(presigned_url_pattern[_], input.path)

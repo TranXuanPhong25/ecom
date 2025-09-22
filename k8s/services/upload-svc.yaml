@@ -20,17 +20,17 @@ spec:
         ports:
         - containerPort: 8080
         env:
-          - name: ServerPort
+          - name: SERVER_PORT
             value: "8080"
-          - name: MinIOEndpoint
-            value: "minio.storages:9000"
-          - name: MinIOAccessKey
-            value: "admin"
-          - name: MinIOSecretKey
-            value: "admin1234"
-          - name: MinIOBucketName
+          - name: MINIO_ENDPOINT
+            value: "minio-server.minio"
+          - name: MINIO_ACCESS_KEY
+            value: "minio"
+          - name: MINIO_SECRET_KEY
+            value: "minio1234"
+          - name: MINIO_BUCKET_NAME
             value: "products-images"
-          - name: MinIOUseSSL
+          - name: MINIO_USE_SSL
             value: "false"
 ---
 apiVersion: v1
