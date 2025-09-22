@@ -10,7 +10,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: "/"
+            value: "/products-images"
       filters:
         - type: URLRewrite
           urlRewrite:
