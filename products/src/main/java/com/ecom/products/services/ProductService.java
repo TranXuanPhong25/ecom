@@ -5,7 +5,7 @@ import com.ecom.products.dtos.VariantDTO;
 import com.ecom.products.entities.Product;
 import com.ecom.products.entities.ProductVariant;
 import com.ecom.products.models.CreateProductRequest;
-import com.ecom.products.models.ProductCategoriesModel;
+import com.ecom.products.models.ProductCategoryPathNode;
 import com.ecom.products.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class ProductService {
         List<VariantDTO> variantDTOs = productVariantService.getVariantsByProductId(id);
         ProductDTO productDTO = toDTO(product, variantDTOs);
         if (product.getCategoryId() != null) {
-            Mono<ProductCategoriesModel> categoryPathMono = categoryService.getCategoryPath(product.getCategoryId());
+            Mono<List<ProductCategoryPathNode>> categoryPathMono = categoryService.getCategoryPath(product.getCategoryId());
             productDTO.setCategoryPath(categoryPathMono.block());
         }
         return productDTO;
