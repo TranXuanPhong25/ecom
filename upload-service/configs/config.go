@@ -12,6 +12,7 @@ type Config struct {
 	MinIOSecretKey  string
 	MinIOBucketName string
 	MinIOUseSSL     string
+	RewriteHost     string
 }
 
 var AppConfig Config
@@ -23,6 +24,7 @@ func LoadEnv() {
 	AppConfig.MinIOSecretKey = getEnv("MINIO_SECRET_KEY", "minioadmin")
 	AppConfig.MinIOBucketName = getEnv("MINIO_BUCKET_NAME", "uploads")
 	AppConfig.MinIOUseSSL = getEnv("MINIO_USE_SSL", "false")
+	AppConfig.RewriteHost = getEnv("REWRITE_HOST", "localhost:8000")
 
 	log.Printf("Upload Config loaded - Server Port: %s, MinIO: %s",
 		AppConfig.ServerPort, AppConfig.MinIOEndpoint)

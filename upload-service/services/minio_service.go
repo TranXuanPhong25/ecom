@@ -55,7 +55,7 @@ func GeneratePresignedURLUploadImage(objectName string) (*url.URL, error) {
 		return &url.URL{}, err
 	}
 	// Modify host to point to minio proxy server
-	presignedURL.Host = "localhost:9000"
+	presignedURL.Host = configs.AppConfig.RewriteHost
 	return presignedURL, nil
 }
 
