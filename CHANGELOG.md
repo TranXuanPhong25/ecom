@@ -1,3 +1,9 @@
+## [3.15.0](https://github.com/TranXuanPhong25/ecom/compare/v3.14.0...v3.15.0) (2025-09-22)
+
+### 🚀 Features
+
+* minio routing ([9772870](https://github.com/TranXuanPhong25/ecom/commit/9772870b8c30188b7ba7f16e311c62a4ee8e7b65))
+
 ## [3.14.0](https://github.com/TranXuanPhong25/ecom/compare/v3.13.0...v3.14.0) (2025-09-21)
 
 ### 🚀 Features
