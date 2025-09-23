@@ -1,3 +1,9 @@
+## [3.15.1](https://github.com/TranXuanPhong25/ecom/compare/v3.15.0...v3.15.1) (2025-09-22)
+
+### 🐛 Bug Fixes
+
+* correct path for minio ([9c26635](https://github.com/TranXuanPhong25/ecom/commit/9c26635daf12e64fa9a27e8391de443f31909f97))
+
 ## [3.15.0](https://github.com/TranXuanPhong25/ecom/compare/v3.14.0...v3.15.0) (2025-09-22)
 
 ### 🚀 Features
