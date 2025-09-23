@@ -1,3 +1,16 @@
+## [3.16.0](https://github.com/TranXuanPhong25/ecom/compare/v3.15.1...v3.16.0) (2025-09-23)
+
+### 🚀 Features
+
+* cart service with scyllaBD and simple get cart endpoint ([5390fc2](https://github.com/TranXuanPhong25/ecom/commit/5390fc225f20c61377c7f0b5c0fe43ffccc9871b))
+* **carts:** complete CRUD ([03ec710](https://github.com/TranXuanPhong25/ecom/commit/03ec710c52aca95358d16557a9033856eb54b24d))
+
+### 🐛 Bug Fixes
+
+* correct mapping response from CategoryService ([6e6c8ce](https://github.com/TranXuanPhong25/ecom/commit/6e6c8ce8c8170b048787b69b16d5359e1a34f904))
+* remove naive drop cluster and wrong use of SelectRelease, BindMap ([e245a06](https://github.com/TranXuanPhong25/ecom/commit/e245a0639dd9bb3c1df1c53d8f5160de52032370))
+* rewrite host injection ([8dcf813](https://github.com/TranXuanPhong25/ecom/commit/8dcf813c5a0c10676bb64397d58263d85b360dfd))
+
 ## [3.15.1](https://github.com/TranXuanPhong25/ecom/compare/v3.15.0...v3.15.1) (2025-09-22)
 
 ### 🐛 Bug Fixes
