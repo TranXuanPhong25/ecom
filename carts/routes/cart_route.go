@@ -6,7 +6,10 @@ import (
 )
 
 func RegisterCartRoutes(e *echo.Echo) {
-	e.GET("/api/carts", controllers.GetCart)
+	e.GET("/api/carts/mine", controllers.GetCart)
+	e.GET("/api/carts/mine/summary", controllers.GetCart)
 
-	e.POST("/api/carts/item", controllers.AddItemToCart)
+	e.POST("/api/carts/mine/items", controllers.AddItemToCart)
+	e.PUT("/api/carts/mine/items", controllers.UpdateCartItem)
+	e.DELETE("/api/carts/mine/items", controllers.DeleteItemInCart)
 }

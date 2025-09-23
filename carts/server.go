@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/TranXuanPhong25/ecom/carts/configs"
 	"github.com/TranXuanPhong25/ecom/carts/repositories"
 	"github.com/TranXuanPhong25/ecom/carts/routes"
@@ -19,7 +17,5 @@ func main() {
 	routes.RegisterCartRoutes(e)
 	routes.RegisterHealthRoute(e)
 	// Start server
-	if err := e.Start(":" + configs.AppConfig.ServerPort); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
-	}
+	e.Logger.Fatal(e.Start(":" + configs.AppConfig.ServerPort))
 }
