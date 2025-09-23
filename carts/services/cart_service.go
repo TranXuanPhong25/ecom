@@ -32,7 +32,7 @@ func AddItemToCart(userID string, item *dtos.AddItemRequest) error {
 	}
 	existingQuantity, err := repositories.GetItemQuantity(userID, item.ProductVariantID)
 	if (existingQuantity > 0) || (err == nil) {
-		item.Quantity += existingQuantity
+		cartItem.Quantity += existingQuantity
 		return repositories.UpdateItemQuantity(cartItem)
 	}
 	return repositories.AddItemToCart(cartItem)

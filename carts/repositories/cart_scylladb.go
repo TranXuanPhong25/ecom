@@ -33,12 +33,12 @@ func ConnectScyllaDB() {
 }
 
 func MigrateDB() {
-	err := session.Query("DROP KEYSPACE IF EXISTS carts_ks", nil).Exec()
-	if err != nil {
-		panic(err)
-		return
-	}
-	err = session.Query(
+	//err := session.Query("DROP KEYSPACE IF EXISTS carts_ks", nil).Exec()
+	//if err != nil {
+	//	panic(err)
+	//	return
+	//}
+	err := session.Query(
 		"CREATE KEYSPACE IF NOT EXISTS carts_ks "+
 			"WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '1'}  AND durable_writes = true AND TABLETS = {'enabled': false};;",
 		nil).Exec()
