@@ -9,4 +9,5 @@ dependencies = [
     "langchain-tavily>=0.2.11",
     "langchain[google-genai]>=0.3.27",
     "langgraph>=0.6.7",
+    "langgraph-supervisor>=0.0.29",
 ]
