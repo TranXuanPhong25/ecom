@@ -16,7 +16,6 @@ spec:
       containers:
       - name: jwt
         image: rengumin/jwt-svc:1.0
-        imagePullPolicy: Always
         ports:
         - containerPort: 50050
         env:

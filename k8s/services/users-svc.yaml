@@ -16,7 +16,6 @@ spec:
       containers:
       - name: users
         image: rengumin/users-svc:1.0
-        imagePullPolicy: Always
         ports:
         - containerPort: 50050
         env:

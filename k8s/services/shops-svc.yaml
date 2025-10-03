@@ -16,7 +16,6 @@ spec:
       containers:
         - name: shops
           image: rengumin/shops-svc:1.0
-          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
