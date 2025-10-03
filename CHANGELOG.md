@@ -1,3 +1,16 @@
+## [3.17.0](https://github.com/TranXuanPhong25/ecom/compare/v3.16.0...v3.17.0) (2025-10-03)
+
+### 🚀 Features
+
+* **carts:** connect with product-variants service ([c14ec1a](https://github.com/TranXuanPhong25/ecom/commit/c14ec1abbb1e1f5f3bb9783bcd056c48f807b1b3))
+* **chatbots:** basic agent graph ([1b027f9](https://github.com/TranXuanPhong25/ecom/commit/1b027f98970c981000f6ddf71f104d404c4fa7a4))
+* **products:** product-variants retrieval logic ([36c5724](https://github.com/TranXuanPhong25/ecom/commit/36c5724c507613ba8dd63b97a7ddc13526adc4b2))
+
+### 🔨 Technical Changes
+
+* change image pull rule to default(never) ([6b1fd90](https://github.com/TranXuanPhong25/ecom/commit/6b1fd905ed0dd8975bd05fb4cfe7a1c58595243f))
+* suppress compiler warning ([6f8ea84](https://github.com/TranXuanPhong25/ecom/commit/6f8ea846f5277ddf4e711c46e745fe1f80e3f159))
+
 ## [3.16.0](https://github.com/TranXuanPhong25/ecom/compare/v3.15.1...v3.16.0) (2025-09-23)
 
 ### 🚀 Features
