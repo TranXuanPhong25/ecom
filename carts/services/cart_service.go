@@ -6,16 +6,58 @@ import (
 	"github.com/TranXuanPhong25/ecom/carts/repositories"
 )
 
-func GetCart(userID string) (*dtos.Cart, error) {
+type ICartService interface {
+	GetCart(userID string) (*dtos.Cart, error)
+	AddItemToCart(userID string, item *dtos.CartItemPayload) error
+	UpdateItemInCart(userID string, item *dtos.CartItemPayload) error
+	DeleteItemInCart(userID string, item *dtos.CartItemPayload) error
+	ClearCart(userID string) error
+}
+type CartService struct {
+	repo           repositories.ICartRepository
+	productService IProductService
+}
 
-	items, err := repositories.GetCart(userID)
+func NewCartService(repo repositories.ICartRepository, productService IProductService) ICartService {
+
+	return &CartService{
+		repo:           repo,
+		productService: productService,
+	}
+}
+
+func (s *CartService) GetCart(userID string) (*dtos.Cart, error) {
+
+	items, err := s.repo.GetCart(userID)
 	if err != nil {
 		return nil, err
 	}
-	cartItems := make([]dtos.CartItem, len(items))
+	productVariantIDs := make([]string, len(items))
 	for i, item := range items {
-		cartItems[i].Quantity = item.Quantity
-		cartItems[i].ProductVariant = item.ProductVariantID
+		productVariantIDs[i] = item.ProductVariantID
+	}
+	productVariantsResponse, err := s.productService.GetProductVariantByIds(productVariantIDs)
+	if err != nil {
+		return nil, err
+	}
+	//TODO: handle not found product variants
+	// if len(productVariantsResponse.NotFoundIDs) > 0 {
+	// 	for _, notFoundID := range productVariantsResponse.NotFoundIDs {
+	// 		for _, item := range items {
+	// 			if item.ProductVariantID == notFoundID {
+	// 				_ = s.repo.DeleteItemInCart(item)
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// remove notfound in items
+	cartItems := make([]dtos.CartItem, 0, len(productVariantsResponse.Variants))
+	for i, item := range items {
+		cartItems = append(cartItems, dtos.CartItem{
+			ProductVariant: productVariantsResponse.Variants[i],
+			Quantity:       item.Quantity,
+			ShopID:         item.ShopID,
+		})
 	}
 	cart := dtos.Cart{
 		Items: cartItems,
@@ -23,41 +65,41 @@ func GetCart(userID string) (*dtos.Cart, error) {
 	return &cart, nil
 }
 
-func AddItemToCart(userID string, item *dtos.AddItemRequest) error {
+func (s *CartService) AddItemToCart(userID string, item *dtos.CartItemPayload) error {
 	cartItem := models.CartItem{
 		UserID:           userID,
 		ProductVariantID: item.ProductVariantID,
 		ShopID:           item.ShopID,
 		Quantity:         item.Quantity,
 	}
-	existingQuantity, err := repositories.GetItemQuantity(userID, item.ProductVariantID)
+	existingQuantity, err := s.repo.GetItemQuantity(userID, item.ProductVariantID, item.ShopID)
 	if (existingQuantity > 0) || (err == nil) {
 		cartItem.Quantity += existingQuantity
-		return repositories.UpdateItemQuantity(cartItem)
+		return s.repo.UpdateItemQuantity(cartItem)
 	}
-	return repositories.AddItemToCart(cartItem)
+	return s.repo.AddItemToCart(cartItem)
 }
 
-func UpdateItemInCart(userID string, item *dtos.AddItemRequest) error {
+func (s *CartService) UpdateItemInCart(userID string, item *dtos.CartItemPayload) error {
 	cartItem := models.CartItem{
 		UserID:           userID,
 		ProductVariantID: item.ProductVariantID,
 		ShopID:           item.ShopID,
 		Quantity:         item.Quantity,
 	}
-	return repositories.UpdateItemQuantity(cartItem)
+	return s.repo.UpdateItemQuantity(cartItem)
 }
 
-func DeleteItemInCart(userID string, item *dtos.AddItemRequest) error {
+func (s *CartService) DeleteItemInCart(userID string, item *dtos.CartItemPayload) error {
 	cartItem := models.CartItem{
 		UserID:           userID,
 		ProductVariantID: item.ProductVariantID,
 		ShopID:           item.ShopID,
 		Quantity:         item.Quantity,
 	}
-	return repositories.DeleteItemInCart(cartItem)
+	return s.repo.DeleteItemInCart(cartItem)
 }
 
-func ClearCart(userID string) error {
-	return repositories.ClearCart(userID)
+func (s *CartService) ClearCart(userID string) error {
+	return s.repo.ClearCart(userID)
 }

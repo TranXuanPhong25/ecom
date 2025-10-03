@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/TranXuanPhong25/ecom/carts/configs"
@@ -27,24 +28,23 @@ func ConnectScyllaDB() {
 	//cluster.PoolConfig.HostSelectionPolicy = gocql.DCAwareRoundRobinPolicy("AWS_US_EAST_1")
 	newSession, err := gocqlx.WrapSession(cluster.CreateSession())
 	if err != nil {
+		fmt.Printf("Error connecting to ScyllaDB: %v\n", err)
 		panic("Connection to scyllaDB failed")
 	}
 	session = newSession
 }
 
 func MigrateDB() {
-	//err := session.Query("DROP KEYSPACE IF EXISTS carts_ks", nil).Exec()
-	//if err != nil {
-	//	panic(err)
-	//	return
-	//}
-	err := session.Query(
+	err := session.Query("DROP KEYSPACE IF EXISTS carts_ks", nil).Exec()
+	if err != nil {
+		panic(err)
+	}
+	err = session.Query(
 		"CREATE KEYSPACE IF NOT EXISTS carts_ks "+
 			"WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '1'}  AND durable_writes = true AND TABLETS = {'enabled': false};;",
 		nil).Exec()
 	if err != nil {
 		panic(err)
-		return
 	}
 	err = session.Query(
 		"CREATE TABLE IF NOT EXISTS "+
@@ -53,20 +53,11 @@ func MigrateDB() {
 			"shop_id uuid,"+
 			"product_variant_id int,"+
 			"quantity int,"+
-			"PRIMARY KEY (user_id, product_variant_id))"+
+			"PRIMARY KEY ((user_id), product_variant_id, shop_id))"+
 			"WITH cdc = {'enabled': true, 'preimage': true, 'postimage': true}",
 		nil).Exec()
 	if err != nil {
 		panic(err)
-		return
 	}
 
-	//session.Query(
-	//	"CREATE INDEX IF NOT EXISTS cart_product_variant_id_idx "+
-	//		"ON carts_ks.cart_items (product_variant_id)",
-	//	nil).Exec()
-	session.Query(
-		"CREATE INDEX IF NOT EXISTS cart_product_variant_id_idx "+
-			"ON carts_ks.cart_items (user_id)",
-		nil).Exec()
 }
