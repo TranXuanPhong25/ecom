@@ -22,7 +22,6 @@ public class VariantDTO {
     private Integer stockQuantity;
     private List<String> images;
     private String sku;
-
     public VariantDTO(Long id, BigDecimal price, Map<String, String> attributes, boolean isActive,
                       Integer stockQuantity, String sku, String[] images) {
         this.id = id;

@@ -16,7 +16,6 @@ spec:
       containers:
       - name: auth
         image: rengumin/auth-svc:1.0
-        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

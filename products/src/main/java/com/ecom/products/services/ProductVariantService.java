@@ -1,7 +1,9 @@
 package com.ecom.products.services;
 
 import com.ecom.products.dtos.VariantDTO;
+import com.ecom.products.dtos.VariantWithNameDTO;
 import com.ecom.products.entities.ProductVariant;
+import com.ecom.products.models.GetProductVariantsResponse;
 import com.ecom.products.repositories.ProductVariantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,8 +30,13 @@ public class ProductVariantService {
         return variantDTOList;
     }
 
-    public VariantDTO getVariantById(Long id) {
-        return variantRepository.findById(id).map(this::toDTO).orElse(null);
+    public GetProductVariantsResponse getVariantByIds(List<Long> ids) {
+        List<ProductVariant> foundVariants = variantRepository.findAllByIdWithProduct(ids);
+        System.out.println(foundVariants);
+        List<VariantWithNameDTO> variantDTOs = foundVariants.stream().map(this::toVariantWithNameDTO).collect(Collectors.toList());
+        List<Long> foundIds = foundVariants.stream().map(ProductVariant::getId).collect(Collectors.toList());
+        List<Long> notFoundIds = ids.stream().filter(id -> !foundIds.contains(id)).collect(Collectors.toList());
+        return new GetProductVariantsResponse(variantDTOs, notFoundIds);
     }
 
     @Transactional
@@ -58,6 +65,22 @@ public class ProductVariantService {
         dto.setActive(variant.isActive());
         dto.setSku(variant.getSku());
         dto.setImages(variant.getImages());
+        // Set product name from the fetched product relationship
+
+        return dto;
+    }
+
+    VariantWithNameDTO toVariantWithNameDTO(ProductVariant variant) {
+        VariantWithNameDTO dto = new VariantWithNameDTO(
+                variant.getId(),
+                variant.getProduct() != null ? variant.getProduct().getName() : null,
+                variant.getPrice(),
+                variant.getAttributes(),
+                variant.isActive(),
+                variant.getStockQuantity(),
+                variant.getSku(),
+                variant.getImages().toArray(new String[0])
+        );
         return dto;
     }
 

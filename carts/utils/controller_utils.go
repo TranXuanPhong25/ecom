@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func ValidateRequestStructure(c echo.Context, req interface{}) error {
+func ValidateRequestStructure(c echo.Context, req any) error {
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"status": strconv.Itoa(http.StatusBadRequest),

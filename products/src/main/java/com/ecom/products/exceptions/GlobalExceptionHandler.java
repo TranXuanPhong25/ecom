@@ -24,49 +24,58 @@ public class GlobalExceptionHandler {
     ResponseEntity<ProblemDetail> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex, WebRequest request) {
         String detailMessage = "";
-        if (ex.getRequiredType().getName().equals(UUID.class.getName())) {
-            detailMessage = "Invalid UUID format for parameter '" + ex.getName() + "': " + ex.getValue();
+        if (ex.getRequiredType() != null) {
+            if (ex.getRequiredType().getName().equals(UUID.class.getName())) {
+                detailMessage = "Invalid UUID format for parameter '" + ex.getName() + "': " + ex.getValue();
+            }
         } else {
             detailMessage = "Invalid value for parameter '" + ex.getName() + "': " + ex.getValue();
         }
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detailMessage);
         problemDetail.setTitle("Bad Request");
         problemDetail.setInstance(URI.create(request.getContextPath()));
-        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the ProblemDetail
+        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the
+                                                               // ProblemDetail
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
                 .body(problemDetail);
     }
-
 
     @ExceptionHandler(DuplicateKeyException.class)
     ResponseEntity<ProblemDetail> handleDuplicateKeyException(DuplicateKeyException ex, WebRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
         problemDetail.setTitle("Duplicate Key Error");
         problemDetail.setInstance(URI.create(request.getContextPath()));
-        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the ProblemDetail
+        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the
+                                                               // ProblemDetail
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
                 .body(problemDetail);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    ResponseEntity<ProblemDetail> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    ResponseEntity<ProblemDetail> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+            WebRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY,
+                ex.getMessage());
         problemDetail.setTitle("Data Integrity Violation");
         problemDetail.setInstance(URI.create(request.getContextPath()));
-        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the ProblemDetail
+        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the
+                                                               // ProblemDetail
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
                 .body(problemDetail);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,  WebRequest request) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, handleMethodArgumentNotValidMessage(ex));
+    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
+            WebRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                handleMethodArgumentNotValidMessage(ex));
         problemDetail.setTitle("Bad request");
         problemDetail.setInstance(URI.create(request.getContextPath()));
-        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the ProblemDetail
+        problemDetail.setProperty("timestamp", Instant.now()); // adding more data using the Map properties of the
+                                                               // ProblemDetail
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 

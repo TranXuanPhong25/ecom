@@ -9,8 +9,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddItemToCart(c echo.Context) error {
-	req := new(dtos.AddItemRequest)
+type cartController struct {
+	cartService services.ICartService
+}
+
+func NewCartController(cartService services.ICartService) *cartController {
+	return &cartController{
+		cartService: cartService,
+	}
+}
+
+func (controller *cartController) AddItemToCart(c echo.Context) error {
+	req := new(dtos.CartItemPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
 		return err
@@ -21,15 +31,15 @@ func AddItemToCart(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
 
-	if err := services.AddItemToCart(userID, req); err != nil {
+	if err := controller.cartService.AddItemToCart(userID, req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Item added to cart"})
 }
 
-func UpdateCartItem(c echo.Context) error {
-	req := new(dtos.AddItemRequest)
+func (controller *cartController) UpdateCartItem(c echo.Context) error {
+	req := new(dtos.CartItemPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
 		return err
@@ -39,15 +49,15 @@ func UpdateCartItem(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
 
-	if err := services.UpdateItemInCart(userID, req); err != nil {
+	if err := controller.cartService.UpdateItemInCart(userID, req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Cart item updated"})
 }
 
-func DeleteItemInCart(c echo.Context) error {
-	req := new(dtos.AddItemRequest)
+func (controller *cartController) DeleteItemInCart(c echo.Context) error {
+	req := new(dtos.CartItemPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
 		return err
@@ -57,19 +67,19 @@ func DeleteItemInCart(c echo.Context) error {
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
-	if err := services.DeleteItemInCart(userID, req); err != nil {
+	if err := controller.cartService.DeleteItemInCart(userID, req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusNoContent, nil)
 }
 
-func GetCart(c echo.Context) error {
+func (controller *cartController) GetCart(c echo.Context) error {
 	userID := c.Request().Header["X-User-Id"][0]
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
-	cart, err := services.GetCart(userID)
+	cart, err := controller.cartService.GetCart(userID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}

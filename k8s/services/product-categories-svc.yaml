@@ -18,7 +18,6 @@ spec:
       containers:
       - name: product-categories
         image: rengumin/product-categories-svc:1.0
-        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

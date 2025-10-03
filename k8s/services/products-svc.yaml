@@ -18,7 +18,6 @@ spec:
       containers:
       - name: products
         image: rengumin/products-svc:1.0
-        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -41,10 +40,10 @@ metadata:
   name: products-svc
   namespace: services
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: products
   ports:
-  - protocol: TCP
-    port: 8080  
-    targetPort: 8080
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
