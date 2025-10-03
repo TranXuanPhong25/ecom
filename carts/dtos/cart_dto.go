@@ -16,3 +16,7 @@ type CartItemPayload struct {
 	Quantity         int    `json:"quantity" validate:"required,min=1"`
 	ShopID           string `json:"shopID" validate:"required"`
 }
+
+type DeleteCartItemsPayload struct {
+	Items []string `json:"ids" validate:"required,dive,required"`
+}

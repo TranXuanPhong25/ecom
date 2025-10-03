@@ -7,10 +7,13 @@ import (
 	"github.com/TranXuanPhong25/ecom/carts/configs"
 	"github.com/gocql/gocql"
 	"github.com/scylladb/gocqlx/v3"
+	"github.com/scylladb/gocqlx/v3/qb"
+	"github.com/scylladb/gocqlx/v3/table"
 )
 
 var (
 	session gocqlx.Session
+	stmts   = createStatements()
 )
 
 func InitDBConnection() {
@@ -35,11 +38,11 @@ func ConnectScyllaDB() {
 }
 
 func MigrateDB() {
-	err := session.Query("DROP KEYSPACE IF EXISTS carts_ks", nil).Exec()
-	if err != nil {
-		panic(err)
-	}
-	err = session.Query(
+	//err := session.Query("DROP KEYSPACE IF EXISTS carts_ks", nil).Exec()
+	//if err != nil {
+	//	panic(err)
+	//}
+	err := session.Query(
 		"CREATE KEYSPACE IF NOT EXISTS carts_ks "+
 			"WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '1'}  AND durable_writes = true AND TABLETS = {'enabled': false};;",
 		nil).Exec()
@@ -60,4 +63,50 @@ func MigrateDB() {
 		panic(err)
 	}
 
+}
+
+func createStatements() *statements {
+	m := table.Metadata{
+		Name:    "cart_items",
+		Columns: []string{"user_id", "shop_id", "product_variant_id", "quantity"},
+		PartKey: []string{"user_id"},
+	}
+	tbl := table.New(m)
+
+	deleteStmt, deleteNames := tbl.Delete()
+	insertStmt, insertNames := tbl.Insert()
+	updateStmt, updateNames := tbl.Update()
+	// Normally a select statement such as this would use `tbl.Select()` to select by
+	// primary key but now we just want to display all the records...
+	selectStmt, selectNames := qb.Select(m.Name).Columns(m.Columns...).ToCql()
+	return &statements{
+		del: query{
+			stmt:  deleteStmt,
+			names: deleteNames,
+		},
+		ins: query{
+			stmt:  insertStmt,
+			names: insertNames,
+		},
+		sel: query{
+			stmt:  selectStmt,
+			names: selectNames,
+		},
+		upd: query{
+			stmt:  updateStmt,
+			names: updateNames,
+		},
+	}
+}
+
+type query struct {
+	stmt  string
+	names []string
+}
+
+type statements struct {
+	del query
+	ins query
+	upd query
+	sel query
 }

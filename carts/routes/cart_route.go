@@ -9,9 +9,9 @@ import (
 )
 
 func RegisterCartRoutes(e *echo.Echo) {
-	service_configs := configs.LoadServiceConfig()
+	serviceConfigs := configs.LoadServiceConfig()
 	repo := repositories.NewCartRepository()
-	productService := services.NewProductService(service_configs)
+	productService := services.NewProductService(serviceConfigs)
 	service := services.NewCartService(repo, productService)
 	controllers := controllers.NewCartController(service)
 	e.GET("/api/carts/mine", controllers.GetCart)

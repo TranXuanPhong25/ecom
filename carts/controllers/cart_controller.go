@@ -57,17 +57,25 @@ func (controller *cartController) UpdateCartItem(c echo.Context) error {
 }
 
 func (controller *cartController) DeleteItemInCart(c echo.Context) error {
-	req := new(dtos.CartItemPayload)
+	//idsParam := c.QueryParam("ids")
+	//uuids := strings.Split(idsParam, ",")
+	//for _, u := range uuids {
+	//	_, err := uuid.Parse(strings.TrimSpace(u))
+	//	if err != nil {
+	//		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid UUID"})
+	//	}
+	//}
+	req := new(dtos.DeleteCartItemsPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
 		return err
 	}
+	uuids := req.Items
 	userID := c.Request().Header["X-User-Id"][0]
-
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
-	if err := controller.cartService.DeleteItemInCart(userID, req); err != nil {
+	if err := controller.cartService.DeleteItemInCart(userID, uuids); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 

@@ -1,6 +1,8 @@
 package services
 
 import (
+	"strconv"
+
 	"github.com/TranXuanPhong25/ecom/carts/dtos"
 	"github.com/TranXuanPhong25/ecom/carts/models"
 	"github.com/TranXuanPhong25/ecom/carts/repositories"
@@ -10,7 +12,7 @@ type ICartService interface {
 	GetCart(userID string) (*dtos.Cart, error)
 	AddItemToCart(userID string, item *dtos.CartItemPayload) error
 	UpdateItemInCart(userID string, item *dtos.CartItemPayload) error
-	DeleteItemInCart(userID string, item *dtos.CartItemPayload) error
+	DeleteItemInCart(userID string, uuids []string) error
 	ClearCart(userID string) error
 }
 type CartService struct {
@@ -32,6 +34,11 @@ func (s *CartService) GetCart(userID string) (*dtos.Cart, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(items) == 0 {
+		return &dtos.Cart{
+			Items: []dtos.CartItem{},
+		}, nil
+	}
 	productVariantIDs := make([]string, len(items))
 	for i, item := range items {
 		productVariantIDs[i] = item.ProductVariantID
@@ -51,13 +58,18 @@ func (s *CartService) GetCart(userID string) (*dtos.Cart, error) {
 	// 	}
 	// }
 	// remove notfound in items
-	cartItems := make([]dtos.CartItem, 0, len(productVariantsResponse.Variants))
+	//build map of productVariantID to ProductVariant
+	productVariantMap := make(map[string]dtos.ProductVariant)
+	for _, pv := range productVariantsResponse.Variants {
+		productVariantMap[strconv.Itoa(pv.ID)] = pv
+	}
+	cartItems := make([]dtos.CartItem, len(productVariantsResponse.Variants))
 	for i, item := range items {
-		cartItems = append(cartItems, dtos.CartItem{
-			ProductVariant: productVariantsResponse.Variants[i],
+		cartItems[i] = dtos.CartItem{
+			ProductVariant: productVariantMap[item.ProductVariantID],
 			Quantity:       item.Quantity,
 			ShopID:         item.ShopID,
-		})
+		}
 	}
 	cart := dtos.Cart{
 		Items: cartItems,
@@ -90,14 +102,8 @@ func (s *CartService) UpdateItemInCart(userID string, item *dtos.CartItemPayload
 	return s.repo.UpdateItemQuantity(cartItem)
 }
 
-func (s *CartService) DeleteItemInCart(userID string, item *dtos.CartItemPayload) error {
-	cartItem := models.CartItem{
-		UserID:           userID,
-		ProductVariantID: item.ProductVariantID,
-		ShopID:           item.ShopID,
-		Quantity:         item.Quantity,
-	}
-	return s.repo.DeleteItemInCart(cartItem)
+func (s *CartService) DeleteItemInCart(userID string, uuids []string) error {
+	return s.repo.DeleteItemInCart(userID, uuids)
 }
 
 func (s *CartService) ClearCart(userID string) error {
