@@ -2,6 +2,7 @@ package com.ecom.products.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,11 +16,17 @@ import java.util.Map;
 @Data
 @Entity
 @Table(name = "product_variants")
+@ToString
 public class ProductVariant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private Product product;
+
+    @Column(name = "product_id")
     private Long productId;
 
     private BigDecimal price;
@@ -39,5 +46,7 @@ public class ProductVariant {
 
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
+
+    
 }
 
