@@ -124,6 +124,7 @@ func (x *Shop) GetName() string {
 type GetShopsByIDsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Shops         []*Shop                `protobuf:"bytes,1,rep,name=shops,proto3" json:"shops,omitempty"`
+	NotFoundIds   []string               `protobuf:"bytes,2,rep,name=not_found_ids,json=notFoundIds,proto3" json:"not_found_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -165,6 +166,13 @@ func (x *GetShopsByIDsResponse) GetShops() []*Shop {
 	return nil
 }
 
+func (x *GetShopsByIDsResponse) GetNotFoundIds() []string {
+	if x != nil {
+		return x.NotFoundIds
+	}
+	return nil
+}
+
 var File_proto_shop_proto protoreflect.FileDescriptor
 
 const file_proto_shop_proto_rawDesc = "" +
@@ -174,9 +182,10 @@ const file_proto_shop_proto_rawDesc = "" +
 	"\x03ids\x18\x01 \x03(\tR\x03ids\"*\n" +
 	"\x04Shop\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\":\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"^\n" +
 	"\x15GetShopsByIDsResponse\x12!\n" +
-	"\x05shops\x18\x01 \x03(\v2\v.users.ShopR\x05shops2Z\n" +
+	"\x05shops\x18\x01 \x03(\v2\v.users.ShopR\x05shops\x12\"\n" +
+	"\rnot_found_ids\x18\x02 \x03(\tR\vnotFoundIds2Z\n" +
 	"\fShopsService\x12J\n" +
 	"\rGetShopsByIDs\x12\x1b.users.GetShopsByIDsRequest\x1a\x1c.users.GetShopsByIDsResponseB-Z+github.com/TranXuanPhong25/ecom/shops/protob\x06proto3"
 

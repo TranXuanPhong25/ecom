@@ -21,4 +21,5 @@ message Shop {
 
 message GetShopsByIDsResponse {
   repeated Shop shops = 1;
+  repeated string not_found_ids = 2;
 }
