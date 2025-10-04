@@ -1,16 +1,47 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/TranXuanPhong25/ecom/shops/dtos"
 	"github.com/TranXuanPhong25/ecom/shops/models"
+	pb "github.com/TranXuanPhong25/ecom/shops/proto"
 	"github.com/TranXuanPhong25/ecom/shops/repositories"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
+	"google.golang.org/grpc"
 	"gorm.io/gorm"
 )
+
+type RPCShopsService struct {
+	pb.UnimplementedShopsServiceServer
+}
+
+func (s *RPCShopsService) GetShopsByIDs(_ context.Context, in *pb.GetShopsByIDsRequest) (*pb.GetShopsByIDsResponse, error) {
+	response, err := GetShopsByIDs(in.GetIds())
+	if err != nil {
+		return nil, err
+	}
+	var shopProtos []*pb.Shop
+	for _, shop := range response.Shops {
+		shopProtos = append(shopProtos, &pb.Shop{
+			Id:   shop.ID.String(),
+			Name: shop.Name,
+		})
+	}
+	return &pb.GetShopsByIDsResponse{
+		Shops:       shopProtos,
+		NotFoundIds: response.NotFoundIDs,
+	}, nil
+}
+
+func RegisterService(s *grpc.Server) {
+	pb.RegisterShopsServiceServer(s, &RPCShopsService{})
+	log.Info("ShopService registered")
+}
 
 func CreateShop(request *models.CreateShopRequest) (*dtos.ShopDTO, *echo.HTTPError) {
 	shop := &models.Shop{
@@ -34,7 +65,7 @@ func CreateShop(request *models.CreateShopRequest) (*dtos.ShopDTO, *echo.HTTPErr
 
 }
 
-func GetShop(ownerId string) (*dtos.ShopDTO, *echo.HTTPError) {
+func GetShopsByOwnerID(ownerId string) (*dtos.ShopDTO, *echo.HTTPError) {
 	shop := &models.Shop{}
 	tx := repositories.DB.First(shop, "owner_id = ?", ownerId)
 
@@ -50,6 +81,33 @@ func GetShop(ownerId string) (*dtos.ShopDTO, *echo.HTTPError) {
 	return toShopDTO(shop), nil
 }
 
+func GetShopsByIDs(shopIDs []string) (*dtos.GetShopsResponse, *echo.HTTPError) {
+	var shops []models.Shop
+
+	foundShopIDs := make(map[string]bool)
+	for _, shop := range shops {
+		foundShopIDs[shop.ID.String()] = true
+	}
+
+	var notFoundIDs []string
+	for _, id := range shopIDs {
+		if !foundShopIDs[id] {
+			notFoundIDs = append(notFoundIDs, id)
+		}
+	}
+
+	var shopDTOs []dtos.ShopDTO
+	for _, shop := range shops {
+		shopDTOs = append(shopDTOs, *toShopDTO(&shop))
+	}
+
+	response := &dtos.GetShopsResponse{
+		Shops:       shopDTOs,
+		NotFoundIDs: notFoundIDs,
+	}
+
+	return response, nil
+}
 func toShopDTO(shop *models.Shop) *dtos.ShopDTO {
 	return &dtos.ShopDTO{
 		ID:           shop.ID,

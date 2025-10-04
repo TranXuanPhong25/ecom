@@ -16,3 +16,8 @@ type ShopDTO struct {
 	Phone        string    `json:"phone"`
 	BusinessType string    `json:"businessType"`
 }
+
+type GetShopsResponse struct {
+	Shops       []ShopDTO `json:"shops"`
+	NotFoundIDs []string  `json:"notFoundIds,omitempty"`
+}

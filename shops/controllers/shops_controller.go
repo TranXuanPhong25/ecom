@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/TranXuanPhong25/ecom/shops/models"
 	"github.com/TranXuanPhong25/ecom/shops/services"
@@ -36,7 +37,7 @@ func CreateShop(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
-func GetShops(c echo.Context) error {
+func GetShopsByOwnerID(c echo.Context) error {
 	ownerId := c.QueryParam("owner_id")
 	_, parseErr := uuid.Parse(ownerId)
 	if parseErr != nil {
@@ -44,7 +45,30 @@ func GetShops(c echo.Context) error {
 			"message": "Invalid owner ID",
 		})
 	}
-	shop, err := services.GetShop(ownerId)
+	shop, err := services.GetShopsByOwnerID(ownerId)
+	if err != nil {
+		return c.JSON(err.Code, err)
+	}
+	return c.JSON(http.StatusOK, shop)
+}
+
+func GetShopsByIDs(c echo.Context) error {
+	idsParams := c.QueryParam("ids")
+	if idsParams == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"message": "IDs parameter is required",
+		})
+	}
+	ids := []string{}
+	for _, id := range strings.Split(idsParams, ",") {
+		if _, err := uuid.Parse(id); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]string{
+				"message": "Invalid ID format: " + id,
+			})
+		}
+		ids = append(ids, id)
+	}
+	shop, err := services.GetShopsByIDs(ids)
 	if err != nil {
 		return c.JSON(err.Code, err)
 	}
