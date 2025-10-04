@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/TranXuanPhong25/ecom/carts/models"
+	"github.com/gocql/gocql"
 	"github.com/scylladb/gocqlx/v3"
 )
 
@@ -10,7 +11,7 @@ type ICartRepository interface {
 	GetItemQuantity(userID string, productVariantID string, shopID string) (int, error)
 	AddItemToCart(item models.CartItem) error
 	UpdateItemQuantity(item models.CartItem) error
-	DeleteItemInCart(item models.CartItem) error
+	DeleteItemInCart(userID string, uuids []string) error
 	ClearCart(userID string) error
 }
 type scyllaRepository struct {
@@ -60,25 +61,28 @@ func (r *scyllaRepository) AddItemToCart(item models.CartItem) error {
 
 func (r *scyllaRepository) UpdateItemQuantity(item models.CartItem) error {
 	q := r.session.Query(
-		`UPDATE carts_ks.cart_items SET quantity = ? WHERE user_id = ? AND product_variant_id = ? AND shop_id = ?`,
-		[]string{":quantity", ":user_id", ":product_variant_id", ":shop_id"}).
+		`UPDATE carts_ks.cart_items 
+				SET quantity = ? 
+				WHERE user_id = ? 
+  				AND product_variant_id = ?
+				AND shop_id = ?`, nil).
 		Bind(item.Quantity, item.UserID, item.ProductVariantID, item.ShopID)
-
-	err := q.Exec()
+	err := q.ExecRelease()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *scyllaRepository) DeleteItemInCart(item models.CartItem) error {
-	q := r.session.Query(
-		`DELETE FROM carts_ks.cart_items WHERE user_id = ? AND product_variant_id = ?`,
-		[]string{":user_id", ":product_variant_id"}).
-		Bind(item.UserID, item.ProductVariantID)
-
-	err := q.Exec()
-	if err != nil {
+func (r *scyllaRepository) DeleteItemInCart(userID string, uuids []string) error {
+	batch := r.session.Batch(gocql.LoggedBatch)
+	for _, u := range uuids {
+		batch.Query(
+			"DELETE FROM carts_ks.cart_items WHERE user_id = ? AND product_variant_id = ?",
+			userID, u,
+		)
+	}
+	if err := r.session.ExecuteBatch(batch); err != nil {
 		return err
 	}
 	return nil

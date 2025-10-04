@@ -12,6 +12,7 @@ type Config struct {
 	DBUser     string
 	DBPassword string
 	DBName     string
+	RPCPort    string
 }
 
 var AppConfig Config
@@ -23,6 +24,7 @@ func LoadEnv() {
 	AppConfig.DBUser = getEnv("DB_USER", "postgres")
 	AppConfig.DBPassword = getEnv("DB_PASSWORD", "password")
 	AppConfig.DBName = getEnv("DB_NAME", "shops_db")
+	AppConfig.RPCPort = getEnv("RPC_PORT", "50050")
 
 	log.Printf("Shops Config loaded - Server Port: %s, DB: %s:%s",
 		AppConfig.ServerPort, AppConfig.DBHost, AppConfig.DBPort)

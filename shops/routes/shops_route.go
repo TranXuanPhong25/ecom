@@ -6,6 +6,7 @@ import (
 )
 
 func ShopsRoute(e *echo.Echo) {
-	e.GET("/api/shops", controllers.GetShops)
+	e.GET("/api/shops/owners/:ownerId{", controllers.GetShopsByOwnerID)
 	e.POST("/api/shops", controllers.CreateShop)
+	e.GET("/api/shops", controllers.GetShopsByIDs)
 }
