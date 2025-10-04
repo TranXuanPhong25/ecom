@@ -41,6 +41,5 @@ require (
 )
 
 replace (
-	github.com/TranXuanPhong25/ecom/shops => ../shops
 	github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3
 )
