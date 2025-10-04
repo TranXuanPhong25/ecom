@@ -1,23 +1,32 @@
-# Use the official Golang image as a base image
-FROM golang:1.20
+# ===== STAGE 1: Build the Go binary =====
+FROM golang:1.24-alpine AS builder
 
-# Set the working directory
+# Install git (nếu dùng go get lấy module từ github)
+RUN apk add --no-cache git
+
+# Set working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum files
-COPY go.mod ./
+# Copy go mod và sum trước để optimize cache Docker layer
+COPY go.mod go.sum  ./
 
 # Download dependencies
 RUN go mod download
 
-# Copy the rest of the application code
+# Copy toàn bộ code
 COPY . .
 
-# Build the application
+# Build app
 RUN go build -o main .
 
-# Expose the application port
-EXPOSE 8080
+# ===== STAGE 2: Build a minimal image =====
+FROM alpine:latest AS release
 
-# Command to run the application
+# Tạo thư mục app
+WORKDIR /root/
+
+# Copy binary từ stage build
+COPY --from=builder /app/main .
+
+# Lệnh chạy app
 CMD ["./main"]

@@ -83,7 +83,10 @@ func GetShopsByOwnerID(ownerId string) (*dtos.ShopDTO, *echo.HTTPError) {
 
 func GetShopsByIDs(shopIDs []string) (*dtos.GetShopsResponse, *echo.HTTPError) {
 	var shops []models.Shop
-
+	tx := repositories.DB.Where("id IN ?", shopIDs).Find(&shops)
+	if tx.Error != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, "Error while fetching shops")
+	}
 	foundShopIDs := make(map[string]bool)
 	for _, shop := range shops {
 		foundShopIDs[shop.ID.String()] = true

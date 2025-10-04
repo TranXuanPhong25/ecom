@@ -45,5 +45,10 @@ spec:
     app: shops
   ports:
     - protocol: TCP
+      name: http
       port: 8080
       targetPort: 8080
+    - protocol: TCP
+      name: grpc
+      port: 50050
+      targetPort: 50050

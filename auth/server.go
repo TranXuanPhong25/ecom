@@ -33,8 +33,9 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	e.Logger.Fatal(e.Start(":" + configs.AppConfig.ServerPort))
-
+	go func() {
+		e.Logger.Fatal(e.Start(":" + configs.AppConfig.ServerPort))
+	}()
 	<-quit
 	services.CloseUsersServiceConnection()
 	services.CloseJWTServiceConnection()

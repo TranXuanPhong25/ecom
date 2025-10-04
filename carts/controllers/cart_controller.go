@@ -9,17 +9,23 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type cartController struct {
+type ICartController interface {
+	AddItemToCart(c echo.Context) error
+	UpdateCartItem(c echo.Context) error
+	DeleteItemInCart(c echo.Context) error
+	GetCart(c echo.Context) error
+}
+type CartController struct {
 	cartService services.ICartService
 }
 
-func NewCartController(cartService services.ICartService) *cartController {
-	return &cartController{
+func NewCartController(cartService services.ICartService) ICartController {
+	return &CartController{
 		cartService: cartService,
 	}
 }
 
-func (controller *cartController) AddItemToCart(c echo.Context) error {
+func (controller *CartController) AddItemToCart(c echo.Context) error {
 	req := new(dtos.CartItemPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
@@ -38,7 +44,7 @@ func (controller *cartController) AddItemToCart(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"message": "Item added to cart"})
 }
 
-func (controller *cartController) UpdateCartItem(c echo.Context) error {
+func (controller *CartController) UpdateCartItem(c echo.Context) error {
 	req := new(dtos.CartItemPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
@@ -56,7 +62,7 @@ func (controller *cartController) UpdateCartItem(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"message": "Cart item updated"})
 }
 
-func (controller *cartController) DeleteItemInCart(c echo.Context) error {
+func (controller *CartController) DeleteItemInCart(c echo.Context) error {
 	//idsParam := c.QueryParam("ids")
 	//uuids := strings.Split(idsParam, ",")
 	//for _, u := range uuids {
@@ -82,7 +88,7 @@ func (controller *cartController) DeleteItemInCart(c echo.Context) error {
 	return c.JSON(http.StatusNoContent, nil)
 }
 
-func (controller *cartController) GetCart(c echo.Context) error {
+func (controller *CartController) GetCart(c echo.Context) error {
 	userID := c.Request().Header["X-User-Id"][0]
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
