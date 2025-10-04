@@ -1,3 +1,21 @@
+## [3.18.0](https://github.com/TranXuanPhong25/ecom/compare/v3.17.0...v3.18.0) (2025-10-04)
+
+### 🚀 Features
+
+* **opa:** rules for carts ([2d0716d](https://github.com/TranXuanPhong25/ecom/commit/2d0716d80b2eb60be9585c071e5929e6b21716ca))
+* **shop:** shop proto ([8a28904](https://github.com/TranXuanPhong25/ecom/commit/8a289046863068cc8b1922d63227268f92db3b09))
+* **shop:** shop proto ([3c1e56c](https://github.com/TranXuanPhong25/ecom/commit/3c1e56c0a5a00d64d94eaab89857f4a33252bf07))
+* **shops:** rpc server ([6ba075a](https://github.com/TranXuanPhong25/ecom/commit/6ba075ab6a7ace3642550bb5828e7d6c94e92d06))
+
+### 🐛 Bug Fixes
+
+* **carts:** correct mapping response from product service ([3c55356](https://github.com/TranXuanPhong25/ecom/commit/3c55356021affcdd88964a3103bb8ae858a876da))
+
+### 🔨 Technical Changes
+
+* carts - shops logic, run server in goroutine to graceful shutdown ([68fd04a](https://github.com/TranXuanPhong25/ecom/commit/68fd04a344e0fd6e455f14327bb42987558c484e))
+* **carts:** remove replace module ([734392e](https://github.com/TranXuanPhong25/ecom/commit/734392e0e4e3d5b6cfbb030bcc0d8f4421634b1b))
+
 ## [3.17.0](https://github.com/TranXuanPhong25/ecom/compare/v3.16.0...v3.17.0) (2025-10-03)
 
 ### 🚀 Features
