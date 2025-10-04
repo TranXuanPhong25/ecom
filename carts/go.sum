@@ -1,3 +1,5 @@
+github.com/TranXuanPhong25/ecom/shops v0.0.0-20251004143305-6c76d6c4562b h1:EwA6NOpKG8DV8DLXm0jG418lnr6x2pG6YGA80JiT+kw=
+github.com/TranXuanPhong25/ecom/shops v0.0.0-20251004143305-6c76d6c4562b/go.mod h1:hNphR4L7sKfV/bELg72VFjKrGm+28LnndiWLDc8vxzQ=
 github.com/bitly/go-hostpool v0.0.0-20171023180738-a3a6125de932/go.mod h1:NOuUCSz6Q9T7+igc/hlvDOUdtWKryOrtFyIVABv/p7k=
 github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869/go.mod h1:Ekp36dRnpXw/yCqJaO+ZrUyxD+3VXMFFr56k5XYrpB4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
