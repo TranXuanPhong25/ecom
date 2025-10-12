@@ -6,7 +6,7 @@ A modern, microservices-based eCommerce platform with frontend applications for 
 
 This project implements a complete eCommerce ecosystem with multiple services and frontend applications:
 ### Architecture
-![Architecture](./.github/readme/architecture.png)
+![Architecture](./.github/readme/architecture_v2.svg)
 
 ### Backend Microservices
 
