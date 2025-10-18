@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ProductCategoryRepository  extends JpaRepository<ProductCategoryEntity, Integer> {
@@ -25,8 +26,11 @@ public interface ProductCategoryRepository  extends JpaRepository<ProductCategor
     ProductCategoryEntity findAncestorById(Integer id);
 
     @Query(value="SELECT pc.id, pc.name, pc.image_url " +
-            "FROM product_category pc LEFT JOIN product_category_closure pcc ON pc.id = pcc.descendant_id AND depth !=0 " +
-            "WHERE pcc.ancestor_id IS NULL",
+            "FROM product_category pc " +
+            "WHERE NOT EXISTS (" +
+            "  SELECT 1 FROM product_category_closure pcc " +
+            "  WHERE pcc.descendant_id = pc.id AND pcc.depth > 0" +
+            ")",
             nativeQuery = true)
     List<ProductCategoryEntity> findAllRootCategories();
 
@@ -36,4 +40,11 @@ public interface ProductCategoryRepository  extends JpaRepository<ProductCategor
             "ORDER BY depth desc",
             nativeQuery = true)
     List<ProductCategoryPathNode> getCategoryPath(Integer id);
+
+    // Batch fetch all parent-child relationships with depth 1 (direct children)
+    @Query(value = "SELECT pcc.ancestor_id as parentId, pcc.descendant_id as childId " +
+            "FROM product_category_closure pcc " +
+            "WHERE pcc.depth = 1",
+            nativeQuery = true)
+    List<Map<String, Object>> findAllDirectRelationships();
 }

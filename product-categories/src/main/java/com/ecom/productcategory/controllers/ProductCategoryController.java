@@ -30,7 +30,6 @@ public class ProductCategoryController {
     }
 
     @GetMapping("/hierarchy")
-    @Cacheable(value = "productCategoriesTree", key = "'tree'")
     public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
         return productCategoryService.getProductCategoriesTree();
     }
