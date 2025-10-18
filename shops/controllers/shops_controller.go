@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/TranXuanPhong25/ecom/shops/models"
@@ -17,16 +16,18 @@ func CreateShop(c echo.Context) error {
 
 	// Bind JSON request body vào struct
 	if err := c.Bind(req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"status": strconv.Itoa(http.StatusBadRequest),
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"status": http.StatusBadRequest,
 			"detail": "Invalid request format",
 		})
 	}
 
 	if err := validators.ValidateStruct(req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"status": strconv.Itoa(http.StatusBadRequest),
-			"detail": err.Error(),
+		validationErrors := validators.FormatValidationErrors(err)
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"status": http.StatusBadRequest,
+			"detail": "Validation failed",
+			"errors": validationErrors,
 		})
 	}
 
