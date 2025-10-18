@@ -8,10 +8,11 @@ import com.ecom.productcategory.exceptions.ResourceNotFoundException;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.repositories.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,36 +22,54 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryClosureService productCategoryClosureService;
 
     @Override
+    @Cacheable(value = "rootCategories", key = "'all'")
     public List<ProductCategoryEntity> getALlRootProductCategories() {
         return productCategoryRepository.findAllRootCategories();
     }
 
-    private void constructTree(ProductCategoryNodeDTO category) {
-        List<ProductCategoryEntity> childEntities = productCategoryRepository.findAllChildrenById(category.getId());
-        if (!childEntities.isEmpty()) {
-            List<ProductCategoryNodeDTO> children = childEntities.stream()
-                                                                .map(ProductCategoryNodeDTO::new)
-                                                                .toList();
-            category.setChildren(children);
-            for (ProductCategoryNodeDTO child : children) {
-                constructTree(child);
+    /**
+     * Optimized tree construction using batch fetching to avoid N+1 queries
+     * Fetches all categories and relationships once, then builds tree in memory
+     */
+    @Override
+    @Cacheable(value = "productCategoriesTree", key = "'tree'")
+    public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
+        // Fetch all categories once
+        List<ProductCategoryEntity> allCategories = productCategoryRepository.findAll();
+        
+        // Create a map for quick lookup
+        Map<Integer, ProductCategoryNodeDTO> categoryMap = allCategories.stream()
+                .collect(Collectors.toMap(
+                        ProductCategoryEntity::getId,
+                        ProductCategoryNodeDTO::new
+                ));
+        
+        // Fetch all parent-child relationships once
+        List<Map<String, Object>> relationships = productCategoryRepository.findAllDirectRelationships();
+        
+        // Build the tree structure
+        Set<Integer> childIds = new HashSet<>();
+        for (Map<String, Object> rel : relationships) {
+            Integer parentId = (Integer) rel.get("parentId");
+            Integer childId = (Integer) rel.get("childId");
+            
+            ProductCategoryNodeDTO parent = categoryMap.get(parentId);
+            ProductCategoryNodeDTO child = categoryMap.get(childId);
+            
+            if (parent != null && child != null) {
+                parent.getChildren().add(child);
+                childIds.add(childId);
             }
         }
+        
+        // Return only root categories (those without parents)
+        return categoryMap.values().stream()
+                .filter(cat -> !childIds.contains(cat.getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
-        List<ProductCategoryEntity> rootCategories = productCategoryRepository.findAllRootCategories();
-        List<ProductCategoryNodeDTO> productCategoryDTOs = rootCategories.stream()
-                                                                        .map(ProductCategoryNodeDTO::new)
-                                                                        .collect(Collectors.toList());
-        for (ProductCategoryNodeDTO rootCategory : productCategoryDTOs) {
-            constructTree(rootCategory);
-        }
-        return productCategoryDTOs;
-    }
-
-    @Override
+    @CacheEvict(value = {"productCategoriesTree", "rootCategories", "categoryDetails"}, allEntries = true)
     public List<ProductCategoryEntity> updateProductCategories(ProductCategoryUpdateModel productCategoryUpdateModel) {
         List<Integer> deletedProductCategoryIds = productCategoryUpdateModel.getDeletedProductCategoryIds();
         if (deletedProductCategoryIds != null && !deletedProductCategoryIds.isEmpty()) {
@@ -63,6 +82,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
+    @Cacheable(value = "categoryDetails", key = "#id")
     public ProductCategoryDTO getProductCategoryById(Integer id) {
         ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product category not found with id: " + id));
@@ -82,6 +102,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
+    @CacheEvict(value = {"productCategoriesTree", "rootCategories", "categoryDetails"}, allEntries = true)
     public ProductCategoryEntity createProductCategory(ProductCategoryDTO productCategoryDTO) {
         if (productCategoryDTO == null
                 || productCategoryDTO.getName() == null
@@ -108,6 +129,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
+    @CacheEvict(value = {"productCategoriesTree", "rootCategories", "categoryDetails"}, allEntries = true)
     public ProductCategoryEntity updateProductCategory( ProductCategoryEntity productCategoryDetails) {
         Optional<ProductCategoryEntity> productCategory = productCategoryRepository.findById(productCategoryDetails.getId());
         if( !productCategory.isPresent()) {
@@ -118,7 +140,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         return productCategoryRepository.save(productCategory.get());
     }
+    
     @Override
+    @CacheEvict(value = {"productCategoriesTree", "rootCategories", "categoryDetails"}, allEntries = true)
     public void deleteProductCategory(Integer id) {
         if (!productCategoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product category not found with id: " + id);
