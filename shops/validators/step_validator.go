@@ -33,7 +33,7 @@ func ValidateStep(req *models.ValidateStepRequest) error {
 
 	// Validate required fields for the current step
 	var missingFields []string
-	
+
 	for _, fieldName := range allRequiredFields {
 		if isEmpty(req, fieldName) {
 			missingFields = append(missingFields, fieldName)
@@ -69,10 +69,10 @@ func ValidateStep(req *models.ValidateStepRequest) error {
 // isEmpty checks if a field in the struct is empty
 func isEmpty(req *models.ValidateStepRequest, fieldName string) bool {
 	v := reflect.ValueOf(*req)
-	
+
 	// Convert fieldName to match struct field names (capitalize first letter)
 	structFieldName := strings.ToUpper(fieldName[:1]) + fieldName[1:]
-	
+
 	field := v.FieldByName(structFieldName)
 	if !field.IsValid() {
 		return true
