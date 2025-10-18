@@ -41,3 +41,6 @@ temp
 auth/tmp/main
 kong/conf/decksync.sh
 /node_modules/
+
+# Go binaries
+shops/shops

@@ -74,3 +74,29 @@ func GetShopsByIDs(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, shop)
 }
+
+func ValidateShopCreationStep(c echo.Context) error {
+	req := new(models.ValidateStepRequest)
+
+	// Bind JSON request body
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"status": strconv.Itoa(http.StatusBadRequest),
+			"detail": "Invalid request format",
+		})
+	}
+
+	// Validate the step
+	if err := validators.ValidateStep(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"status": strconv.Itoa(http.StatusBadRequest),
+			"detail": err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"status":  strconv.Itoa(http.StatusOK),
+		"message": "Validation successful",
+		"step":    req.Step,
+	})
+}

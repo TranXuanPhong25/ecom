@@ -8,5 +8,6 @@ import (
 func ShopsRoute(e *echo.Echo) {
 	e.GET("/api/shops/owners/:ownerId{", controllers.GetShopsByOwnerID)
 	e.POST("/api/shops", controllers.CreateShop)
+	e.POST("/api/shops/validate-step", controllers.ValidateShopCreationStep)
 	e.GET("/api/shops", controllers.GetShopsByIDs)
 }
