@@ -15,7 +15,7 @@ chat_router = APIRouter()
 
 
 @chat_router.post("/api/chats")
-def stream(payload: ChatPayload):
+async def stream(payload: ChatPayload):
     messages = ai_sdk_to_langchain(payload.messages)
     return process_query(supervisor_agent.get(),  messages)
 

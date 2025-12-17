@@ -5,6 +5,8 @@ from langchain_tavily import TavilySearch
 from langgraph.prebuilt import create_react_agent
 from langgraph_supervisor import create_supervisor
 
+from app.agents.tools.products_search import products_searcher
+
 try:
     load_dotenv()
 except ImportError:
@@ -38,7 +40,7 @@ class RecommenderAgent(Agent):
 class ProductsSearcherAgent(Agent):
     def __init__(self, prompt, name):
         super().__init__()
-        tools = []
+        tools = [products_searcher]
         self.name = name
         self.agent = create_react_agent(self.model, tools, prompt=prompt, name=self.name)
 

@@ -15,6 +15,11 @@ async def send_completion_events(agent, messages):
     yield f'data: {json.dumps({"type": "start-step"})}\n\n'
     yield f'data: {json.dumps({"type": "text-start", "id": "0"})}\n\n'
     # stream từng token
+    for chunk in agent.stream(
+       messages
+    ):
+        pretty_print_messages(chunk)
+
     async for patch in agent.astream_log(messages):
         for op in patch.ops:
             if op["op"] == "add" and (
