@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/TranXuanPhong25/ecom/jwt-service/proto"
+	pb "github.com/TranXuanPhong25/ecom/services/jwt-service/proto"
 	"google.golang.org/grpc"
 )
 

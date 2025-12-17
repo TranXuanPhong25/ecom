@@ -1,0 +1,14 @@
+[project]
+name = "chatbots"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.116.2",
+    "httpx>=0.28.1",
+    "langchain-tavily>=0.2.11",
+    "langchain[google-genai]>=0.3.27",
+    "langgraph>=0.6.7",
+    "langgraph-supervisor>=0.0.29",
+]
