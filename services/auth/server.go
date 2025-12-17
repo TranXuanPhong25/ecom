@@ -5,11 +5,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/TranXuanPhong25/ecom/auth/configs"
-	"github.com/TranXuanPhong25/ecom/auth/middlewares"
-	"github.com/TranXuanPhong25/ecom/auth/repositories"
-	"github.com/TranXuanPhong25/ecom/auth/routes"
-	"github.com/TranXuanPhong25/ecom/auth/services"
+	"github.com/TranXuanPhong25/ecom/services/auth/configs"
+	"github.com/TranXuanPhong25/ecom/services/auth/middlewares"
+	"github.com/TranXuanPhong25/ecom/services/auth/repositories"
+	"github.com/TranXuanPhong25/ecom/services/auth/routes"
+	"github.com/TranXuanPhong25/ecom/services/auth/services"
 	"github.com/labstack/echo/v4/middleware"
 )
 

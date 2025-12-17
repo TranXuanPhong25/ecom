@@ -6,11 +6,11 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/TranXuanPhong25/ecom/carts/configs"
-	"github.com/TranXuanPhong25/ecom/carts/controllers"
-	"github.com/TranXuanPhong25/ecom/carts/repositories"
-	"github.com/TranXuanPhong25/ecom/carts/routes"
-	"github.com/TranXuanPhong25/ecom/carts/services"
+	"github.com/TranXuanPhong25/ecom/services/carts/configs"
+	"github.com/TranXuanPhong25/ecom/services/carts/controllers"
+	"github.com/TranXuanPhong25/ecom/services/carts/repositories"
+	"github.com/TranXuanPhong25/ecom/services/carts/routes"
+	"github.com/TranXuanPhong25/ecom/services/carts/services"
 	"github.com/labstack/echo/v4/middleware"
 )
 

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/TranXuanPhong25/ecom/carts/validators"
+	"github.com/TranXuanPhong25/ecom/services/carts/validators"
 )
 
 func ValidateRequestStructure(c echo.Context, req any) error {

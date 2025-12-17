@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/TranXuanPhong25/ecom/carts/controllers"
+	"github.com/TranXuanPhong25/ecom/services/carts/controllers"
 )
 
 // Define health check route

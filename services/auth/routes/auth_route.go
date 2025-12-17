@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/TranXuanPhong25/ecom/auth/controllers"
+	"github.com/TranXuanPhong25/ecom/services/auth/controllers"
 )
 
 func AuthRoute(e *echo.Echo) {

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/TranXuanPhong25/ecom/auth/models"
-	"github.com/TranXuanPhong25/ecom/auth/services"
-	"github.com/TranXuanPhong25/ecom/auth/validators"
+	"github.com/TranXuanPhong25/ecom/services/auth/models"
+	"github.com/TranXuanPhong25/ecom/services/auth/services"
+	"github.com/TranXuanPhong25/ecom/services/auth/validators"
 )
 
 func LoginWithEmailAndPassword(c echo.Context) error {

@@ -4,10 +4,10 @@ import (
 	"log"
 	"net"
 
-	"github.com/TranXuanPhong25/ecom/users/configs"
-	"github.com/TranXuanPhong25/ecom/users/models"
-	"github.com/TranXuanPhong25/ecom/users/repositories"
-	"github.com/TranXuanPhong25/ecom/users/services"
+	"github.com/TranXuanPhong25/ecom/services/users/configs"
+	"github.com/TranXuanPhong25/ecom/services/users/models"
+	"github.com/TranXuanPhong25/ecom/services/users/repositories"
+	"github.com/TranXuanPhong25/ecom/services/users/services"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

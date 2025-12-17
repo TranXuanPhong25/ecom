@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/TranXuanPhong25/ecom/carts/configs"
-	"github.com/TranXuanPhong25/ecom/carts/dtos"
-	pb "github.com/TranXuanPhong25/ecom/shops/proto"
+	"github.com/TranXuanPhong25/ecom/services/carts/configs"
+	"github.com/TranXuanPhong25/ecom/services/carts/dtos"
+	pb "github.com/TranXuanPhong25/ecom/services/shops/proto"
 	"github.com/labstack/gommon/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

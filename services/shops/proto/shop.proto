@@ -3,7 +3,7 @@
 syntax = "proto3";
 
 package users;
-option go_package = "github.com/TranXuanPhong25/ecom/shops/proto";
+option go_package = "github.com/TranXuanPhong25/ecom/services/shops/proto";
 
 service ShopsService {
   rpc GetShopsByIDs(GetShopsByIDsRequest) returns (GetShopsByIDsResponse);

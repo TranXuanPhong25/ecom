@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/TranXuanPhong25/ecom/shops/configs"
+	"github.com/TranXuanPhong25/ecom/services/shops/configs"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

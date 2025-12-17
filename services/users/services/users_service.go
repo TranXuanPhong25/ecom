@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TranXuanPhong25/ecom/users/models"
-	pb "github.com/TranXuanPhong25/ecom/users/proto"
-	"github.com/TranXuanPhong25/ecom/users/repositories"
+	"github.com/TranXuanPhong25/ecom/services/users/models"
+	pb "github.com/TranXuanPhong25/ecom/services/users/proto"
+	"github.com/TranXuanPhong25/ecom/services/users/repositories"
 	"github.com/google/uuid"
 	"github.com/labstack/gommon/log"
 	"golang.org/x/crypto/bcrypt"

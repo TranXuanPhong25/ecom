@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/TranXuanPhong25/ecom/shops/models"
-	"github.com/TranXuanPhong25/ecom/shops/services"
-	"github.com/TranXuanPhong25/ecom/shops/validators"
+	"github.com/TranXuanPhong25/ecom/services/shops/models"
+	"github.com/TranXuanPhong25/ecom/services/shops/services"
+	"github.com/TranXuanPhong25/ecom/services/shops/validators"
 	"github.com/google/uuid"
 )
 

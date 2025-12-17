@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/TranXuanPhong25/ecom/shops/controllers"
+	"github.com/TranXuanPhong25/ecom/services/shops/controllers"
 )
 
 func ShopsRoute(e *echo.Echo) {

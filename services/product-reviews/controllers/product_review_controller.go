@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/TranXuanPhong25/ecom/product-review/database"
-	"github.com/TranXuanPhong25/ecom/product-review/models"
+	"github.com/TranXuanPhong25/ecom/services/product-review/database"
+	"github.com/TranXuanPhong25/ecom/services/product-review/models"
 )
 
 // Lấy tất cả reviews

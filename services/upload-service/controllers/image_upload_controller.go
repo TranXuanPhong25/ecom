@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/TranXuanPhong25/ecom/upload-service/models"
-	"github.com/TranXuanPhong25/ecom/upload-service/services"
+	"github.com/TranXuanPhong25/ecom/services/upload-service/models"
+	"github.com/TranXuanPhong25/ecom/services/upload-service/services"
 )
 
 func GeneratePresignedURLUploadImage(c echo.Context) error {

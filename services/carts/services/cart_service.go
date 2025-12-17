@@ -3,9 +3,9 @@ package services
 import (
 	"strconv"
 
-	"github.com/TranXuanPhong25/ecom/carts/dtos"
-	"github.com/TranXuanPhong25/ecom/carts/models"
-	"github.com/TranXuanPhong25/ecom/carts/repositories"
+	"github.com/TranXuanPhong25/ecom/services/carts/dtos"
+	"github.com/TranXuanPhong25/ecom/services/carts/models"
+	"github.com/TranXuanPhong25/ecom/services/carts/repositories"
 )
 
 type ICartService interface {

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/TranXuanPhong25/ecom/product-review/database"
-	"github.com/TranXuanPhong25/ecom/product-review/models"
-	"github.com/TranXuanPhong25/ecom/product-review/routes"
+	"github.com/TranXuanPhong25/ecom/services/product-review/database"
+	"github.com/TranXuanPhong25/ecom/services/product-review/models"
+	"github.com/TranXuanPhong25/ecom/services/product-review/routes"
 	"github.com/labstack/echo/v4/middleware"
 )
 

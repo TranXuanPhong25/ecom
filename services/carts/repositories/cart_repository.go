@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/TranXuanPhong25/ecom/carts/models"
+	"github.com/TranXuanPhong25/ecom/services/carts/models"
 	"github.com/gocql/gocql"
 )
 

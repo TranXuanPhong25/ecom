@@ -3,7 +3,7 @@
 syntax = "proto3";
 
 package token;
-option go_package = "github.com/TranXuanPhong25/ecom/jwt-service/proto";
+option go_package = "github.com/TranXuanPhong25/ecom/services/jwt-service/proto";
 service JWTService {
    rpc ValidateToken(TokenRequest) returns (ValidationResponse);
    rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse);

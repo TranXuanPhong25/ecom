@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/TranXuanPhong25/ecom/carts/configs"
-	"github.com/TranXuanPhong25/ecom/carts/dtos"
+	"github.com/TranXuanPhong25/ecom/services/carts/configs"
+	"github.com/TranXuanPhong25/ecom/services/carts/dtos"
 )
 
 type productServiceClient struct {

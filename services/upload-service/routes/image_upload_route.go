@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/TranXuanPhong25/ecom/upload-service/controllers"
+	"github.com/TranXuanPhong25/ecom/services/upload-service/controllers"
 )
 
 func ImageUploadRoutes(e *echo.Echo) {

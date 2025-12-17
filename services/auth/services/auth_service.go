@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/TranXuanPhong25/ecom/auth/models"
+	"github.com/TranXuanPhong25/ecom/services/auth/models"
 )
 
 func LoginWithEmailAndPassword(email, password string) (models.LoginResponse, error) {

@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	services "github.com/TranXuanPhong25/ecom/jwt-service/services"
+	services "github.com/TranXuanPhong25/ecom/services/jwt-service/services"
 	"google.golang.org/grpc"
 )
 

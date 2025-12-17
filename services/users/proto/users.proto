@@ -3,7 +3,7 @@
 syntax = "proto3";
 
 package users;
-option go_package = "github.com/TranXuanPhong25/ecom/users/proto";
+option go_package = "github.com/TranXuanPhong25/ecom/services/users/proto";
 import "google/protobuf/empty.proto";
 
 service UsersService {

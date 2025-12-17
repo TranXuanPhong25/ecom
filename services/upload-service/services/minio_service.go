@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/TranXuanPhong25/ecom/upload-service/configs"
+	"github.com/TranXuanPhong25/ecom/services/upload-service/configs"
 	"github.com/labstack/gommon/log"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )

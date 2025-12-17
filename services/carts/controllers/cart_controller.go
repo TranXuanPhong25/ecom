@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/TranXuanPhong25/ecom/carts/dtos"
-	"github.com/TranXuanPhong25/ecom/carts/services"
-	"github.com/TranXuanPhong25/ecom/carts/utils"
+	"github.com/TranXuanPhong25/ecom/services/carts/dtos"
+	"github.com/TranXuanPhong25/ecom/services/carts/services"
+	"github.com/TranXuanPhong25/ecom/services/carts/utils"
 )
 
 type ICartController interface {
