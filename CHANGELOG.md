@@ -1,3 +1,14 @@
+## [3.20.1](https://github.com/TranXuanPhong25/ecom/compare/v3.20.0...v3.20.1) (2025-12-26)
+
+### 🐛 Bug Fixes
+
+* imports ([f5f92a0](https://github.com/TranXuanPhong25/ecom/commit/f5f92a0d4bcdefd227ef526112b47681d755deca))
+* update cart imports ([c1e26d6](https://github.com/TranXuanPhong25/ecom/commit/c1e26d6c867154a156729a956ccba20ebcabc28b))
+
+### 🔨 Technical Changes
+
+* update k8s ([132644c](https://github.com/TranXuanPhong25/ecom/commit/132644c02acfd583bc419498a2a582adf7191833))
+
 ## [3.20.0](https://github.com/TranXuanPhong25/ecom/compare/v3.19.0...v3.20.0) (2025-12-26)
 
 ### 🚀 Features
