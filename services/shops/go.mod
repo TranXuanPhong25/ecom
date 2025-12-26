@@ -1,4 +1,4 @@
-module github.com/TranXuanPhong25/ecom/shops
+module github.com/TranXuanPhong25/ecom/services/shops
 
 go 1.23.10
 

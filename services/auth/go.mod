@@ -1,4 +1,4 @@
-module github.com/TranXuanPhong25/ecom/auth
+module github.com/TranXuanPhong25/ecom/services/auth
 
 go 1.23.10
 

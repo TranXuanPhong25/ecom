@@ -1,11 +1,10 @@
-module github.com/TranXuanPhong25/ecom/carts
+module github.com/TranXuanPhong25/ecom/services/carts
 
 go 1.23.10
 
 toolchain go1.24.7
 
 require (
-	github.com/TranXuanPhong25/ecom/shops v0.0.0-20251004143305-6c76d6c4562b
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/gocql/gocql v1.7.0
 	github.com/labstack/echo/v4 v4.13.4
@@ -40,4 +39,7 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 )
 
-replace github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3
+replace (
+github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3
+github.com/TranXuanPhong25/ecom/services/carts => ./
+)

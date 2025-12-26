@@ -1,4 +1,4 @@
-module github.com/TranXuanPhong25/ecom/jwt-service
+module github.com/TranXuanPhong25/ecom/services/jwt-service
 
 go 1.24.0
 
