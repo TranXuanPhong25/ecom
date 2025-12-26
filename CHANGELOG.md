@@ -1,3 +1,9 @@
+## [3.20.0](https://github.com/TranXuanPhong25/ecom/compare/v3.19.0...v3.20.0) (2025-12-26)
+
+### 🚀 Features
+
+* update go.mod to match with new location ([52af5fe](https://github.com/TranXuanPhong25/ecom/commit/52af5feca355c2550ff10677f83fd29181edbfe5))
+
 ## [3.19.0](https://github.com/TranXuanPhong25/ecom/compare/v3.18.0...v3.19.0) (2025-12-17)
 
 ### 🚀 Features
