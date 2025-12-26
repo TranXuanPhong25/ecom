@@ -83,6 +83,19 @@ func (r *postgresRepository) ClearCart(userID string) error {
 	}
 	return nil
 }
+func (r *postgresRepository) GetTotalItemsInCart(userID string) (int, error) {
+	var total int64
+
+	if err := r.DB.
+		Model(&models.CartItem{}).
+		Where("user_id = ?", userID).
+		Count(&total).Error; err != nil {
+		log.Error("GetTotalItemsInCart failed:", err)
+		return 0, err
+	}
+
+	return int(total), nil
+}
 
 func ConnectPostgresDB() {
 	dbHost := configs.AppConfig.DBHost

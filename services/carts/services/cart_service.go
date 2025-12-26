@@ -13,6 +13,7 @@ type ICartService interface {
 	UpdateItemInCart(userID uuid.UUID, item *dtos.CartItemPayload) error
 	DeleteItemInCart(userID string, itemIds []int) error
 	ClearCart(userID string) error
+	GetTotalItems(id string) (int, error)
 }
 type CartService struct {
 	repo           repositories.ICartRepository
@@ -144,4 +145,8 @@ func (s *CartService) DeleteItemInCart(userID string, itemIds []int) error {
 
 func (s *CartService) ClearCart(userID string) error {
 	return s.repo.ClearCart(userID)
+}
+
+func (s *CartService) GetTotalItems(id string) (int, error) {
+	return s.repo.GetTotalItemsInCart(id)
 }

@@ -15,6 +15,7 @@ type ICartController interface {
 	UpdateCartItem(c echo.Context) error
 	DeleteItemInCart(c echo.Context) error
 	GetCart(c echo.Context) error
+	GetTotalItemsInCart(c echo.Context) error
 }
 type CartController struct {
 	cartService services.ICartService
@@ -30,7 +31,7 @@ func (controller *CartController) AddItemToCart(c echo.Context) error {
 	req := new(dtos.CartItemPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, err)
 	}
 	userID := c.Request().Header["X-User-Id"][0]
 
@@ -81,10 +82,10 @@ func (controller *CartController) DeleteItemInCart(c echo.Context) error {
 	req := new(dtos.DeleteCartItemsPayload)
 	err := utils.ValidateRequestStructure(c, req)
 	if err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, err)
 	}
 	uuids := req.Items
-	userID := c.Request().Header["X-User-Id"][0]
+	userID := c.Request().Header.Get("X-User-Id")
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
@@ -105,4 +106,16 @@ func (controller *CartController) GetCart(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 	return c.JSON(http.StatusOK, cart)
+}
+
+func (controller *CartController) GetTotalItemsInCart(c echo.Context) error {
+	userID := c.Request().Header["X-User-Id"][0]
+	if userID == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
+	}
+	totalItems, err := controller.cartService.GetTotalItems(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+	return c.JSON(http.StatusOK, map[string]int{"totalItems": totalItems})
 }

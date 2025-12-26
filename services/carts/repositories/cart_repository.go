@@ -11,6 +11,7 @@ type ICartRepository interface {
 	UpdateItemQuantity(item models.CartItem) error
 	DeleteItemInCart(userID string, itemIDs []int) error
 	ClearCart(userID string) error
+	GetTotalItemsInCart(id string) (int, error)
 }
 
 func InitDBConnection() {
