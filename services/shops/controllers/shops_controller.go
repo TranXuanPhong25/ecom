@@ -38,7 +38,7 @@ func CreateShop(c echo.Context) error {
 }
 
 func GetShopsByOwnerID(c echo.Context) error {
-	ownerId := c.QueryParam("owner_id")
+	ownerId := c.Param("ownerId")
 	_, parseErr := uuid.Parse(ownerId)
 	if parseErr != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{

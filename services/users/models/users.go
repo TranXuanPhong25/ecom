@@ -15,6 +15,6 @@ type CustomBaseModel struct {
 }
 type User struct {
 	CustomBaseModel
-	Email    string `gorm:"type:varchar(100);uniqueIndex;not null"`
+	Email    string `gorm:"type:varchar(100);not null;uniqueIndex:idx_users_email"`
 	Password string `gorm:"type:varchar(255);not null"`
 }

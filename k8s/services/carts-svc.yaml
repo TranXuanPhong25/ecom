@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carts-service
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carts
+  template:
+    metadata:
+      labels:
+        app: carts
+    spec:
+      containers:
+        - name: carts
+          image: rengumin/carts-svc:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: "carts-pg-db.storages"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_NAME
+              value: mydatabase
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SHOPS_SERVICE_ADDR
+              value: "shops-svc.services:50050"
+            - name: PRODUCT_SERVICE_URL
+              value: "http://products-svc.services:8080/api"
+          resources:
+            requests:
+              cpu: "500m"
+            limits:
+              cpu: "1"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: carts-svc
+  namespace: services
+spec:
+  type: LoadBalancer
+  selector:
+    app: carts
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8080
+      targetPort: 8080
+    - protocol: TCP
+      name: grpc
+      port: 50050
+      targetPort: 50050
