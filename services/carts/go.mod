@@ -5,6 +5,7 @@ go 1.23.10
 toolchain go1.24.7
 
 require (
+	github.com/TranXuanPhong25/ecom/services/shops v0.0.0-00010101000000-000000000000
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/gocql/gocql v1.7.0
 	github.com/labstack/echo/v4 v4.13.4
@@ -40,6 +41,6 @@ require (
 )
 
 replace (
-github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3
-github.com/TranXuanPhong25/ecom/services/carts => ./
+	github.com/TranXuanPhong25/ecom/services/shops => ../shops
+	github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3
 )
