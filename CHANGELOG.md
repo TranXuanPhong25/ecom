@@ -1,3 +1,17 @@
+## [3.21.0](https://github.com/TranXuanPhong25/ecom/compare/v3.20.1...v3.21.0) (2025-12-26)
+
+### 🚀 Features
+
+* **carts:** totalcount ([f9da8e1](https://github.com/TranXuanPhong25/ecom/commit/f9da8e1cf7024fa7f5de39deb7c8303f4a0d4323))
+
+### 🐛 Bug Fixes
+
+* cart params ([7c6ded3](https://github.com/TranXuanPhong25/ecom/commit/7c6ded3ac73657fb4f522e53beb733c5faaafabd))
+
+### 🔨 Technical Changes
+
+* **carts:** migrate to postgres ([e483de9](https://github.com/TranXuanPhong25/ecom/commit/e483de99619aa60178eea3c72d57cdbc261ca150))
+
 ## [3.20.1](https://github.com/TranXuanPhong25/ecom/compare/v3.20.0...v3.20.1) (2025-12-26)
 
 ### 🐛 Bug Fixes
