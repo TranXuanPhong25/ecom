@@ -1,4 +1,4 @@
-module github.com/TranXuanPhong25/ecom/upload-service
+module github.com/TranXuanPhong25/ecom/services/upload-service
 
 go 1.23.0
 
