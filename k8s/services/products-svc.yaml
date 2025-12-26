@@ -40,7 +40,7 @@ metadata:
   name: products-svc
   namespace: services
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: products
   ports:

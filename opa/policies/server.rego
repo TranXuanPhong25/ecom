@@ -84,3 +84,8 @@ allow if {
     input.authenticated == true
 }
 
+allow if {
+    input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET" }
+    regex.match(`\/api\/carts`, input.path)
+    input.authenticated == true
+}

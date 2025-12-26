@@ -6,6 +6,8 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/carts/dtos"
 	"github.com/TranXuanPhong25/ecom/services/carts/services"
 	"github.com/TranXuanPhong25/ecom/services/carts/utils"
+	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
 )
 
 type ICartController interface {
@@ -35,8 +37,11 @@ func (controller *CartController) AddItemToCart(c echo.Context) error {
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
-
-	if err := controller.cartService.AddItemToCart(userID, req); err != nil {
+	safeUserID, err := uuid.Parse(userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid User ID"})
+	}
+	if err := controller.cartService.AddItemToCart(safeUserID, req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
@@ -53,8 +58,11 @@ func (controller *CartController) UpdateCartItem(c echo.Context) error {
 	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
-
-	if err := controller.cartService.UpdateItemInCart(userID, req); err != nil {
+	safeUserID, err := uuid.Parse(userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid User ID"})
+	}
+	if err := controller.cartService.UpdateItemInCart(safeUserID, req); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 

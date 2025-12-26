@@ -1,5 +1,7 @@
 package dtos
 
+import "github.com/google/uuid"
+
 type CartItem struct {
 	ProductVariant ProductVariant `json:"productVariant"`
 	Quantity       int            `json:"quantity"`
@@ -12,11 +14,11 @@ type Cart struct {
 }
 
 type CartItemPayload struct {
-	ProductVariantID string `json:"productVariantID" validate:"required"`
-	Quantity         int    `json:"quantity" validate:"required,min=1"`
-	ShopID           string `json:"shopID" validate:"required"`
+	ProductVariantID int       `json:"productVariantID" validate:"required"`
+	Quantity         int       `json:"quantity" validate:"required,min=1"`
+	ShopID           uuid.UUID `json:"shopID" validate:"required"`
 }
 
 type DeleteCartItemsPayload struct {
-	Items []string `json:"ids" validate:"required,dive,required"`
+	Items []int `json:"ids" validate:"required,dive,required"`
 }

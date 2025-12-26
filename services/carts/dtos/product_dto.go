@@ -15,5 +15,5 @@ type StockCheckRequest struct {
 
 type GetProductVariantsResponse struct {
 	Variants    []ProductVariant `json:"variants"`
-	NotFoundIDs []string         `json:"notFoundIds,omitempty"`
+	NotFoundIDs []int            `json:"notFoundIds,omitempty"`
 }

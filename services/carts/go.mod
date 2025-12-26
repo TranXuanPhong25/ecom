@@ -5,15 +5,24 @@ go 1.24.0
 toolchain go1.24.7
 
 require (
-	github.com/TranXuanPhong25/ecom/services/shops v0.0.0-00010101000000-000000000000
+	github.com/TranXuanPhong25/ecom/services/shops v0.0.0-20251226020818-b20948fa7725
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/gocql/gocql v1.7.0
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/scylladb/gocqlx/v3 v3.0.4
 	google.golang.org/grpc v1.75.1
+	gorm.io/driver/postgres v1.6.0
+	gorm.io/gorm v1.30.0
 )
 
 require (
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/pgx/v5 v5.7.5 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	golang.org/x/sync v0.19.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250707201910-8d1bb00bc6a7 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )
@@ -22,7 +31,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/google/uuid v1.6.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/labstack/gommon v0.4.2
 	github.com/leodido/go-urn v1.4.0 // indirect
@@ -36,11 +45,7 @@ require (
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
-	golang.org/x/time v0.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 )
 
-replace (
-	github.com/TranXuanPhong25/ecom/services/shops => ../shops
-	github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3
-)
+replace github.com/gocql/gocql => github.com/scylladb/gocql v1.15.3

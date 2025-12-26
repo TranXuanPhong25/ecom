@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/TranXuanPhong25/ecom/services/carts/configs"
@@ -18,7 +19,7 @@ type productServiceClient struct {
 }
 
 type IProductService interface {
-	GetProductVariantByIds(productVariantIDs []string) (*dtos.GetProductVariantsResponse, error)
+	GetProductVariantByIds(productVariantIDs []int) (*dtos.GetProductVariantsResponse, error)
 	// CheckStock(ctx context.Context, productID string) (int, error)
 }
 type ProductService struct {
@@ -37,8 +38,14 @@ func NewProductService(config *configs.ServiceConfig) IProductService {
 	}
 }
 
-func (s *ProductService) GetProductVariantByIds(productVariantIDs []string) (*dtos.GetProductVariantsResponse, error) {
-	url := fmt.Sprintf("%s/product-variants?ids=%s", s.client.baseURL, strings.Join(productVariantIDs, ","))
+func (s *ProductService) GetProductVariantByIds(productVariantIDs []int) (*dtos.GetProductVariantsResponse, error) {
+	strs := make([]string, len(productVariantIDs))
+	for i, v := range productVariantIDs {
+		strs[i] = strconv.Itoa(v)
+	}
+
+	ids := strings.Join(strs, ",")
+	url := fmt.Sprintf("%s/product-variants?ids=%s", s.client.baseURL, ids)
 	ctx := context.Background()
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
