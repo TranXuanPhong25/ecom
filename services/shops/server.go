@@ -15,6 +15,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/shops/repositories"
 	"github.com/TranXuanPhong25/ecom/services/shops/routes"
 	"github.com/TranXuanPhong25/ecom/services/shops/services"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"google.golang.org/grpc"

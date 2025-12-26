@@ -3,6 +3,7 @@ package repositories
 import (
 	"github.com/TranXuanPhong25/ecom/services/carts/models"
 	"github.com/gocql/gocql"
+	"github.com/scylladb/gocqlx/v3"
 )
 
 type ICartRepository interface {

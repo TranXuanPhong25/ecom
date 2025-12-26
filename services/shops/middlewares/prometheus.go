@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )

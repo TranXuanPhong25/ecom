@@ -9,6 +9,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/shops/services"
 	"github.com/TranXuanPhong25/ecom/services/shops/validators"
 	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
 )
 
 func CreateShop(c echo.Context) error {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/TranXuanPhong25/ecom/services/carts/configs"
 	"github.com/gocql/gocql"
+	"github.com/scylladb/gocqlx/v3"
 	"github.com/scylladb/gocqlx/v3/qb"
 	"github.com/scylladb/gocqlx/v3/table"
 )

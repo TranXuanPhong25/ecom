@@ -10,6 +10,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/shops/models"
 	pb "github.com/TranXuanPhong25/ecom/services/shops/proto"
 	"github.com/TranXuanPhong25/ecom/services/shops/repositories"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"google.golang.org/grpc"
 	"gorm.io/gorm"

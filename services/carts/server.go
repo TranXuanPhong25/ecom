@@ -11,6 +11,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/carts/repositories"
 	"github.com/TranXuanPhong25/ecom/services/carts/routes"
 	"github.com/TranXuanPhong25/ecom/services/carts/services"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -33,9 +34,9 @@ func main() {
 	var shopsOnce sync.Once
 	shopsService := services.NewShopsService(serviceConfigs, &shopsOnce)
 	service := services.NewCartService(repo, productService, shopsService)
-	controllers := controllers.NewCartController(service)
+	cartController := controllers.NewCartController(service)
 	// Register routes
-	routes.RegisterCartRoutes(e, controllers)
+	routes.RegisterCartRoutes(e, cartController)
 	routes.RegisterHealthRoute(e)
 
 	quit := make(chan os.Signal, 1)
