@@ -5,7 +5,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v6.31.1
-// source: proto/shop.proto
+// source: shop.proto
 
 package proto
 
@@ -33,7 +33,7 @@ type GetShopsByIDsRequest struct {
 
 func (x *GetShopsByIDsRequest) Reset() {
 	*x = GetShopsByIDsRequest{}
-	mi := &file_proto_shop_proto_msgTypes[0]
+	mi := &file_shop_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *GetShopsByIDsRequest) String() string {
 func (*GetShopsByIDsRequest) ProtoMessage() {}
 
 func (x *GetShopsByIDsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_shop_proto_msgTypes[0]
+	mi := &file_shop_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *GetShopsByIDsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetShopsByIDsRequest.ProtoReflect.Descriptor instead.
 func (*GetShopsByIDsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_shop_proto_rawDescGZIP(), []int{0}
+	return file_shop_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GetShopsByIDsRequest) GetIds() []string {
@@ -79,7 +79,7 @@ type Shop struct {
 
 func (x *Shop) Reset() {
 	*x = Shop{}
-	mi := &file_proto_shop_proto_msgTypes[1]
+	mi := &file_shop_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -91,7 +91,7 @@ func (x *Shop) String() string {
 func (*Shop) ProtoMessage() {}
 
 func (x *Shop) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_shop_proto_msgTypes[1]
+	mi := &file_shop_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -104,7 +104,7 @@ func (x *Shop) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Shop.ProtoReflect.Descriptor instead.
 func (*Shop) Descriptor() ([]byte, []int) {
-	return file_proto_shop_proto_rawDescGZIP(), []int{1}
+	return file_shop_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Shop) GetId() string {
@@ -131,7 +131,7 @@ type GetShopsByIDsResponse struct {
 
 func (x *GetShopsByIDsResponse) Reset() {
 	*x = GetShopsByIDsResponse{}
-	mi := &file_proto_shop_proto_msgTypes[2]
+	mi := &file_shop_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -143,7 +143,7 @@ func (x *GetShopsByIDsResponse) String() string {
 func (*GetShopsByIDsResponse) ProtoMessage() {}
 
 func (x *GetShopsByIDsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_shop_proto_msgTypes[2]
+	mi := &file_shop_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -156,7 +156,7 @@ func (x *GetShopsByIDsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetShopsByIDsResponse.ProtoReflect.Descriptor instead.
 func (*GetShopsByIDsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_shop_proto_rawDescGZIP(), []int{2}
+	return file_shop_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetShopsByIDsResponse) GetShops() []*Shop {
@@ -173,11 +173,12 @@ func (x *GetShopsByIDsResponse) GetNotFoundIds() []string {
 	return nil
 }
 
-var File_proto_shop_proto protoreflect.FileDescriptor
+var File_shop_proto protoreflect.FileDescriptor
 
-const file_proto_shop_proto_rawDesc = "" +
+const file_shop_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/shop.proto\x12\x05users\"(\n" +
+	"\n" +
+	"shop.proto\x12\x05users\"(\n" +
 	"\x14GetShopsByIDsRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\tR\x03ids\"*\n" +
 	"\x04Shop\x12\x0e\n" +
@@ -187,27 +188,27 @@ const file_proto_shop_proto_rawDesc = "" +
 	"\x05shops\x18\x01 \x03(\v2\v.users.ShopR\x05shops\x12\"\n" +
 	"\rnot_found_ids\x18\x02 \x03(\tR\vnotFoundIds2Z\n" +
 	"\fShopsService\x12J\n" +
-	"\rGetShopsByIDs\x12\x1b.users.GetShopsByIDsRequest\x1a\x1c.users.GetShopsByIDsResponseB-Z+github.com/TranXuanPhong25/ecom/shops/protob\x06proto3"
+	"\rGetShopsByIDs\x12\x1b.users.GetShopsByIDsRequest\x1a\x1c.users.GetShopsByIDsResponseB6Z4github.com/TranXuanPhong25/ecom/services/shops/protob\x06proto3"
 
 var (
-	file_proto_shop_proto_rawDescOnce sync.Once
-	file_proto_shop_proto_rawDescData []byte
+	file_shop_proto_rawDescOnce sync.Once
+	file_shop_proto_rawDescData []byte
 )
 
-func file_proto_shop_proto_rawDescGZIP() []byte {
-	file_proto_shop_proto_rawDescOnce.Do(func() {
-		file_proto_shop_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_shop_proto_rawDesc), len(file_proto_shop_proto_rawDesc)))
+func file_shop_proto_rawDescGZIP() []byte {
+	file_shop_proto_rawDescOnce.Do(func() {
+		file_shop_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_shop_proto_rawDesc), len(file_shop_proto_rawDesc)))
 	})
-	return file_proto_shop_proto_rawDescData
+	return file_shop_proto_rawDescData
 }
 
-var file_proto_shop_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_proto_shop_proto_goTypes = []any{
+var file_shop_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_shop_proto_goTypes = []any{
 	(*GetShopsByIDsRequest)(nil),  // 0: users.GetShopsByIDsRequest
 	(*Shop)(nil),                  // 1: users.Shop
 	(*GetShopsByIDsResponse)(nil), // 2: users.GetShopsByIDsResponse
 }
-var file_proto_shop_proto_depIdxs = []int32{
+var file_shop_proto_depIdxs = []int32{
 	1, // 0: users.GetShopsByIDsResponse.shops:type_name -> users.Shop
 	0, // 1: users.ShopsService.GetShopsByIDs:input_type -> users.GetShopsByIDsRequest
 	2, // 2: users.ShopsService.GetShopsByIDs:output_type -> users.GetShopsByIDsResponse
@@ -218,26 +219,26 @@ var file_proto_shop_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_proto_shop_proto_init() }
-func file_proto_shop_proto_init() {
-	if File_proto_shop_proto != nil {
+func init() { file_shop_proto_init() }
+func file_shop_proto_init() {
+	if File_shop_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_shop_proto_rawDesc), len(file_proto_shop_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_shop_proto_rawDesc), len(file_shop_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_shop_proto_goTypes,
-		DependencyIndexes: file_proto_shop_proto_depIdxs,
-		MessageInfos:      file_proto_shop_proto_msgTypes,
+		GoTypes:           file_shop_proto_goTypes,
+		DependencyIndexes: file_shop_proto_depIdxs,
+		MessageInfos:      file_shop_proto_msgTypes,
 	}.Build()
-	File_proto_shop_proto = out.File
-	file_proto_shop_proto_goTypes = nil
-	file_proto_shop_proto_depIdxs = nil
+	File_shop_proto = out.File
+	file_shop_proto_goTypes = nil
+	file_shop_proto_depIdxs = nil
 }
