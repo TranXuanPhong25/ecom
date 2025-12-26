@@ -1,3 +1,15 @@
+## [3.19.0](https://github.com/TranXuanPhong25/ecom/compare/v3.18.0...v3.19.0) (2025-12-17)
+
+### 🚀 Features
+
+* **k8s:** update README.md ([fe50270](https://github.com/TranXuanPhong25/ecom/commit/fe50270f58b2a2dcf138d886c135daf73a52e1c9))
+
+### 🔨 Technical Changes
+
+* **carts:** remove replace module ([9e8a522](https://github.com/TranXuanPhong25/ecom/commit/9e8a522df57c8dc7f047f6bfc4eaa6c469782a08))
+* move all services into services folder ([915fe35](https://github.com/TranXuanPhong25/ecom/commit/915fe357090a24adb69ad72ea6180de9164b863d))
+* move all services into services folder ([48d7f75](https://github.com/TranXuanPhong25/ecom/commit/48d7f75d4d4fd70dd929bf5768cf9a6e82842cbb))
+
 ## [3.18.0](https://github.com/TranXuanPhong25/ecom/compare/v3.17.0...v3.18.0) (2025-10-04)
 
 ### 🚀 Features
