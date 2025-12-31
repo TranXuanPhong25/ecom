@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"log"
 	"os"
-	"time"
 )
 
 type Config struct {
@@ -13,11 +12,6 @@ type Config struct {
 }
 
 var AppConfig Config
-
-var (
-	SigningMethod = jwt.SigningMethodHS256
-	ExpireTime    = time.Duration(36)
-)
 
 func LoadEnv() {
 	AppConfig.RpcPort = getEnv("RPC_PORT", ":50050")

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/TranXuanPhong25/ecom/services/jwt-service/configs"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/gommon/log"
 
 	"google.golang.org/grpc"
@@ -17,14 +18,14 @@ var (
 		privateKey []byte
 	}
 	SigningMethod = jwt.SigningMethodHS256
-	ExpireTime    = time.Duration(36)
+	ExpireTime    = time.Duration(2)
 )
 
 func LoadEnv() {
 	configs.LoadEnv()
 	keyVault.privateKey = configs.AppConfig.SecretKey
 	SigningMethod = jwt.SigningMethodHS256
-	ExpireTime = time.Duration(36)
+	ExpireTime = time.Duration(2)
 }
 
 type JWTService struct {
@@ -60,7 +61,7 @@ func (s *JWTService) CreateToken(ctx context.Context, in *pb.CreateTokenRequest)
 		"aud": in.Roles,
 		"iss": "ecom-jwt-service",
 		"iat": jwt.NewNumericDate(time.Now()),
-		"exp": jwt.NewNumericDate(time.Now().Add(ExpireTime * time.Minute)),
+		"exp": jwt.NewNumericDate(time.Now().Add(ExpireTime * time.Hour)),
 	})
 
 	signedToken, err := unsignedToken.SignedString(keyVault.privateKey)
