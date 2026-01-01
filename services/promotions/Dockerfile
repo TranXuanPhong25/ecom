@@ -8,7 +8,7 @@ RUN apk add --no-cache git
 WORKDIR /app
 
 # Copy go mod và sum trước để optimize cache Docker layer
-COPY go.mod go.sum  ./
+COPY go.mod go.sum* ./
 
 # Download dependencies
 RUN go mod download

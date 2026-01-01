@@ -10,6 +10,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/auth/repositories"
 	"github.com/TranXuanPhong25/ecom/services/auth/routes"
 	"github.com/TranXuanPhong25/ecom/services/auth/services"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 

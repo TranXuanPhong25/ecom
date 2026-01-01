@@ -8,6 +8,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/auth/models"
 	"github.com/TranXuanPhong25/ecom/services/auth/services"
 	"github.com/TranXuanPhong25/ecom/services/auth/validators"
+	"github.com/labstack/echo/v4"
 )
 
 func LoginWithEmailAndPassword(c echo.Context) error {
@@ -76,6 +77,11 @@ func GetCurrentUser(c echo.Context) error {
 	}
 	user, err := services.GetCurrentUser(userId)
 	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return c.JSON(http.StatusUnauthorized, map[string]string{
+				"error": err.Error(),
+			})
+		}
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": err.Error(),
 		})

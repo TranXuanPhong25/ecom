@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/TranXuanPhong25/ecom/services/auth/controllers"
+	"github.com/labstack/echo/v4"
 )
 
 func AuthRoute(e *echo.Echo) {

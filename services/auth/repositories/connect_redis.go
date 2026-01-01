@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/labstack/gommon/log"
+	"github.com/redis/go-redis/v9"
 )
 
 var (
