@@ -11,36 +11,36 @@ type EventBannerDTO struct {
 	ID          uuid.UUID `json:"id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description,omitempty"`
-	ImageURL    string    `json:"image_url"`
-	LinkURL     string    `json:"link_url,omitempty"`
-	StartTime   time.Time `json:"start_time"`
-	EndTime     time.Time `json:"end_time"`
+	ImageURL    string    `json:"imageUrl"`
+	LinkURL     string    `json:"linkUrl,omitempty"`
+	StartTime   time.Time `json:"startTime"`
+	EndTime     time.Time `json:"endTime"`
 	Priority    int       `json:"priority"`
-	IsActive    bool      `json:"is_active"`
-	EventType   string    `json:"event_type"`
+	IsActive    bool      `json:"isActive"`
+	EventType   string    `json:"eventType"`
 	Position    string    `json:"position"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 // PromoBarDTO - DTO cho Promo Bar
 type PromoBarDTO struct {
 	ID              uuid.UUID `json:"id"`
 	Message         string    `json:"message"`
-	BackgroundColor string    `json:"background_color"`
-	TextColor       string    `json:"text_color"`
-	LinkURL         string    `json:"link_url,omitempty"`
-	StartTime       time.Time `json:"start_time"`
-	EndTime         time.Time `json:"end_time"`
-	IsActive        bool      `json:"is_active"`
+	BackgroundColor string    `json:"backgroundColor"`
+	TextColor       string    `json:"textColor"`
+	LinkURL         string    `json:"linkUrl,omitempty"`
+	StartTime       time.Time `json:"startTime"`
+	EndTime         time.Time `json:"endTime"`
+	IsActive        bool      `json:"isActive"`
 	Priority        int       `json:"priority"`
-	IsCloseable     bool      `json:"is_closeable"`
-	CreatedAt       time.Time `json:"created_at"`
-	UpdatedAt       time.Time `json:"updated_at"`
+	IsCloseable     bool      `json:"isCloseable"`
+	CreatedAt       time.Time `json:"createdAt"`
+	UpdatedAt       time.Time `json:"updatedAt"`
 }
 
 // GetActivePromotionsResponse - Response cho API lấy promotions đang active
 type GetActivePromotionsResponse struct {
-	EventBanners []EventBannerDTO `json:"event_banners"`
-	PromoBars    []PromoBarDTO    `json:"promo_bars"`
+	EventBanners []EventBannerDTO `json:"eventBanners"`
+	PromoBars    []PromoBarDTO    `json:"promoBars"`
 }
