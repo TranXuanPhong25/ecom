@@ -11,5 +11,6 @@
     <modules>
         <module>product-categories</module>
         <module>products</module>
+        <module>orders</module>
     </modules>
 </project>
