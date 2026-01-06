@@ -1,15 +1,15 @@
 
 from fastapi import FastAPI
 
-from app.routes.chat_routes import chat_router
+from fastapi.middleware.cors import CORSMiddleware
+from app.chat_routes import chat_router
 
 app = FastAPI()
 app.include_router(chat_router)
 origins = [
     "http://localhost:3000",
-    "http://localhost:8080",
+    "http://localhost:3001",
 ]
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,

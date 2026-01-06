@@ -14,7 +14,7 @@ from app.utils.chat_utils import ai_sdk_to_langchain
 chat_router = APIRouter()
 
 
-@chat_router.post("/api/chats")
+@chat_router.post("/api/chatbot")
 async def stream(payload: ChatPayload):
     messages = ai_sdk_to_langchain(payload.messages)
     return process_query(supervisor_agent.get(),  messages)
