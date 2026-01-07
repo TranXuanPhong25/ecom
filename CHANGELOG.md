@@ -1,3 +1,19 @@
+## [3.22.0](https://github.com/TranXuanPhong25/ecom/compare/v3.21.0...v3.22.0) (2026-01-07)
+
+### 🚀 Features
+
+* **k8s:** streamzi kafka and kafka-connect cdc installation ([43471ac](https://github.com/TranXuanPhong25/ecom/commit/43471acac591bc3ec1d600be9d6952de9ab3b46c))
+* **orders:** init order service ([5b59958](https://github.com/TranXuanPhong25/ecom/commit/5b59958151d87a1a179ed156003d294c15aecb6c))
+* **promo:** new ([bf24c51](https://github.com/TranXuanPhong25/ecom/commit/bf24c5104cf538ffe1571d41784d8e6fe59b7c85))
+* **recommendation:** init service ([8674cad](https://github.com/TranXuanPhong25/ecom/commit/8674cad569fe59522089535d5fd5a1b832b05183))
+
+### 🔨 Technical Changes
+
+* **chatbot:** structure simplified ([cb99ebf](https://github.com/TranXuanPhong25/ecom/commit/cb99ebf23a704f6b01e006fd59d1bfc3b9b0abdc))
+* **jwt:** long expire time for development convenience ([35dfd9a](https://github.com/TranXuanPhong25/ecom/commit/35dfd9a640b21de8a4bb648613671dff5435184c))
+* **k8s:** correctly use StateFulSet for db ([8909700](https://github.com/TranXuanPhong25/ecom/commit/890970037c75e625888a09c1649ed52d5efe42c4))
+* **promotion:** response format update ([e90cb57](https://github.com/TranXuanPhong25/ecom/commit/e90cb5791ee62ad9d810102d9fa93db36c5361f7))
+
 ## [3.21.0](https://github.com/TranXuanPhong25/ecom/compare/v3.20.1...v3.21.0) (2025-12-26)
 
 ### 🚀 Features
