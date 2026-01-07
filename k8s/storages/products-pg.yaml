@@ -1,73 +1,81 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: products-pg
-  namespace: storages
+   name: products-pg
+   namespace: storages
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: products-pg
-  template:
-    metadata:
-      labels:
-        app: products-pg
-    spec:
-      containers:
-      - name: products-pg
-        image: postgres:15-alpine
-        env:
-          - name: POSTGRES_USER
-            value: postgres
-          - name: POSTGRES_PASSWORD
-            value: postgres
-          - name: POSTGRES_DB
-            value: mydatabase
-          - name: PGDATA
-            value: /var/lib/postgresql/data/pgdata
-        volumeMounts:
-        - name: db-storage
-          mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:
-  - metadata:
-      name: db-storage
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 1Gi
-      storageClassName: standard
+   serviceName: "products-pg-db"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: products-pg
+   template:
+      metadata:
+         labels:
+            app: products-pg
+      spec:
+         containers:
+            - name: products-pg
+              image: postgres:15-alpine
+              args:
+                 - "-c"
+                 - "wal_level=logical"
+                 - "-c"
+                 - "max_replication_slots=10"
+                 - "-c"
+                 - "max_wal_senders=10"
+              env:
+                 - name: POSTGRES_USER
+                   value: postgres
+                 - name: POSTGRES_PASSWORD
+                   value: postgres
+                 - name: POSTGRES_DB
+                   value: mydatabase
+                 - name: PGDATA
+                   value: /var/lib/postgresql/data/pgdata
+              volumeMounts:
+                 - name: db-storage
+                   mountPath: /var/lib/postgresql/data
+   volumeClaimTemplates:
+      - metadata:
+           name: db-storage
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 1Gi
+           storageClassName: standard
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: products-pg-db
-  namespace: storages
+   name: products-pg-db
+   namespace: storages
 spec:
-  clusterIP: None
-  selector:
-    app: products-pg
-  ports:
-  - protocol: TCP
-    port: 5432
-    targetPort: 5432
+   clusterIP: None
+   selector:
+      app: products-pg
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  namespace: storages
-  name: allow-products-service-to-db
+   namespace: storages
+   name: allow-products-service-to-db
 spec:
-  podSelector:
-    matchLabels:
-      app: products-pg
-  policyTypes:
-  - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: services
-    ports:
-    - protocol: TCP
-      port: 5432
+   podSelector:
+      matchLabels:
+         app: products-pg
+   policyTypes:
+      - Ingress
+   ingress:
+      - from:
+           - namespaceSelector:
+                matchLabels:
+                   name: services
+        ports:
+           - protocol: TCP
+             port: 5432

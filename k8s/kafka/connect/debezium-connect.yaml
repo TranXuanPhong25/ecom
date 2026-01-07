@@ -1,0 +1,45 @@
+# create -f
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaConnect
+metadata:
+   name: debezium-connect-cluster
+   namespace: kafka
+   annotations:
+      strimzi.io/use-connector-resources: "true"
+spec:
+   version: 4.1.1
+   image: rengumin/custom-debezium-connect:latest
+
+   replicas: 1
+   bootstrapServers: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+   groupId: connect-cluster
+   offsetStorageTopic: connect-cluster-offsets
+   configStorageTopic: connect-cluster-configs
+   statusStorageTopic: connect-cluster-status
+   resources:
+      requests:
+         memory: "1Gi"
+         cpu: "500m"
+      limits:
+         memory: "2Gi"
+         cpu: "1"
+   jvmOptions:
+      "-Xms": "1g"
+      "-Xmx": "1g"
+   config:
+      config.providers.secrets.class: io.strimzi.kafka.KubernetesSecretConfigProvider
+      config.providers: secrets
+      # -1 means it will use the default replication factor configured in the broker
+      config.storage.replication.factor: -1
+      offset.storage.replication.factor: -1
+      status.storage.replication.factor: -1
+   # build:
+   #    output:
+   #       type: docker
+   #       image: rengumin/debezium-connect-postgres:latest
+   #    plugins:
+   #       - name: debezium-postgres-connector
+   #         artifacts:
+   #            - type: tgz
+   #              url: https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/3.4.0.Final/debezium-connector-postgres-3.4.0.Final-plugin.tar.gz
+   #              sha512sum: b82fb1652a7b4b7ab05f60af5dae0a9a07037df0268c0abd73cd8210d221b06b1d0b583996c7a4cb3b55cacaaf117c23e637321cab00bf84e54beb77c8dd2b83

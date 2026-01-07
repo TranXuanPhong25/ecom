@@ -1,0 +1,26 @@
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaConnector
+metadata:
+   name: debezium-connector-product-pg
+   namespace: kafka
+   labels:
+      strimzi.io/cluster: debezium-connect-cluster
+spec:
+   class: io.debezium.connector.postgresql.PostgresConnector
+   tasksMax: 1
+   autoRestart:
+      enabled: true
+   config:
+      tasks.max: 1
+      database.hostname: products-pg-db.storages
+      database.port: 5432
+      database.user: postgres
+      database.password: postgres
+      database.server.id: 184054
+      topic.prefix: product-pg-
+      database.dbname: mydatabase
+      plugin.name: pgoutput
+      # database.include.list: mydatabase
+      table.include.list: public.products, public.product_variants
+      schema.history.internal.kafka.bootstrap.servers: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+      schema.history.internal.kafka.topic: schema-changes.products

@@ -1,0 +1,74 @@
+### 1) Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: mongo
+---
+### 2) Secret (user/pass)
+apiVersion: v1
+kind: Secret
+metadata:
+   name: mongo-secret
+   namespace: mongo
+type: Opaque
+data:
+   MONGO_INITDB_ROOT_USERNAME: YWRtaW4=
+   MONGO_INITDB_ROOT_PASSWORD: cGFzc3dvcmQ=
+---
+### 3) Service (headless cho StatefulSet)
+apiVersion: v1
+kind: Service
+metadata:
+   name: mongo
+   namespace: mongo
+spec:
+   clusterIP: None
+   selector:
+      app: mongo
+   ports:
+      - port: 27017
+        name: mongo
+---
+### 4) StatefulSet + PVC
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: mongo
+   namespace: mongo
+spec:
+   serviceName: mongo
+   replicas: 1
+   selector:
+      matchLabels:
+         app: mongo
+   template:
+      metadata:
+         labels:
+            app: mongo
+      spec:
+         containers:
+            - name: mongo
+              image: mongo:6.0.27
+              ports:
+                 - containerPort: 27017
+              envFrom:
+                 - secretRef:
+                      name: mongo-secret
+              volumeMounts:
+                 - name: data
+                   mountPath: /data/db
+              resources:
+                 requests:
+                    cpu: "100m"
+                    memory: "256Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "1Gi"
+   volumeClaimTemplates:
+      - metadata:
+           name: data
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 2Gi

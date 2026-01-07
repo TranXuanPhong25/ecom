@@ -1,34 +1,41 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-    name: storages
-    labels:
-        name: storages
+   name: storages
+   labels:
+      name: storages
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-    name: services
-    labels:
-        name: services
+   name: services
+   labels:
+      name: services
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-    name: minio
-    labels:
-        name: minio        
---- 
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: gateway
-    labels:
-        name: gateway        
+   name: minio
+   labels:
+      name: minio
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: opa
-  labels:
-    name: opa
+   name: gateway
+   labels:
+      name: gateway
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: opa
+   labels:
+      name: opa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: kafka
+   labels:
+      name: kafka
