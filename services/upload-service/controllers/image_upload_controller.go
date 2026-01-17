@@ -6,6 +6,7 @@ import (
 
 	"github.com/TranXuanPhong25/ecom/services/upload-service/models"
 	"github.com/TranXuanPhong25/ecom/services/upload-service/services"
+	"github.com/labstack/echo/v4"
 )
 
 func GeneratePresignedURLUploadImage(c echo.Context) error {

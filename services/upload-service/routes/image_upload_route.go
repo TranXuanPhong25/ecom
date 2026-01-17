@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/TranXuanPhong25/ecom/services/upload-service/controllers"
+	"github.com/labstack/echo/v4"
 )
 
 func ImageUploadRoutes(e *echo.Echo) {
