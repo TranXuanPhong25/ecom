@@ -1,4 +1,4 @@
-package com.ecom.orders.exceptions;
+package com.ecom.orders.infras.adapter.inbound.http.filter.exceptions;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;

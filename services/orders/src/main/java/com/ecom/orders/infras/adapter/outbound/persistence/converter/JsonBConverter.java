@@ -1,4 +1,4 @@
-package com.ecom.orders.utils;
+package com.ecom.orders.infras.adapter.outbound.persistence.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
