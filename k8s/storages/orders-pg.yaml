@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: orders-pg
+   namespace: storages
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: orders-pg
+   template:
+      metadata:
+         labels:
+            app: orders-pg
+      spec:
+         containers:
+            - name: orders-pg
+              image: postgres:15-alpine
+              env:
+                 - name: POSTGRES_USER
+                   value: postgres
+                 - name: POSTGRES_PASSWORD
+                   value: postgres
+                 - name: POSTGRES_DB
+                   value: mydatabase
+                 - name: PGDATA
+                   value: /var/lib/postgresql/data/pgdata
+              volumeMounts:
+                 - name: db-storage
+                   mountPath: /var/lib/postgresql/data
+   volumeClaimTemplates:
+      - metadata:
+           name: db-storage
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 1Gi
+           storageClassName: standard
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: orders-pg-db
+   namespace: storages
+spec:
+   clusterIP: None
+   selector:
+      app: orders-pg
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+   namespace: storages
+   name: allow-orders-service-to-db
+spec:
+   podSelector:
+      matchLabels:
+         app: orders-pg
+   policyTypes:
+      - Ingress
+   ingress:
+      - from:
+           - namespaceSelector:
+                matchLabels:
+                   name: services
+        ports:
+           - protocol: TCP
+             port: 5432

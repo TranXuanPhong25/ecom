@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-placement-service
+  namespace: services
+  labels:
+    app: order-placement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-placement
+  template:
+    metadata:
+      labels:
+        app: order-placement
+    spec:
+      containers:
+      - name: order-placement
+        image: rengumin/order-placement-svc:1.0
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+          - name: DB_HOST
+            value: order-placement-pg-db.storages
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: postgres
+          - name: DB_PASSWORD
+            value: postgres
+          - name: DB_NAME
+            value: mydatabase
+          - name: SERVER_PORT
+            value: "8080"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-placement-svc
+  namespace: services
+spec:
+  type: ClusterIP
+  selector:
+    app: order-placement
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 50070
+      targetPort: 50070
+      name: grpc

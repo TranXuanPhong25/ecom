@@ -1,4 +1,8 @@
 ```bash
+curl -sfL https://get.k3s.io | sh -s - --disable=traefik
+```
+
+```bash
 kubectl apply -f k8s/shopiew.namespace.yaml
 ```
 

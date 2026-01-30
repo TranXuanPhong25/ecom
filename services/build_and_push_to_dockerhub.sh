@@ -12,6 +12,8 @@ SERVICES=(
     "users-svc:go:./users"
     "upload-svc:go:./upload-service"
     "jwt-service:go:./jwt-service"
+    "promotions-svc:go:./promotions"
+
 #    "chatbots-svc:spring:./orders"
     "carts-svc:go:./carts"
     "auth-svc:go:./auth"

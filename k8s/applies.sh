@@ -10,3 +10,8 @@ kubectl apply -f opa/
 kubectl apply -f envoy-gateway/
 kubectl apply -f envoy-gateway/auth/
 kubectl apply -f envoy-gateway/routes/
+kubectl apply -f elastic-system/
+kubectl apply -f kafka/
+kubectl apply -f kafka/connect/
+kubectl apply -f kafka/connect/sources/
+kubectl apply -f kafka/connect/sinks/

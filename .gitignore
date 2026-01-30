@@ -42,3 +42,4 @@ auth/tmp/main
 kong/conf/decksync.sh
 /node_modules/
 __pycache__/
+services/order-placement/tmp/*
