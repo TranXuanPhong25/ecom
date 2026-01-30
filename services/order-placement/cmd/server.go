@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 
 	httpHandler "github.com/TranXuanPhong25/ecom/services/order-placement/internal/adapter/handler/http"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/adapter/storage/postgres"
@@ -53,7 +57,6 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(1)
-
 	go func() {
 		defer wg.Done()
 		log.Printf("HTTP server listening on %v\n", config.AppConfig.ServerPort)
@@ -61,4 +64,11 @@ func main() {
 			log.Fatal(err)
 		}
 	}()
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Print("Shutting down server...\n")
+	e.Shutdown(context.Background())
+
+	wg.Wait()
 }

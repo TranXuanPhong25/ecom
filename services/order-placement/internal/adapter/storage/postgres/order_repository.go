@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/config"
+	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/dto"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/entity"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/port"
 	"gorm.io/driver/postgres"
@@ -39,7 +40,7 @@ func ConnectDB() *gorm.DB {
 }
 
 // CreateOrderWithItems creates an order and order items in a transaction
-func (r *OrderRepository) CreateOrderWithItems(order *entity.Order, items []entity.OrderItemInput) (*entity.Order, error) {
+func (r *OrderRepository) CreateOrderWithItems(order *entity.Order, items []dto.OrderItemInput) (*entity.Order, error) {
 	tx := r.db.Begin()
 	if tx.Error != nil {
 		return nil, tx.Error

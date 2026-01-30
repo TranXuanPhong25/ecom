@@ -3,8 +3,10 @@ package service
 import (
 	"net/http"
 
+	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/dto"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/entity"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/port"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -21,10 +23,10 @@ func NewOrderService(repo port.OrderRepository) port.OrderService {
 }
 
 // CreateOrder creates a new order with items
-func (s *OrderService) CreateOrder(request *entity.CreateOrderRequest) (*entity.CreateOrderResponse, *echo.HTTPError) {
+func (s *OrderService) CreateOrder(request *dto.CreateOrderRequest, userID uuid.UUID) (*dto.CreateOrderResponse, *echo.HTTPError) {
 	// Create order with processing status
 	order := &entity.Order{
-		UserID:      request.UserID,
+		UserID:      userID,
 		Status:      "processing",
 		TotalAmount: 0,
 	}
@@ -35,7 +37,7 @@ func (s *OrderService) CreateOrder(request *entity.CreateOrderRequest) (*entity.
 		return nil, echo.NewHTTPError(http.StatusInternalServerError, "Failed to create order: "+err.Error())
 	}
 
-	response := &entity.CreateOrderResponse{
+	response := &dto.CreateOrderResponse{
 		Order:   *toOrderDTO(createdOrder),
 		Message: "Order created successfully with processing status",
 	}
@@ -44,10 +46,10 @@ func (s *OrderService) CreateOrder(request *entity.CreateOrderRequest) (*entity.
 }
 
 // toOrderDTO converts Order entity to OrderDTO
-func toOrderDTO(order *entity.Order) *entity.OrderDTO {
-	orderItems := make([]entity.OrderItemDTO, 0)
+func toOrderDTO(order *entity.Order) *dto.OrderDTO {
+	orderItems := make([]dto.OrderItemDTO, 0)
 	for _, item := range order.OrderItems {
-		orderItems = append(orderItems, entity.OrderItemDTO{
+		orderItems = append(orderItems, dto.OrderItemDTO{
 			ID:        item.ID,
 			ProductID: item.ProductID,
 			Quantity:  item.Quantity,
@@ -56,7 +58,7 @@ func toOrderDTO(order *entity.Order) *entity.OrderDTO {
 		})
 	}
 
-	return &entity.OrderDTO{
+	return &dto.OrderDTO{
 		ID:          order.ID,
 		UserID:      order.UserID,
 		TotalAmount: order.TotalAmount,

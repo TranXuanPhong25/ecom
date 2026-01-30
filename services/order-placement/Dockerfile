@@ -17,7 +17,7 @@ RUN go mod download
 COPY . .
 
 # Build app
-RUN go build -o main .
+RUN go build -o main ./cmd/server.go
 
 # ===== STAGE 2: Build a minimal image =====
 FROM alpine:latest AS release
