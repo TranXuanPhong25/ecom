@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "services.product.categories.url",
+			"type": "java.lang.String",
+			"description": "product-categories url'"
+		}
+	]
+}
