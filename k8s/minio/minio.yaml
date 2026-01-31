@@ -5,7 +5,8 @@ metadata:
   name: minio-pvc
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
+  storageClassName: local-path
   resources:
     requests:
       storage: 10Gi
@@ -50,25 +51,25 @@ spec:
       - name: minio-storage
         persistentVolumeClaim:
           claimName: minio-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: minio-loadbalancer
-  namespace: minio
-spec:
-  selector:
-    app: minio
-  ports:
-    - protocol: TCP
-      name: console
-      port: 9001
-      targetPort: 9001
-    - protocol: TCP
-      name: api
-      port: 9000
-      targetPort: 9000
-  type: LoadBalancer
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: minio-loadbalancer
+#   namespace: minio
+# spec:
+#   selector:
+#     app: minio
+#   ports:
+#     - protocol: TCP
+#       name: console
+#       port: 9001
+#       targetPort: 9001
+#     - protocol: TCP
+#       name: api
+#       port: 9000
+#       targetPort: 9000
+#   type: LoadBalancer
 
 
 ---
