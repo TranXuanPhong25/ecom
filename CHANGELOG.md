@@ -1,3 +1,15 @@
+## [4.0.0](https://github.com/TranXuanPhong25/ecom/compare/v3.23.0...v4.0.0) (2026-01-31)
+
+### ⚠ BREAKING CHANGES
+
+* replaces minikube and restructures the codebase
+* go to k3s
+
+### 🚀 Features
+
+* go to k3s ([de4ec21](https://github.com/TranXuanPhong25/ecom/commit/de4ec21f08f90255cd9d5f74f138687355b40e18))
+* switch to k3s, hexagonal architecture, and new Go layout ([22e1b38](https://github.com/TranXuanPhong25/ecom/commit/22e1b3870e31c13a5236d064779505685e4d883e))
+
 ## [3.23.0](https://github.com/TranXuanPhong25/ecom/compare/v3.22.0...v3.23.0) (2026-01-31)
 
 ### 🚀 Features
