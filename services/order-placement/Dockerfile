@@ -23,10 +23,13 @@ RUN go build -o main ./cmd/server.go
 FROM alpine:latest AS release
 
 # Tạo thư mục app
-WORKDIR /root/
+WORKDIR /app
 
 # Copy binary từ stage build
 COPY --from=builder /app/main .
+
+# Copy migrations folder
+COPY --from=builder /app/migrations ./migrations
 
 # Lệnh chạy app
 CMD ["./main"]

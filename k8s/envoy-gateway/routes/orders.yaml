@@ -11,6 +11,10 @@ spec:
                 type: PathPrefix
                 value: /api/orders/placement
              method: POST
+           - path:
+                type: PathPrefix
+                value: /api/orders/placement
+             method: OPTIONS
         backendRefs:
            - name: order-placement-svc
              namespace: services
