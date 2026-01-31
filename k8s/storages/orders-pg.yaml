@@ -4,6 +4,7 @@ metadata:
    name: orders-pg
    namespace: storages
 spec:
+   serviceName: orders-pg
    replicas: 1
    selector:
       matchLabels:
@@ -36,7 +37,7 @@ spec:
            resources:
               requests:
                  storage: 1Gi
-           storageClassName: standard
+           storageClassName: local-path
 ---
 apiVersion: v1
 kind: Service
