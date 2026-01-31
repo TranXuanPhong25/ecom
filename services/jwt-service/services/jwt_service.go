@@ -18,14 +18,12 @@ var (
 		privateKey []byte
 	}
 	SigningMethod = jwt.SigningMethodHS256
-	ExpireTime    = time.Duration(2)
+	ExpireTime    = time.Duration(24 * 7)
 )
 
 func LoadEnv() {
 	configs.LoadEnv()
 	keyVault.privateKey = configs.AppConfig.SecretKey
-	SigningMethod = jwt.SigningMethodHS256
-	ExpireTime = time.Duration(2)
 }
 
 type JWTService struct {
