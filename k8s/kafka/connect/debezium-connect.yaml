@@ -11,7 +11,7 @@ spec:
    image: rengumin/custom-debezium-connect:latest
 
    replicas: 1
-   bootstrapServers: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+   bootstrapServers: kafka-cluster-kafka-bootstrap.kafka:9092
    groupId: connect-cluster
    offsetStorageTopic: connect-cluster-offsets
    configStorageTopic: connect-cluster-configs
@@ -33,6 +33,10 @@ spec:
       config.storage.replication.factor: -1
       offset.storage.replication.factor: -1
       status.storage.replication.factor: -1
+      key.converter: org.apache.kafka.connect.json.JsonConverter
+      key.converter.schemas.enable: false
+      value.converter: org.apache.kafka.connect.json.JsonConverter
+      value.converter.schemas.enable: false
    # build:
    #    output:
    #       type: docker
