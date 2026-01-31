@@ -1,4 +1,4 @@
-package com.ecom.orders.infras.adapter.inbound.event;
+package com.ecom.orders.core.app.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,14 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-
-import com.ecom.orders.core.domain.model.OrderStatus;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderCreatedEvent {
+public class OrderDTO {
    private Long id;
    private String orderNumber;
    private String userId;
@@ -24,25 +24,19 @@ public class OrderCreatedEvent {
    private String recipientPhone;
    private String deliveryAddress;
 
-   // Order status
-   private OrderStatus status;
-
-   // Payment information
+   // Status
+   private String status;
    private String paymentMethod;
    private String paymentStatus;
-
    private Instant paidAt;
 
    // Pricing
    private Long subtotal;
-
    private Long shippingFee;
-
-   private String discount;
-
+   private Map<String, Object> discount;
    private Long totalAmount;
 
-   // Shipping
+   // Shipping details
    private String shippingMethod;
    private String shippingProvider;
    private String trackingNumber;
@@ -61,9 +55,8 @@ public class OrderCreatedEvent {
    private Instant deliveredAt;
    private Instant completedAt;
    private Instant cancelledAt;
-
    private Instant createdAt;
    private Instant updatedAt;
 
-   private String items;
+   private List<OrderItemDTO> orderItems;
 }

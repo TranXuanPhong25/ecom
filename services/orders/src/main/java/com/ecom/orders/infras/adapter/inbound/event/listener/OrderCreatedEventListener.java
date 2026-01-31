@@ -1,6 +1,9 @@
 package com.ecom.orders.infras.adapter.inbound.event.listener;
 
+import com.ecom.orders.core.domain.model.Order;
+import com.ecom.orders.core.domain.service.OrderService;
 import com.ecom.orders.infras.adapter.inbound.event.OrderCreatedEvent;
+import com.ecom.orders.infras.adapter.inbound.event.mapper.OrderEventMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +17,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OrderEventListener {
+public class OrderCreatedEventListener {
 
    private final ObjectMapper objectMapper;
+   private final OrderEventMapper orderEventMapper;
+   private final OrderService orderService;
 
    @KafkaListener(topics = "${spring.kafka.topics.order-created}", groupId = "${spring.kafka.consumer.group-id}", containerFactory = "kafkaListenerContainerFactory")
    public void handleOrderCreatedEvent(
@@ -32,12 +37,11 @@ public class OrderEventListener {
          // Parse the event
          OrderCreatedEvent event = objectMapper.readValue(message, OrderCreatedEvent.class);
 
-         // Process the event - Add your business logic here
+         // Map to domain entity and process
          processOrderCreatedEvent(event);
 
          // Manually acknowledge the message
          acknowledgment.acknowledge();
-         log.info("Successfully processed order event for orderId: {}", event.getOrderId());
 
       } catch (Exception e) {
          log.error("Error processing order event from topic: {}, partition: {}, offset: {}",
@@ -47,10 +51,11 @@ public class OrderEventListener {
    }
 
    private void processOrderCreatedEvent(OrderCreatedEvent event) {
-      // Implement your business logic here
-      log.info("Processing order created event: orderId={}, userId={}, amount={}",
-            event.getOrderId(), event.getUserId(), event.getTotalAmount());
+      Order order = orderEventMapper.toEntity(event);
 
-      // Example: Send notification, update inventory, etc.
+      // Save order to database or perform other business logic
+      orderService.createOrder(order);
+      log.info("Created order: orderId={}, userId={}, amount={}",
+            order.getId(), order.getUserId(), order.getTotalAmount());
    }
 }

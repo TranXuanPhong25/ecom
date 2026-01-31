@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "spring.kafka.topics.order-created",
+			"type": "java.lang.String",
+			"description": "The Kafka topic for order created events."
+		}
+	]
+}
