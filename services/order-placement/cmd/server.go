@@ -41,7 +41,7 @@ func main() {
 	// Auto migrate database schemas
 	err := db.AutoMigrate(
 		&entity.Order{},
-		&entity.OrderItem{},
+		&entity.Outbox{},
 	)
 	if err != nil {
 		fmt.Printf("Failed to migrate database: %v\n", err)

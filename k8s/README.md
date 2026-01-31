@@ -36,4 +36,6 @@ kubectl create configmap opa-server-policy --from-file=opa/policies/server.rego 
 
 ```bash
 eval $(minikube docker-env)
+docker save product-categories:dev | sudo k3s ctr images import -
+
 ```

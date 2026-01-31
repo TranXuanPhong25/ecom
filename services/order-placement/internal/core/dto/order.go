@@ -30,11 +30,9 @@ type OrderDTO struct {
 
 // OrderItemDTO - Data transfer object for order item
 type OrderItemDTO struct {
-	ID        uuid.UUID `json:"id"`
 	ProductID uuid.UUID `json:"product_id"`
 	Quantity  int       `json:"quantity"`
 	Price     float64   `json:"price"`
-	CreatedAt time.Time `json:"created_at"`
 }
 
 // CreateOrderResponse - Response after creating an order

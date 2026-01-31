@@ -1,0 +1,16 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: order-placement-route
+spec:
+  parentRefs:
+    - name: gateway
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/api/order-placement"
+      backendRefs:
+        - name: order-placement-svc
+          namespace: services
+          port: 8080

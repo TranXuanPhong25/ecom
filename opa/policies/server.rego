@@ -98,3 +98,11 @@ allow if {
     input.method in { "GET" }
     regex.match(`\/api\/promotions`, input.path)
 }
+allow if {
+    input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET"}
+    regex.match(`\/api\/orders`, input.path)
+}
+allow if {
+    input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET"}
+    regex.match(`\/api\/order-placement`, input.path)
+}

@@ -11,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// OrderHandler handles HTTP requests for orders
+// OrderHandler handles HTTP requests for order placement
 type OrderHandler struct {
 	service port.OrderService
 }
@@ -25,7 +25,7 @@ func NewOrderHandler(service port.OrderService) *OrderHandler {
 
 // RegisterRoutes registers all order routes
 func (h *OrderHandler) RegisterRoutes(e *echo.Echo) {
-	e.POST("/api/orders", h.CreateOrder)
+	e.POST("/api/order-placement", h.CreateOrder)
 }
 
 // CreateOrder handles order creation request

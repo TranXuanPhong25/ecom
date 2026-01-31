@@ -24,10 +24,10 @@ func NewOrderService(repo port.OrderRepository) port.OrderService {
 
 // CreateOrder creates a new order with items
 func (s *OrderService) CreateOrder(request *dto.CreateOrderRequest, userID uuid.UUID) (*dto.CreateOrderResponse, *echo.HTTPError) {
-	// Create order with processing status
+	// Create order with created status
 	order := &entity.Order{
 		UserID:      userID,
-		Status:      "processing",
+		Status:      "CREATED",
 		TotalAmount: 0,
 	}
 
@@ -47,14 +47,13 @@ func (s *OrderService) CreateOrder(request *dto.CreateOrderRequest, userID uuid.
 
 // toOrderDTO converts Order entity to OrderDTO
 func toOrderDTO(order *entity.Order) *dto.OrderDTO {
-	orderItems := make([]dto.OrderItemDTO, 0)
-	for _, item := range order.OrderItems {
+	orderItems := make([]dto.OrderItemDTO, 0, len(order.Items))
+
+	for _, item := range order.Items {
 		orderItems = append(orderItems, dto.OrderItemDTO{
-			ID:        item.ID,
 			ProductID: item.ProductID,
 			Quantity:  item.Quantity,
 			Price:     item.Price,
-			CreatedAt: item.CreatedAt,
 		})
 	}
 
