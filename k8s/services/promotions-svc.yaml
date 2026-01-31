@@ -1,60 +1,62 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: promotions-service
-  namespace: services
+   name: promotions-service
+   namespace: services
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: promotions
-  template:
-    metadata:
-      labels:
-        app: promotions
-    spec:
-      containers:
-        - name: promotions
-          image: rengumin/promotions-svc:1.0
-          ports:
-            - containerPort: 8080
-          env:
-            - name: DB_HOST
-              value: "promotions-pg-db.storages"
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_USER
-              value: postgres
-            - name: DB_PASSWORD
-              value: postgres
-            - name: DB_NAME
-              value: mydatabase
-            - name: RPC_PORT
-              value: "50050"
-            - name: SERVER_PORT
-              value: "8080"
-          resources:
-            requests:
-              cpu: "500m"
-            limits:
-              cpu: "1"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: promotions
+   template:
+      metadata:
+         labels:
+            app: promotions
+      spec:
+         containers:
+            - name: promotions
+              image: rengumin/promotions-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: "promotions-pg-db.storages"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: RPC_PORT
+                   value: "50050"
+                 - name: SERVER_PORT
+                   value: "8080"
+              resources:
+                 requests:
+                    cpu: "500m"
+                    memory: "256Mi"
+                 limits:
+                    cpu: "1"
+                    memory: "512Mi"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: promotions-svc
-  namespace: services
+   name: promotions-svc
+   namespace: services
 spec:
-  type: LoadBalancer
-  selector:
-    app: promotions
-  ports:
-    - protocol: TCP
-      name: http
-      port: 8080
-      targetPort: 8080
-    - protocol: TCP
-      name: grpc
-      port: 50050
-      targetPort: 50050
+   type: LoadBalancer
+   selector:
+      app: promotions
+   ports:
+      - protocol: TCP
+        name: http
+        port: 8080
+        targetPort: 8080
+      - protocol: TCP
+        name: grpc
+        port: 50050
+        targetPort: 50050

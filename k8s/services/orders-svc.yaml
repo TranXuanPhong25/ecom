@@ -1,58 +1,58 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-service
-  namespace: services
-  labels:
-    app: orders
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
+   name: orders-service
+   namespace: services
+   labels:
       app: orders
-  template:
-    metadata:
-      labels:
-        app: orders
-    spec:
-      containers:
-      - name: orders
-        image: rengumin/orders-svc:1.0
-        ports:
-        - containerPort: 8080
-        env:
-          - name: DB_HOST
-            value: orders-pg-db.storages
-          - name: DB_PORT
-            value: "5432"
-          - name: DB_USER
-            value: postgres
-          - name: DB_PASSWORD
-            value: postgres
-          - name: DB_NAME
-            value: mydatabase
-          - name: SPRING_DEVTOOLS_RESTART_ENABLED
-            value: "false"
-          - name: SPRING_DEVTOOLS_LIVERELOAD_ENABLED
-            value: "false"
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: orders
+   template:
+      metadata:
+         labels:
+            app: orders
+      spec:
+         containers:
+            - name: orders
+              image: rengumin/orders-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: orders-pg-db.storages
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: SPRING_DEVTOOLS_RESTART_ENABLED
+                   value: "false"
+                 - name: SPRING_DEVTOOLS_LIVERELOAD_ENABLED
+                   value: "false"
+              resources:
+                 limits:
+                    memory: "512Mi"
+                    cpu: "500m"
+                 requests:
+                    memory: "1G"
+                    cpu: "250m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: orders-svc
-  namespace: services
+   name: orders-svc
+   namespace: services
 spec:
-  type: ClusterIP
-  selector:
-    app: orders
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+   type: ClusterIP
+   selector:
+      app: orders
+   ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080

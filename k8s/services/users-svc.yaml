@@ -1,47 +1,54 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users-service
-  namespace: services
+   name: users-service
+   namespace: services
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: users
-  template:
-    metadata:
-      labels:
-        app: users
-    spec:
-      containers:
-      - name: users
-        image: rengumin/users-svc:1.0
-        ports:
-        - containerPort: 50050
-        env:
-          - name: DB_HOST
-            value: "users-pg-db.storages"
-          - name: DB_PORT
-            value: "5432"
-          - name: DB_USER
-            value: postgres
-          - name: DB_PASSWORD
-            value: postgres
-          - name: DB_NAME
-            value: mydatabase
-          - name: RPC_PORT
-            value: "50050"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: users
+   template:
+      metadata:
+         labels:
+            app: users
+      spec:
+         containers:
+            - name: users
+              image: rengumin/users-svc:1.0
+              ports:
+                 - containerPort: 50050
+              env:
+                 - name: DB_HOST
+                   value: "users-pg-db.storages"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: RPC_PORT
+                   value: "50050"
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "128Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "256Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: users-svc
-  namespace: services
+   name: users-svc
+   namespace: services
 spec:
-  type: ClusterIP
-  selector:
-    app: users
-  ports:
-  - protocol: TCP
-    port: 50050  
-    targetPort: 50050
+   type: ClusterIP
+   selector:
+      app: users
+   ports:
+      - protocol: TCP
+        port: 50050
+        targetPort: 50050

@@ -1,49 +1,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: products-service
-  namespace: services
-  labels:
-    app: products
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
+   name: products-service
+   namespace: services
+   labels:
       app: products
-  template:
-    metadata:
-      labels:
-        app: products
-    spec:
-      containers:
-      - name: products
-        image: rengumin/products-svc:1.0
-        ports:
-        - containerPort: 8080
-        env:
-          - name: DB_HOST
-            value: products-pg-db.storages
-          - name: DB_PORT
-            value: "5432"
-          - name: DB_USER
-            value: postgres
-          - name: DB_PASSWORD
-            value: postgres
-          - name: DB_NAME
-            value: mydatabase
-          - name: PRODUCT_CATEGORIES_SERVICE_URL
-            value: http://product-categories-svc.services:8080/api/product-categories
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: products
+   template:
+      metadata:
+         labels:
+            app: products
+      spec:
+         containers:
+            - name: products
+              image: rengumin/products-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: products-pg-db.storages
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: PRODUCT_CATEGORIES_SERVICE_URL
+                   value: http://product-categories-svc.services:8080/api/product-categories
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "128Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "1G"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: products-svc
-  namespace: services
+   name: products-svc
+   namespace: services
 spec:
-  type: ClusterIP
-  selector:
-    app: products
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+   type: ClusterIP
+   selector:
+      app: products
+   ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080
