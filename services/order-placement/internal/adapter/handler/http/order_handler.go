@@ -7,7 +7,6 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/dto"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/port"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/validators"
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,7 +24,7 @@ func NewOrderHandler(service port.OrderService) *OrderHandler {
 
 // RegisterRoutes registers all order routes
 func (h *OrderHandler) RegisterRoutes(e *echo.Echo) {
-	e.POST("/api/order-placement", h.CreateOrder)
+	e.POST("/api/orders/placement", h.CreateOrder)
 }
 
 // CreateOrder handles order creation request
@@ -45,16 +44,13 @@ func (h *OrderHandler) CreateOrder(c echo.Context) error {
 			"detail": err.Error(),
 		})
 	}
-	userID := c.Request().Header["X-User-Id"][0]
 
-	if userID == "" {
+	userIDHeader := c.Request().Header.Get("X-User-Id")
+	if userIDHeader == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
 	}
-	safeUserID, err := uuid.Parse(userID)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid User ID"})
-	}
-	res, svcErr := h.service.CreateOrder(req, safeUserID)
+
+	res, svcErr := h.service.CreateOrder(req, userIDHeader)
 	if svcErr != nil {
 		return c.JSON(svcErr.Code, svcErr)
 	}

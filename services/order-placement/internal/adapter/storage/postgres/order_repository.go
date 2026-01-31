@@ -1,16 +1,13 @@
 package postgres
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/config"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/dto"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/entity"
 	"github.com/TranXuanPhong25/ecom/services/order-placement/internal/core/port"
-	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -45,78 +42,31 @@ func ConnectDB() *gorm.DB {
 // CreateOrderWithItems creates an order with items stored as JSONB
 func (r *OrderRepository) CreateOrderWithItems(order *entity.Order, items []dto.OrderItemInput) (*entity.Order, error) {
 	// Convert input items to entity items
-	var totalAmount float64
 	orderItems := make(entity.OrderItems, 0, len(items))
 
 	for _, item := range items {
 		orderItem := entity.OrderItem{
-			ProductID: item.ProductID,
-			Quantity:  item.Quantity,
-			Price:     0, // TODO: Fetch from product service
+			ProductID:     item.ProductID,
+			ProductName:   item.ProductName,
+			ProductSku:    item.ProductSku,
+			ImageUrl:      item.ImageUrl,
+			VariantID:     item.VariantID,
+			VariantName:   item.VariantName,
+			OriginalPrice: item.OriginalPrice,
+			SalePrice:     item.SalePrice,
+			Quantity:      item.Quantity,
 		}
-
-		totalAmount += orderItem.Price * float64(orderItem.Quantity)
 		orderItems = append(orderItems, orderItem)
 	}
 
-	// Set order fields
+	// Set order items and calculate total
 	order.Items = orderItems
-	order.TotalAmount = totalAmount
-
-	// Start transaction
-	tx := r.db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
+	order.CalculateTotalAmount()
 
 	// Create order with JSONB items
-	if err := tx.Create(order).Error; err != nil {
-		return nil, err
-	}
-
-	// Create outbox event
-	if err := r.createOutboxEvent(tx, order); err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	// Commit transaction
-	if err := tx.Commit().Error; err != nil {
+	if err := r.db.Create(order).Error; err != nil {
 		return nil, err
 	}
 
 	return order, nil
-}
-
-// createOutboxEvent creates an outbox event for the order
-func (r *OrderRepository) createOutboxEvent(tx *gorm.DB, order *entity.Order) error {
-	// Prepare event payload
-	payload := map[string]interface{}{
-		"orderId":     order.ID.String(),
-		"userId":      order.UserID.String(),
-		"totalAmount": order.TotalAmount,
-		"status":      order.Status,
-		"items":       order.Items,
-		"createdAt":   order.CreatedAt,
-	}
-
-	payloadJSON, err := json.Marshal(payload)
-	if err != nil {
-		return err
-	}
-
-	// Create outbox event
-	outboxEvent := &entity.Outbox{
-		ID:            uuid.New(),
-		AggregateType: "Order",
-		AggregateID:   order.ID.String(),
-		Type:          "OrderCreated",
-		Payload:       payloadJSON,
-		Timestamp:     time.Now(),
-		TracingSpanID: nil, // Optional: add tracing span ID if available
-	}
-
-	return tx.Create(outboxEvent).Error
 }
