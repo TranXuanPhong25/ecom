@@ -5,10 +5,8 @@ import com.ecom.orders.core.domain.service.OrderService;
 import com.ecom.orders.infras.adapter.inbound.event.OrderCreatedEvent;
 import com.ecom.orders.infras.adapter.inbound.event.mapper.OrderEventMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;

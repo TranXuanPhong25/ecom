@@ -20,7 +20,6 @@ import java.util.UUID;
 public class ProductController {
     private final ProductService productService;
 
-
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody @Valid CreateProductRequest createProductRequest) {
         ProductDTO productDTO = productService.createProduct(createProductRequest);
@@ -33,7 +32,8 @@ public class ProductController {
     }
 
     @GetMapping(params = "shop_id")
-    public PageResponse<ProductDTO> getProductsByShopId(@RequestParam(name = "shop_id") UUID shopId, Pageable pageable) {
+    public PageResponse<ProductDTO> getProductsByShopId(@RequestParam(name = "shop_id") UUID shopId,
+            Pageable pageable) {
 
         return new PageResponse<>(productService.getProductsByShopId(shopId, pageable));
     }
@@ -45,8 +45,9 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody CreateProductRequest updateProductRequest) {
-        ProductDTO updatedProduct = productService.updateProduct(id,updateProductRequest);
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id,
+            @RequestBody CreateProductRequest updateProductRequest) {
+        ProductDTO updatedProduct = productService.updateProduct(id, updateProductRequest);
         return updatedProduct != null ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
     }
 

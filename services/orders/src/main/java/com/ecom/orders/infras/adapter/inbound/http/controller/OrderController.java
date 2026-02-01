@@ -4,6 +4,7 @@ import com.ecom.orders.core.app.dto.ConfirmOrdersRequest;
 import com.ecom.orders.core.app.dto.ConfirmOrdersResponse;
 import com.ecom.orders.core.app.dto.OrderDTO;
 import com.ecom.orders.core.app.dto.OrderListItemDTO;
+import com.ecom.orders.core.app.dto.PageResponse;
 import com.ecom.orders.core.app.mapper.OrderMapper;
 import com.ecom.orders.core.domain.model.Order;
 import com.ecom.orders.core.domain.model.OrderStatus;
@@ -11,6 +12,9 @@ import com.ecom.orders.core.domain.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,10 +50,11 @@ public class OrderController {
     * @param status - lọc theo status (optional)
     */
    @GetMapping
-   public ResponseEntity<List<OrderListItemDTO>> searchOrders(
+   public PageResponse<OrderListItemDTO> searchOrders(
          @RequestHeader(value = "X-User-Id", required = true) String userId,
          @RequestParam(required = false) String shopId,
-         @RequestParam(required = false) String status) {
+         @RequestParam(required = false) String status,
+         Pageable pageable) {
       log.info("Searching orders - userId: {}, shopId: {}, status: {}", userId, shopId, status);
 
       try {
@@ -58,13 +63,12 @@ public class OrderController {
             orderStatus = OrderStatus.valueOf(status.toUpperCase());
          }
 
-         List<Order> orders = orderService.searchOrders(userId, shopId, orderStatus);
-         List<OrderListItemDTO> response = orderMapper.toListItemDTOs(orders);
-
-         return ResponseEntity.ok(response);
+         Page<Order> pageOrders = orderService.searchOrders(userId, shopId, orderStatus, pageable);
+         Page<OrderListItemDTO> response = pageOrders.map(orderMapper::toListItemDTO);
+         return new PageResponse<>(response);
       } catch (IllegalArgumentException e) {
          log.error("Invalid order status: {}", status);
-         return ResponseEntity.badRequest().build();
+         return new PageResponse<>(null);
       }
    }
 

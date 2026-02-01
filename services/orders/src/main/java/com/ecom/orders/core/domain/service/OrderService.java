@@ -6,6 +6,9 @@ import com.ecom.orders.infras.adapter.outbound.persistence.repository.OrderRepos
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,7 +89,7 @@ public class OrderService {
     * Tìm kiếm orders với các filter tùy chọn
     */
    @Transactional(readOnly = true)
-   public List<Order> searchOrders(String userId, String shopId, OrderStatus status) {
+   public Page<Order> searchOrders(String userId, String shopId, OrderStatus status, Pageable pageable) {
       Specification<Order> spec = (root, query, cb) -> {
          List<Predicate> predicates = new ArrayList<>();
 
@@ -106,6 +109,6 @@ public class OrderService {
          return cb.and(predicates.toArray(new Predicate[0]));
       };
 
-      return orderRepository.findAll(spec);
+      return orderRepository.findAll(spec, pageable);
    }
 }
