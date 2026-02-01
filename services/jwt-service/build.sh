@@ -8,7 +8,7 @@ VERSION="1.0"
 echo "Building $SERVICE_NAME..."
 
 # Build the Docker image
-docker build -t $DOCKER_USERNAME/$SERVICE_NAME:$VERSION .
+docker build -t $DOCKER_USERNAME/$SERVICE_NAME:$VERSION . --target=release
 docker save $DOCKER_USERNAME/$SERVICE_NAME:$VERSION | sudo k3s ctr images import -
 
 # # Push to Docker Hub

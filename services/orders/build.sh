@@ -1,6 +1,6 @@
 #!/bin/bash
 # Build and push Order Placement service to Docker Hub
-SERVICE_NAME="order-placement-svc"
+SERVICE_NAME="orders-svc"
 DOCKER_USERNAME="rengumin"
 VERSION="1.0"
 
@@ -13,6 +13,6 @@ docker save $DOCKER_USERNAME/$SERVICE_NAME:$VERSION | sudo k3s ctr images import
 # # Push to Docker Hub
 # echo "Pushing $SERVICE_NAME to Docker Hub..."
 # docker push $DOCKER_USERNAME/$SERVICE_NAME:$VERSION
-kubectl rollout restart deployment order-placement-service -n services
+kubectl rollout restart deployment orders-service -n services
 
 echo "$SERVICE_NAME built and pushed successfully!"
