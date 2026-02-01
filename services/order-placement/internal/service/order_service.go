@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/hex"
 	"fmt"
 	"net/http"
 	"time"
@@ -29,7 +28,6 @@ func NewOrderService(repo port.OrderRepository) port.OrderService {
 func (s *OrderService) CreateOrder(request *dto.CreateOrderRequest, userID string) (*dto.CreateOrderResponse, *echo.HTTPError) {
 	// Generate order number
 	orderNumber := generateOrderNumber()
-
 	// Convert discount
 	discount := entity.DiscountInfo{}
 	if request.Discount != nil {
@@ -74,9 +72,8 @@ func generateOrderNumber() string {
 	date := now.Format("020106") // ddmmyy
 
 	// combine time (ns) + uuid, then hex, take 6 chars
-	raw := fmt.Sprintf("%d%s", now.UnixNano(), uuid.New().String())
-	hex6 := hex.EncodeToString([]byte(raw))[:6]
-	return fmt.Sprintf("ORD-%s-%s", date, hex6)
+	raw := fmt.Sprintf("%d%s", now.UnixNano(), uuid.New().String()[:8])
+	return fmt.Sprintf("ORD-%s-%s", date, raw)
 }
 
 // toOrderDTO converts Order entity to OrderDTO

@@ -34,7 +34,7 @@ func (h *OrderHandler) CreateOrder(c echo.Context) error {
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"status": strconv.Itoa(http.StatusBadRequest),
-			"detail": "Invalid request format",
+			"detail": "Invalid request format: " + err.Error(),
 		})
 	}
 
