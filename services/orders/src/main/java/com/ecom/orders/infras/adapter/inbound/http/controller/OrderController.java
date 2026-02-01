@@ -3,6 +3,7 @@ package com.ecom.orders.infras.adapter.inbound.http.controller;
 import com.ecom.orders.core.app.dto.ConfirmOrdersRequest;
 import com.ecom.orders.core.app.dto.ConfirmOrdersResponse;
 import com.ecom.orders.core.app.dto.OrderDTO;
+import com.ecom.orders.core.app.dto.OrderListItemDTO;
 import com.ecom.orders.core.app.mapper.OrderMapper;
 import com.ecom.orders.core.domain.model.Order;
 import com.ecom.orders.core.domain.model.OrderStatus;
@@ -40,13 +41,12 @@ public class OrderController {
    /**
     * Tìm kiếm orders với các filter tùy chọn
     * 
-    * @param userId - lấy từ header X-User-Id (optional)
+    * @param userId - lấy từ header X-User-Id
     * @param shopId - lọc theo shop (optional)
-    * @param status - lọc theo status: CREATED, CONFIRMED, PICKED_UP, SHIPPED,
-    *               DELIVERED, CANCELLED, REFUNDED (optional)
+    * @param status - lọc theo status (optional)
     */
    @GetMapping
-   public ResponseEntity<List<OrderDTO>> searchOrders(
+   public ResponseEntity<List<OrderListItemDTO>> searchOrders(
          @RequestHeader(value = "X-User-Id", required = true) String userId,
          @RequestParam(required = false) String shopId,
          @RequestParam(required = false) String status) {
@@ -59,7 +59,7 @@ public class OrderController {
          }
 
          List<Order> orders = orderService.searchOrders(userId, shopId, orderStatus);
-         List<OrderDTO> response = orderMapper.toDTOs(orders);
+         List<OrderListItemDTO> response = orderMapper.toListItemDTOs(orders);
 
          return ResponseEntity.ok(response);
       } catch (IllegalArgumentException e) {

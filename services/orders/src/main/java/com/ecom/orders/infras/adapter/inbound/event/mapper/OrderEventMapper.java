@@ -32,8 +32,7 @@ public class OrderEventMapper {
 
    public Order toEntity(OrderCreatedEvent event) {
       Order order = Order.builder()
-            // Không set id - để JPA tự generate
-            // .id(event.getId())
+            .id(event.getId())
             .orderNumber(event.getOrderNumber()) // Dùng orderNumber làm business key
             .userId(event.getUserId())
             .shopId(event.getShopId())

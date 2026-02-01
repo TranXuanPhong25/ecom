@@ -23,7 +23,6 @@ import java.util.Map;
 public class Order {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "order_number", unique = true, nullable = false, length = 50)

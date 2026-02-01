@@ -24,7 +24,7 @@ public class OrderService {
    @Transactional
    public Order createOrder(Order order) {
       log.info("Creating order for user: {}", order.getUserId());
-
+      order.setStatus(OrderStatus.UNCONFIRMED);
       // Calculate total amount from order items
       order.calculateTotalAmount();
 

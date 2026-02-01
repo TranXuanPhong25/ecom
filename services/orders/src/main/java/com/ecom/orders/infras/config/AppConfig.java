@@ -16,7 +16,6 @@ public class AppConfig {
 
    @Bean
    @Qualifier("snakeCaseObjectMapper")
-   @Primary
    public ObjectMapper snakeCaseObjectMapper() {
       ObjectMapper mapper = new ObjectMapper();
       mapper.registerModule(new JavaTimeModule());
@@ -28,6 +27,7 @@ public class AppConfig {
 
    @Bean
    @Qualifier("camelCaseObjectMapper")
+   @Primary
    public ObjectMapper camelCaseObjectMapper() {
       ObjectMapper mapper = new ObjectMapper();
       mapper.registerModule(new JavaTimeModule());

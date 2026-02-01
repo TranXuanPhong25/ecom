@@ -7,6 +7,9 @@ import com.ecom.orders.infras.adapter.inbound.event.mapper.OrderEventMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -16,12 +19,19 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class OrderCreatedEventListener {
+   private ObjectMapper snakeCaseMapper;
+   private OrderEventMapper orderEventMapper;
+   private OrderService orderService;
 
-   private final ObjectMapper objectMapper;
-   private final OrderEventMapper orderEventMapper;
-   private final OrderService orderService;
+   OrderCreatedEventListener(
+         @Qualifier("snakeCaseObjectMapper") ObjectMapper snakeCaseMapper,
+         OrderEventMapper orderEventMapper,
+         OrderService orderService) {
+      this.snakeCaseMapper = snakeCaseMapper;
+      this.orderEventMapper = orderEventMapper;
+      this.orderService = orderService;
+   }
 
    @KafkaListener(topics = "${spring.kafka.topics.order-created}", groupId = "${spring.kafka.consumer.group-id}", containerFactory = "kafkaListenerContainerFactory")
    public void handleOrderCreatedEvent(
@@ -35,7 +45,7 @@ public class OrderCreatedEventListener {
          log.info("Message: {}", message);
 
          // Parse the event
-         OrderCreatedEvent event = objectMapper.readValue(message, OrderCreatedEvent.class);
+         OrderCreatedEvent event = snakeCaseMapper.readValue(message, OrderCreatedEvent.class);
 
          // Map to domain entity and process
          processOrderCreatedEvent(event);

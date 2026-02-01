@@ -4,6 +4,7 @@ import com.ecom.orders.core.app.dto.CreateOrderItemRequest;
 import com.ecom.orders.core.app.dto.CreateOrderRequest;
 import com.ecom.orders.core.app.dto.OrderDTO;
 import com.ecom.orders.core.app.dto.OrderItemDTO;
+import com.ecom.orders.core.app.dto.OrderListItemDTO;
 import com.ecom.orders.core.domain.model.Order;
 import com.ecom.orders.core.domain.model.OrderItem;
 import org.springframework.stereotype.Component;
@@ -117,6 +118,29 @@ public class OrderMapper {
       public List<OrderDTO> toDTOs(List<Order> orders) {
             return orders.stream()
                         .map(this::toDTO)
+                        .collect(Collectors.toList());
+      }
+
+      public OrderListItemDTO toListItemDTO(Order order) {
+            List<OrderItem> items = order.getOrderItems() != null ? order.getOrderItems() : List.of();
+            OrderItem firstItem = items.isEmpty() ? null : items.get(0);
+
+            return OrderListItemDTO.builder()
+                        .id(order.getId())
+                        .orderNumber(order.getOrderNumber())
+                        .status(order.getStatus().name())
+                        .paymentStatus(order.getPaymentStatus())
+                        .totalAmount(order.getTotalAmount())
+                        .itemCount(items.size())
+                        .firstItemName(firstItem != null ? firstItem.getProductName() : null)
+                        .firstItemImage(firstItem != null ? firstItem.getImageUrl() : null)
+                        .createdAt(order.getCreatedAt())
+                        .build();
+      }
+
+      public List<OrderListItemDTO> toListItemDTOs(List<Order> orders) {
+            return orders.stream()
+                        .map(this::toListItemDTO)
                         .collect(Collectors.toList());
       }
 
