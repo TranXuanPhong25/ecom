@@ -2,10 +2,14 @@
 package dtos
 
 type ProductVariant struct {
-	ID    int     `json:"id"`
-	Price float64 `json:"price"`
-	Stock int     `json:"stockQuantity"`
-	Name  string  `json:"name"`
+	ID            int      `json:"id"`
+	OriginalPrice float64  `json:"originalPrice"`
+	SalePrice     float64  `json:"salePrice"`
+	Stock         int      `json:"stockQuantity"`
+	Name          string   `json:"name"`
+	Sku           string   `json:"sku,omitempty"`
+	Images        []string `json:"images,omitempty"`
+	CoverImage    string   `json:"coverImage,omitempty"`
 }
 
 type StockCheckRequest struct {
