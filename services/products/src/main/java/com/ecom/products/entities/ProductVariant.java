@@ -29,11 +29,15 @@ public class ProductVariant {
     @Column(name = "product_id")
     private Long productId;
 
-    private BigDecimal price;
+    @Column(name = "original_price")
+    private BigDecimal originalPrice;
+
+    @Column(name = "sale_price")
+    private BigDecimal salePrice;
 
     private List<String> images;
 
-    //    @Convert(converter = JsonBConverter.class)
+    // @Convert(converter = JsonBConverter.class)
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String, String> attributes;
@@ -47,6 +51,4 @@ public class ProductVariant {
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
 
-    
 }
-

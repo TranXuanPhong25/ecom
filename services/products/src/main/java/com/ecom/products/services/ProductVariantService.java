@@ -33,7 +33,8 @@ public class ProductVariantService {
     public GetProductVariantsResponse getVariantByIds(List<Long> ids) {
         List<ProductVariant> foundVariants = variantRepository.findAllByIdWithProduct(ids);
         System.out.println(foundVariants);
-        List<VariantWithNameDTO> variantDTOs = foundVariants.stream().map(this::toVariantWithNameDTO).collect(Collectors.toList());
+        List<VariantWithNameDTO> variantDTOs = foundVariants.stream().map(this::toVariantWithNameDTO)
+                .collect(Collectors.toList());
         List<Long> foundIds = foundVariants.stream().map(ProductVariant::getId).collect(Collectors.toList());
         List<Long> notFoundIds = ids.stream().filter(id -> !foundIds.contains(id)).collect(Collectors.toList());
         return new GetProductVariantsResponse(variantDTOs, notFoundIds);
@@ -42,7 +43,8 @@ public class ProductVariantService {
     @Transactional
     public VariantDTO updateVariant(Long id, VariantDTO variantDTO) {
         return variantRepository.findById(id).map(variant -> {
-            variant.setPrice(variantDTO.getPrice());
+            variant.setOriginalPrice(variantDTO.getOriginalPrice());
+            variant.setSalePrice(variantDTO.getSalePrice());
             variant.setStockQuantity(variantDTO.getStockQuantity());
             variant.setAttributes(variantDTO.getAttributes());
             variant.setImages(variantDTO.getImages());
@@ -59,7 +61,8 @@ public class ProductVariantService {
     VariantDTO toDTO(ProductVariant variant) {
         VariantDTO dto = new VariantDTO();
         dto.setId(variant.getId());
-        dto.setPrice(variant.getPrice());
+        dto.setOriginalPrice(variant.getOriginalPrice());
+        dto.setSalePrice(variant.getSalePrice());
         dto.setStockQuantity(variant.getStockQuantity());
         dto.setAttributes(variant.getAttributes());
         dto.setActive(variant.isActive());
@@ -74,13 +77,13 @@ public class ProductVariantService {
         VariantWithNameDTO dto = new VariantWithNameDTO(
                 variant.getId(),
                 variant.getProduct() != null ? variant.getProduct().getName() : null,
-                variant.getPrice(),
+                variant.getOriginalPrice(),
+                variant.getSalePrice(),
                 variant.getAttributes(),
                 variant.isActive(),
                 variant.getStockQuantity(),
                 variant.getSku(),
-                variant.getImages().toArray(new String[0])
-        );
+                variant.getImages().toArray(new String[0]));
         return dto;
     }
 
@@ -88,7 +91,8 @@ public class ProductVariantService {
         ProductVariant variant = new ProductVariant();
         variant.setId(dto.getId());
         variant.setImages(dto.getImages());
-        variant.setPrice(dto.getPrice());
+        variant.setOriginalPrice(dto.getOriginalPrice());
+        variant.setSalePrice(dto.getSalePrice());
         variant.setStockQuantity(dto.getStockQuantity());
         variant.setAttributes(dto.getAttributes());
         variant.setActive(dto.isActive());

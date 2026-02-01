@@ -13,8 +13,11 @@ import java.util.Map;
 public class VariantDTO {
     private Long id;
 
-    @NotNull(message = "Please provide a price for the variant")
-    private BigDecimal price;
+    @NotNull(message = "Please provide original price for the variant")
+    private BigDecimal originalPrice;
+
+    @NotNull(message = "Please provide sale price for the variant")
+    private BigDecimal salePrice;
 
     private Map<String, String> attributes;
     private boolean isActive;
@@ -22,10 +25,13 @@ public class VariantDTO {
     private Integer stockQuantity;
     private List<String> images;
     private String sku;
-    public VariantDTO(Long id, BigDecimal price, Map<String, String> attributes, boolean isActive,
-                      Integer stockQuantity, String sku, String[] images) {
+
+    public VariantDTO(Long id, BigDecimal originalPrice, BigDecimal salePrice,
+            Map<String, String> attributes, boolean isActive,
+            Integer stockQuantity, String sku, String[] images) {
         this.id = id;
-        this.price = price;
+        this.originalPrice = originalPrice;
+        this.salePrice = salePrice;
         this.attributes = attributes;
         this.isActive = isActive;
         this.stockQuantity = stockQuantity;
