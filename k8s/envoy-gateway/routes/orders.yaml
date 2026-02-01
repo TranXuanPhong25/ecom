@@ -20,11 +20,11 @@ spec:
              namespace: services
              port: 8080
 
-      # - matches:
-      #      - path:
-      #           type: PathPrefix
-      #           value: /api/orders
-      #   backendRefs:
-      #      - name: orders-svc
-      #        namespace: services
-      #        port: 8080
+      - matches:
+           - path:
+                type: PathPrefix
+                value: /api/orders
+        backendRefs:
+           - name: orders-svc
+             namespace: services
+             port: 8080
