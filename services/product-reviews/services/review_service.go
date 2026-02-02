@@ -7,6 +7,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/dtos"
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/models"
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/repositories"
+	"github.com/google/uuid"
 )
 
 type ReviewService struct {
@@ -79,7 +80,7 @@ func (s *ReviewService) GetProductReviews(productID uint, page, limit int) (*dto
 }
 
 // GetUserReviews gets all reviews by a user
-func (s *ReviewService) GetUserReviews(userID uint) ([]dtos.ReviewResponse, error) {
+func (s *ReviewService) GetUserReviews(userID uuid.UUID) ([]dtos.ReviewResponse, error) {
 	reviews, err := s.repo.FindByUserID(userID)
 	if err != nil {
 		return nil, err
@@ -94,7 +95,7 @@ func (s *ReviewService) GetUserReviews(userID uint) ([]dtos.ReviewResponse, erro
 }
 
 // UpdateReview updates an existing review
-func (s *ReviewService) UpdateReview(id uint, req *dtos.UpdateReviewRequest, userID uint) (*dtos.ReviewResponse, error) {
+func (s *ReviewService) UpdateReview(id uint, req *dtos.UpdateReviewRequest, userID uuid.UUID) (*dtos.ReviewResponse, error) {
 	review, err := s.repo.FindByID(id)
 	if err != nil {
 		return nil, errors.New("review not found")
@@ -119,7 +120,7 @@ func (s *ReviewService) UpdateReview(id uint, req *dtos.UpdateReviewRequest, use
 }
 
 // DeleteReview deletes a review
-func (s *ReviewService) DeleteReview(id uint, userID uint) error {
+func (s *ReviewService) DeleteReview(id uint, userID uuid.UUID) error {
 	review, err := s.repo.FindByID(id)
 	if err != nil {
 		return errors.New("review not found")

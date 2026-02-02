@@ -8,6 +8,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/services"
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/utils"
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/validators"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -78,12 +79,17 @@ func (ctrl *ReviewController) GetProductReviews(c echo.Context) error {
 
 // GetUserReviews gets all reviews by a user
 func (ctrl *ReviewController) GetUserReviews(c echo.Context) error {
-	userID, err := strconv.ParseUint(c.Param("userId"), 10, 32)
+	userID := c.Request().Header["X-User-Id"][0]
+	if userID == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "User ID is required"})
+	}
+	safeUserID, err := uuid.Parse(userID)
+
 	if err != nil {
 		return utils.BadRequestError(c, "Invalid user ID")
 	}
 
-	reviews, err := ctrl.service.GetUserReviews(uint(userID))
+	reviews, err := ctrl.service.GetUserReviews(safeUserID)
 	if err != nil {
 		return utils.InternalServerError(c, err.Error())
 	}
@@ -110,12 +116,16 @@ func (ctrl *ReviewController) UpdateReview(c echo.Context) error {
 
 	// TODO: Extract userID from JWT token
 	// For now, get from request body or header
-	userID, _ := strconv.ParseUint(c.Request().Header.Get("X-User-ID"), 10, 32)
-	if userID == 0 {
+	userIDStr := c.Request().Header.Get("X-User-Id")
+	if userIDStr == "" {
 		return utils.BadRequestError(c, "User ID is required")
 	}
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return utils.BadRequestError(c, "Invalid User ID format")
+	}
 
-	review, err := ctrl.service.UpdateReview(uint(id), &req, uint(userID))
+	review, err := ctrl.service.UpdateReview(uint(id), &req, userID)
 	if err != nil {
 		if err.Error() == "review not found" {
 			return utils.NotFoundError(c, err.Error())
@@ -138,12 +148,16 @@ func (ctrl *ReviewController) DeleteReview(c echo.Context) error {
 
 	// TODO: Extract userID from JWT token
 	// For now, get from header
-	userID, _ := strconv.ParseUint(c.Request().Header.Get("X-User-ID"), 10, 32)
-	if userID == 0 {
+	userIDStr := c.Request().Header.Get("X-User-Id")
+	if userIDStr == "" {
 		return utils.BadRequestError(c, "User ID is required")
 	}
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return utils.BadRequestError(c, "Invalid User ID format")
+	}
 
-	err = ctrl.service.DeleteReview(uint(id), uint(userID))
+	err = ctrl.service.DeleteReview(uint(id), userID)
 	if err != nil {
 		if err.Error() == "review not found" {
 			return utils.NotFoundError(c, err.Error())
@@ -171,4 +185,3 @@ func (ctrl *ReviewController) GetProductStats(c echo.Context) error {
 
 	return utils.SuccessResponse(c, http.StatusOK, "Statistics retrieved successfully", stats)
 }
-

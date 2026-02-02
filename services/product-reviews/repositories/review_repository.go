@@ -4,6 +4,7 @@ import (
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/database"
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/dtos"
 	"github.com/TranXuanPhong25/ecom/services/product-reviews/models"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -44,7 +45,7 @@ func (r *ReviewRepository) FindByProductID(productID uint, limit, offset int) ([
 }
 
 // FindByUserID finds all reviews by user ID
-func (r *ReviewRepository) FindByUserID(userID uint) ([]models.Review, error) {
+func (r *ReviewRepository) FindByUserID(userID uuid.UUID) ([]models.Review, error) {
 	var reviews []models.Review
 	err := r.db.Where("user_id = ?", userID).
 		Order("created_at DESC").

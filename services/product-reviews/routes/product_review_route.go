@@ -9,16 +9,15 @@ func ReviewRoutes(e *echo.Echo) {
 	ctrl := controllers.NewReviewController()
 
 	// Review CRUD
-	e.POST("/reviews", ctrl.CreateReview)
-	e.GET("/reviews/:id", ctrl.GetReview)
-	e.PUT("/reviews/:id", ctrl.UpdateReview)
-	e.DELETE("/reviews/:id", ctrl.DeleteReview)
+	e.POST("/api/reviews", ctrl.CreateReview)
+	e.GET("/api/reviews/:id", ctrl.GetReview)
+	e.PUT("/api/reviews/:id", ctrl.UpdateReview)
+	e.DELETE("/api/reviews/:id", ctrl.DeleteReview)
 
 	// Product reviews
-	e.GET("/products/:productId/reviews", ctrl.GetProductReviews)
-	e.GET("/products/:productId/reviews/stats", ctrl.GetProductStats)
+	e.GET("/api/reviews/products", ctrl.GetProductReviews)
+	e.GET("/api/reviews/products/stats", ctrl.GetProductStats)
 
 	// User reviews
-	e.GET("/users/:userId/reviews", ctrl.GetUserReviews)
+	e.GET("/api/reviews/users", ctrl.GetUserReviews)
 }
-

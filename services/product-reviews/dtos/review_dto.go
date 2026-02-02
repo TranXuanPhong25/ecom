@@ -1,13 +1,15 @@
 package dtos
 
+import "github.com/google/uuid"
+
 // CreateReviewRequest represents the request body for creating a review
 type CreateReviewRequest struct {
-	ProductID uint   `json:"product_id" validate:"required,min=1"`
-	UserID    uint   `json:"user_id" validate:"required,min=1"` // TODO: Extract from JWT token
-	Username  string `json:"username" validate:"required,min=2,max=50"`
-	Rating    int    `json:"rating" validate:"required,min=1,max=5"`
-	Title     string `json:"title" validate:"required,min=10,max=100"`
-	Comment   string `json:"comment" validate:"required,min=20,max=1000"`
+	ProductID uint      `json:"productId" validate:"required,min=1"`
+	UserID    uuid.UUID `json:"userId" validate:"required"` // TODO: Extract from JWT token
+	Username  string    `json:"username" validate:"required,min=2,max=50"`
+	Rating    int       `json:"rating" validate:"required,min=1,max=5"`
+	Title     string    `json:"title" validate:"required,min=10,max=100"`
+	Comment   string    `json:"comment" validate:"required,min=20,max=1000"`
 }
 
 // UpdateReviewRequest represents the request body for updating a review
@@ -19,15 +21,15 @@ type UpdateReviewRequest struct {
 
 // ReviewResponse represents a review in API responses
 type ReviewResponse struct {
-	ID        uint   `json:"id"`
-	ProductID uint   `json:"product_id"`
-	UserID    uint   `json:"user_id"`
-	Username  string `json:"username"`
-	Rating    int    `json:"rating"`
-	Title     string `json:"title"`
-	Comment   string `json:"comment"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	ID        uint      `json:"id"`
+	ProductID uint      `json:"productId"`
+	UserID    uuid.UUID `json:"userId"`
+	Username  string    `json:"username"`
+	Rating    int       `json:"rating"`
+	Title     string    `json:"title"`
+	Comment   string    `json:"comment"`
+	CreatedAt string    `json:"createdAt"`
+	UpdatedAt string    `json:"updatedAt"`
 }
 
 // ReviewListResponse represents a paginated list of reviews
@@ -40,14 +42,14 @@ type ReviewListResponse struct {
 
 // ProductRatingStatsResponse represents product rating statistics
 type ProductRatingStatsResponse struct {
-	ProductID      uint    `json:"product_id"`
-	AverageRating  float64 `json:"average_rating"`
-	TotalReviews   int64   `json:"total_reviews"`
-	FiveStarCount  int64   `json:"five_star_count"`
-	FourStarCount  int64   `json:"four_star_count"`
-	ThreeStarCount int64   `json:"three_star_count"`
-	TwoStarCount   int64   `json:"two_star_count"`
-	OneStarCount   int64   `json:"one_star_count"`
+	ProductID      uint    `json:"productId"`
+	AverageRating  float64 `json:"averageRating"`
+	TotalReviews   int64   `json:"totalReviews"`
+	FiveStarCount  int64   `json:"fiveStarCount"`
+	FourStarCount  int64   `json:"fourStarCount"`
+	ThreeStarCount int64   `json:"threeStarCount"`
+	TwoStarCount   int64   `json:"twoStarCount"`
+	OneStarCount   int64   `json:"oneStarCount"`
 }
 
 // ErrorResponse represents an error response
