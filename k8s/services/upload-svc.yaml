@@ -1,38 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: upload-service
-  namespace: services
+   name: upload-service
+   namespace: services
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: upload
-  template:
-    metadata:
-      labels:
-        app: upload
-    spec:
-      containers:
-      - name: upload
-        image: rengumin/upload-svc:1.0
-        ports:
-        - containerPort: 8080
-        env:
-          - name: SERVER_PORT
-            value: "8080"
-          - name: MINIO_ENDPOINT
-            value: "minio-server.minio"
-          - name: MINIO_ACCESS_KEY
-            value: "minio"
-          - name: MINIO_SECRET_KEY
-            value: "minio1234"
-          - name: MINIO_BUCKET_NAME
-            value: "products-images"
-          - name: MINIO_USE_SSL
-            value: "false"
-          - name: REWRITE_HOST
-            value: "localhost:8000"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: upload
+   template:
+      metadata:
+         labels:
+            app: upload
+      spec:
+         containers:
+            - name: upload
+              image: rengumin/upload-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: SERVER_PORT
+                   value: "8080"
+                 - name: MINIO_ENDPOINT
+                   value: "minio-server.minio"
+                 - name: MINIO_ACCESS_KEY
+                   value: "minio"
+                 - name: MINIO_SECRET_KEY
+                   value: "minio1234"
+                 - name: MINIO_BUCKET_NAME
+                   value: "products-images"
+                 - name: MINIO_USE_SSL
+                   value: "false"
+                 - name: REWRITE_HOST
+                   value: "localhost:8000"
+              resources:
+                 requests:
+                    cpu: "500m"
+                    memory: "256Mi"
+                 limits:
+                    cpu: "1"
+                    memory: "512Mi"
+
+
 # ---
 # apiVersion: v1
 # kind: Service
@@ -51,13 +60,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: upload-svc
-  namespace: services
+   name: upload-svc
+   namespace: services
 spec:
-  type: ClusterIP
-  selector:
-    app: upload
-  ports:
-  - protocol: TCP
-    port: 8080
-    targetPort: 8080
+   type: ClusterIP
+   selector:
+      app: upload
+   ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080

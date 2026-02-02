@@ -1,3 +1,62 @@
+## [4.0.0](https://github.com/TranXuanPhong25/ecom/compare/v3.23.0...v4.0.0) (2026-01-31)
+
+### ⚠ BREAKING CHANGES
+
+* replaces minikube and restructures the codebase
+* go to k3s
+
+### 🚀 Features
+
+* go to k3s ([de4ec21](https://github.com/TranXuanPhong25/ecom/commit/de4ec21f08f90255cd9d5f74f138687355b40e18))
+* switch to k3s, hexagonal architecture, and new Go layout ([22e1b38](https://github.com/TranXuanPhong25/ecom/commit/22e1b3870e31c13a5236d064779505685e4d883e))
+
+## [3.23.0](https://github.com/TranXuanPhong25/ecom/compare/v3.22.0...v3.23.0) (2026-01-31)
+
+### 🚀 Features
+
+* **auth:** build scripts ([2e7090f](https://github.com/TranXuanPhong25/ecom/commit/2e7090fe51538807b6a6153cb66307da25833ec0))
+* go build scripts ([ab6eb35](https://github.com/TranXuanPhong25/ecom/commit/ab6eb351091f2208b6b8c50f73d9497b83ac5903))
+* **k8s:** expose kafka external, config debezium, orders routes ([331eb76](https://github.com/TranXuanPhong25/ecom/commit/331eb7638bf3308d5d51531aa684fe5e169a6ecd))
+* **k8s:** order, order-placement manifest, k3s config ([31229d8](https://github.com/TranXuanPhong25/ecom/commit/31229d899798e187ef3430f80d2072e1411d759c))
+* **order-placement:** init service ([46c86b4](https://github.com/TranXuanPhong25/ecom/commit/46c86b47674d07f26241780c062345a008873a34))
+* **order-placement:** outbox ([ba170c2](https://github.com/TranXuanPhong25/ecom/commit/ba170c24abcd3e98ca1903afe6b6cb58f85bbb85))
+* **orders:** hexagonal frame, event template ([6c17af6](https://github.com/TranXuanPhong25/ecom/commit/6c17af66b199a5a95d411de50fe66c1a71bc69be))
+* **orders:** listen order-placement create event and init base apis ([d66e31d](https://github.com/TranXuanPhong25/ecom/commit/d66e31d9857244345e11bb524f3ded4e1d280a99))
+* **recommendation:** init deps ([49b01e2](https://github.com/TranXuanPhong25/ecom/commit/49b01e24bc50397d06bcc996ad02e12aec864497))
+
+### 🐛 Bug Fixes
+
+* **k8s:** lb ([e7f70fe](https://github.com/TranXuanPhong25/ecom/commit/e7f70fe9964172d29a5d362033ad3267c2598b1f))
+* **k8s:** pvc ([3896aa5](https://github.com/TranXuanPhong25/ecom/commit/3896aa5f6122da57cce97a144d083ab620e9ba0f))
+* **k8s:** storages ([bd5a897](https://github.com/TranXuanPhong25/ecom/commit/bd5a89701950913a068a0b30fc9c1692d9ba55f1))
+* upload service imports ([fade70d](https://github.com/TranXuanPhong25/ecom/commit/fade70df1d868d40ffb94300663a09f07a990969))
+
+### 📝 Documentation
+
+* **products:** meta-inf for config.yaml ([89a8b95](https://github.com/TranXuanPhong25/ecom/commit/89a8b95270eef00e82b1f9f4449fa61091733e07))
+
+### 🔨 Technical Changes
+
+* **jwt:** change expire time to 7 days ([f93ca9e](https://github.com/TranXuanPhong25/ecom/commit/f93ca9eed6628802e9697edda5dea002da5a767e))
+* **order-placement:** more standart layout ([81c98b0](https://github.com/TranXuanPhong25/ecom/commit/81c98b0b7e37562ca3cec6e6a6ca9ec424cbf438))
+* **order-placement:** remove outbox, sync with orders service ([f6fe9cb](https://github.com/TranXuanPhong25/ecom/commit/f6fe9cba68fcc2f28f893deb1644f8b540acdf28))
+
+## [3.22.0](https://github.com/TranXuanPhong25/ecom/compare/v3.21.0...v3.22.0) (2026-01-07)
+
+### 🚀 Features
+
+* **k8s:** streamzi kafka and kafka-connect cdc installation ([43471ac](https://github.com/TranXuanPhong25/ecom/commit/43471acac591bc3ec1d600be9d6952de9ab3b46c))
+* **orders:** init order service ([5b59958](https://github.com/TranXuanPhong25/ecom/commit/5b59958151d87a1a179ed156003d294c15aecb6c))
+* **promo:** new ([bf24c51](https://github.com/TranXuanPhong25/ecom/commit/bf24c5104cf538ffe1571d41784d8e6fe59b7c85))
+* **recommendation:** init service ([8674cad](https://github.com/TranXuanPhong25/ecom/commit/8674cad569fe59522089535d5fd5a1b832b05183))
+
+### 🔨 Technical Changes
+
+* **chatbot:** structure simplified ([cb99ebf](https://github.com/TranXuanPhong25/ecom/commit/cb99ebf23a704f6b01e006fd59d1bfc3b9b0abdc))
+* **jwt:** long expire time for development convenience ([35dfd9a](https://github.com/TranXuanPhong25/ecom/commit/35dfd9a640b21de8a4bb648613671dff5435184c))
+* **k8s:** correctly use StateFulSet for db ([8909700](https://github.com/TranXuanPhong25/ecom/commit/890970037c75e625888a09c1649ed52d5efe42c4))
+* **promotion:** response format update ([e90cb57](https://github.com/TranXuanPhong25/ecom/commit/e90cb5791ee62ad9d810102d9fa93db36c5361f7))
+
 ## [3.21.0](https://github.com/TranXuanPhong25/ecom/compare/v3.20.1...v3.21.0) (2025-12-26)
 
 ### 🚀 Features

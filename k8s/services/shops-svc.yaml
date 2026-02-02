@@ -1,60 +1,62 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shops-service
-  namespace: services
+   name: shops-service
+   namespace: services
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: shops
-  template:
-    metadata:
-      labels:
-        app: shops
-    spec:
-      containers:
-        - name: shops
-          image: rengumin/shops-svc:1.0
-          ports:
-            - containerPort: 8080
-          env:
-            - name: DB_HOST
-              value: "shops-pg-db.storages"
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_USER
-              value: postgres
-            - name: DB_PASSWORD
-              value: postgres
-            - name: DB_NAME
-              value: mydatabase
-            - name: RPC_PORT
-              value: "50050"
-            - name: SERVER_PORT
-              value: "8080"
-          resources:
-            requests:
-              cpu: "500m"
-            limits:
-              cpu: "1"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: shops
+   template:
+      metadata:
+         labels:
+            app: shops
+      spec:
+         containers:
+            - name: shops
+              image: rengumin/shops-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: "shops-pg-db.storages"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: RPC_PORT
+                   value: "50050"
+                 - name: SERVER_PORT
+                   value: "8080"
+              resources:
+                 requests:
+                    cpu: "500m"
+                    memory: "256Mi"
+                 limits:
+                    cpu: "1"
+                    memory: "512Mi"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: shops-svc
-  namespace: services
+   name: shops-svc
+   namespace: services
 spec:
-  type: ClusterIP
-  selector:
-    app: shops
-  ports:
-    - protocol: TCP
-      name: http
-      port: 8080
-      targetPort: 8080
-    - protocol: TCP
-      name: grpc
-      port: 50050
-      targetPort: 50050
+   type: ClusterIP
+   selector:
+      app: shops
+   ports:
+      - protocol: TCP
+        name: http
+        port: 8080
+        targetPort: 8080
+      - protocol: TCP
+        name: grpc
+        port: 50050
+        targetPort: 50050

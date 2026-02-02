@@ -31,13 +31,6 @@ spec:
                    value: postgres
                  - name: DB_NAME
                    value: mydatabase
-              resources:
-                 limits:
-                    memory: "1Gi"
-                    cpu: "1"
-                 requests:
-                    memory: "400Mi"
-                    cpu: "512m"
 ---
 apiVersion: v1
 kind: Service

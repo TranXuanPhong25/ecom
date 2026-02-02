@@ -1,41 +1,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jwt-service
-  namespace: services
+   name: jwt-service
+   namespace: services
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: jwt
-  template:
-    metadata:
-      labels:
-        app: jwt
-    spec:
-      containers:
-      - name: jwt
-        image: rengumin/jwt-svc:1.0
-        ports:
-        - containerPort: 50050
-        env:
-          - name: JWT_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: app-secrets
-                key: JWT_SECRET_KEY
+   replicas: 1
+   selector:
+      matchLabels:
+         app: jwt
+   template:
+      metadata:
+         labels:
+            app: jwt
+      spec:
+         containers:
+            - name: jwt
+              image: rengumin/jwt-svc:1.0
+              ports:
+                 - containerPort: 50050
+              env:
+                 - name: JWT_SECRET_KEY
+                   valueFrom:
+                      secretKeyRef:
+                         name: app-secrets
+                         key: JWT_SECRET_KEY
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "128Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "256Mi"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: jwt-svc
-  namespace: services
+   name: jwt-svc
+   namespace: services
 spec:
-  clusterIP: None
-  selector:
-    app: jwt
-  ports:
-  - protocol: TCP
-    port: 50050
-    targetPort: 50050
+   clusterIP: None
+   selector:
+      app: jwt
+   ports:
+      - protocol: TCP
+        port: 50050
+        targetPort: 50050

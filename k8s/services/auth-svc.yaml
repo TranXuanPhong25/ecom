@@ -1,47 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service
-  namespace: services
+   name: auth-service
+   namespace: services
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: auth
-  template:
-    metadata:
-      labels:
-        app: auth
-    spec:
-      containers:
-      - name: auth
-        image: rengumin/auth-svc:1.0
-        ports:
-        - containerPort: 8080
-        env:
-          - name: REDIS_HOST
-            value: "auth-redis.storages"
-          - name: REDIS_PORT
-            value: "6379"
-          - name: USERS_SERVICE_ADDR
-            value: "users-svc.services:50050"
-          - name: JWT_SERVICE_ADDR
-            value: "jwt-svc.services:50050"
-          - name: SEVER_PORT
-            value: "8080"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: auth
+   template:
+      metadata:
+         labels:
+            app: auth
+      spec:
+         containers:
+            - name: auth
+              image: rengumin/auth-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: REDIS_HOST
+                   value: "auth-redis.storages"
+                 - name: REDIS_PORT
+                   value: "6379"
+                 - name: USERS_SERVICE_ADDR
+                   value: "users-svc.services:50050"
+                 - name: JWT_SERVICE_ADDR
+                   value: "jwt-svc.services:50050"
+                 - name: SEVER_PORT
+                   value: "8080"
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "128Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "256Mi"
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-svc
-  namespace: services
+   name: auth-svc
+   namespace: services
 spec:
-  type: ClusterIP
-  selector:
-    app: auth
-  ports:
-  - protocol: TCP
-    port: 8080  
-    targetPort: 8080
+   type: ClusterIP
+   selector:
+      app: auth
+   ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080
