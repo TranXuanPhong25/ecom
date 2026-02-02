@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: product-reviews-pg
+   namespace: storages
+spec:
+   serviceName: product-reviews-pg
+   replicas: 1
+   selector:
+      matchLabels:
+         app: product-reviews-pg
+   template:
+      metadata:
+         labels:
+            app: product-reviews-pg
+      spec:
+         containers:
+            - name: product-reviews-pg
+              image: postgres:15-alpine
+              env:
+                 - name: POSTGRES_USER
+                   value: postgres
+                 - name: POSTGRES_PASSWORD
+                   value: postgres
+                 - name: POSTGRES_DB
+                   value: mydatabase
+                 - name: PGDATA
+                   value: /var/lib/postgresql/data/pgdata
+              volumeMounts:
+                 - name: db-storage
+                   mountPath: /var/lib/postgresql/data
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "256Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "512Mi"
+   volumeClaimTemplates:
+      - metadata:
+           name: db-storage
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 1Gi
+           storageClassName: local-path
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: product-reviews-pg-db
+   namespace: storages
+spec:
+   clusterIP: None
+   selector:
+      app: product-reviews-pg
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+   namespace: storages
+   name: allow-product-reviews-service-to-db
+spec:
+   podSelector:
+      matchLabels:
+         app: product-reviews-pg
+   policyTypes:
+      - Ingress
+   ingress:
+      - from:
+           - namespaceSelector:
+                matchLabels:
+                   name: services
+        ports:
+           - protocol: TCP
+             port: 5432

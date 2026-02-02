@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: product-reviews-service
+   namespace: services
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: product-reviews
+   template:
+      metadata:
+         labels:
+            app: product-reviews
+      spec:
+         containers:
+            - name: product-reviews
+              image: rengumin/product-reviews-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: "product-reviews-pg-db.storages"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: SERVER_PORT
+                   value: ":8080"
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "128Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: product-reviews-svc
+   namespace: services
+spec:
+   type: ClusterIP
+   selector:
+      app: product-reviews
+   ports:
+      - protocol: TCP
+        name: http
+        port: 8080
+        targetPort: 8080
