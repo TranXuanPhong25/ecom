@@ -1,8 +1,18 @@
 #!/bin/bash
+# Build and push Order Placement service to Docker Hub
+SERVICE_NAME="vouchers-svc"
+DOCKER_USERNAME="rengumin"
+VERSION="1.0"
 
-#!/bin/bash
-DOCKER_USERNAME=rengumin
-SERVICE_NAME=promotions-svc
-TAG=1.0
-SERVICE_PATH=.
-docker build -t $DOCKER_USERNAME/$SERVICE_NAME:$TAG -t $DOCKER_USERNAME/$SERVICE_NAME:latest -f $SERVICE_PATH/Dockerfile $SERVICE_PATH --target=release
+echo "Building $SERVICE_NAME..."
+
+# Build the Docker image
+docker build -t $DOCKER_USERNAME/$SERVICE_NAME:$VERSION . --target=release
+docker save $DOCKER_USERNAME/$SERVICE_NAME:$VERSION | sudo k3s ctr images import -
+
+# # Push to Docker Hub
+# echo "Pushing $SERVICE_NAME to Docker Hub..."
+# docker push $DOCKER_USERNAME/$SERVICE_NAME:$VERSION
+kubectl rollout restart deployment vouchers-service -n services
+
+echo "$SERVICE_NAME built and pushed successfully!"

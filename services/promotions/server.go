@@ -23,7 +23,6 @@ func newEchoServer() *echo.Echo {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
 	e.Use(middlewares.PrometheusMiddleware())
 	routes.PromotionsRoute(e)
 	return e
