@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: vouchers-pg
+   namespace: storages
+spec:
+   serviceName: vouchers-pg
+   replicas: 1
+   selector:
+      matchLabels:
+         app: vouchers-pg
+   template:
+      metadata:
+         labels:
+            app: vouchers-pg
+      spec:
+         containers:
+            - name: vouchers-pg
+              image: postgres:15-alpine
+              env:
+                 - name: POSTGRES_USER
+                   value: postgres
+                 - name: POSTGRES_PASSWORD
+                   value: postgres
+                 - name: POSTGRES_DB
+                   value: mydatabase
+                 - name: PGDATA
+                   value: /var/lib/postgresql/data/pgdata
+              volumeMounts:
+                 - name: db-storage
+                   mountPath: /var/lib/postgresql/data
+   volumeClaimTemplates:
+      - metadata:
+           name: db-storage
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 1Gi
+           storageClassName: local-path
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: vouchers-pg-db
+   namespace: storages
+spec:
+   clusterIP: None
+   selector:
+      app: vouchers-pg
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+   namespace: storages
+   name: allow-vouchers-service-to-db
+spec:
+   podSelector:
+      matchLabels:
+         app: vouchers-pg
+   policyTypes:
+      - Ingress
+   ingress:
+      - from:
+           - namespaceSelector:
+                matchLabels:
+                   name: services
+        ports:
+           - protocol: TCP
+             port: 5432
