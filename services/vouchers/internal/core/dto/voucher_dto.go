@@ -8,22 +8,22 @@ import (
 
 // CreateVoucherRequest represents the request to create a new voucher
 type CreateVoucherRequest struct {
-	Code          string               `json:"code" validate:"required,min=4,max=50"`
-	DiscountType  entity.DiscountType  `json:"discount_type" validate:"required,oneof=PERCENTAGE FIXED_AMOUNT"`
-	DiscountValue float64              `json:"discount_value" validate:"required,gt=0"`
-	MinOrderValue float64              `json:"min_order_value" validate:"omitempty,gte=0"`
-	MaxUsage      int                  `json:"max_usage" validate:"omitempty,gte=0"`
-	ExpiresAt     *time.Time           `json:"expires_at" validate:"omitempty"`
-	Description   string               `json:"description" validate:"omitempty,max=500"`
+	Code          string              `json:"code" validate:"required,min=4,max=50"`
+	DiscountType  entity.DiscountType `json:"discountType" validate:"required,oneof=PERCENTAGE FIXED_AMOUNT"`
+	DiscountValue float64             `json:"discountValue" validate:"required,gt=0"`
+	MinOrderValue float64             `json:"minOrderValue" validate:"omitempty,gte=0"`
+	MaxUsage      int                 `json:"maxUsage" validate:"omitempty,gte=0"`
+	ExpiresAt     *time.Time          `json:"expiresAt" validate:"omitempty"`
+	Description   string              `json:"description" validate:"omitempty,max=500"`
 }
 
 // UpdateVoucherRequest represents the request to update a voucher
 type UpdateVoucherRequest struct {
-	DiscountValue *float64   `json:"discount_value" validate:"omitempty,gt=0"`
-	MinOrderValue *float64   `json:"min_order_value" validate:"omitempty,gte=0"`
-	MaxUsage      *int       `json:"max_usage" validate:"omitempty,gte=0"`
-	ExpiresAt     *time.Time `json:"expires_at" validate:"omitempty"`
-	IsActive      *bool      `json:"is_active" validate:"omitempty"`
+	DiscountValue *float64   `json:"discountValue" validate:"omitempty,gt=0"`
+	MinOrderValue *float64   `json:"minOrderValue" validate:"omitempty,gte=0"`
+	MaxUsage      *int       `json:"maxUsage" validate:"omitempty,gte=0"`
+	ExpiresAt     *time.Time `json:"expiresAt" validate:"omitempty"`
+	IsActive      *bool      `json:"isActive" validate:"omitempty"`
 	Description   *string    `json:"description" validate:"omitempty,max=500"`
 }
 
@@ -31,16 +31,16 @@ type UpdateVoucherRequest struct {
 type VoucherResponse struct {
 	ID            uint                `json:"id"`
 	Code          string              `json:"code"`
-	DiscountType  entity.DiscountType `json:"discount_type"`
-	DiscountValue float64             `json:"discount_value"`
-	MinOrderValue float64             `json:"min_order_value"`
-	MaxUsage      int                 `json:"max_usage"`
-	UsedCount     int                 `json:"used_count"`
-	ExpiresAt     *time.Time          `json:"expires_at"`
-	IsActive      bool                `json:"is_active"`
+	DiscountType  entity.DiscountType `json:"discountType"`
+	DiscountValue float64             `json:"discountValue"`
+	MinOrderValue float64             `json:"minOrderValue"`
+	MaxUsage      int                 `json:"maxUsage"`
+	UsedCount     int                 `json:"usedCount"`
+	ExpiresAt     *time.Time          `json:"expiresAt"`
+	IsActive      bool                `json:"isActive"`
 	Description   string              `json:"description"`
-	CreatedAt     time.Time           `json:"created_at"`
-	UpdatedAt     time.Time           `json:"updated_at"`
+	CreatedAt     time.Time           `json:"createdAt"`
+	UpdatedAt     time.Time           `json:"updatedAt"`
 }
 
 // ListVouchersRequest represents the request to list vouchers with pagination
