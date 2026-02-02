@@ -29,7 +29,7 @@ func (r *PostgresProductRepository) SearchByKeyword(ctx context.Context, keyword
 
 	// PostgreSQL full-text search query using tsvector
 	searchQuery := `
-		SELECT id, name, description, price, category_id, cover_image, created_at, updated_at
+		SELECT id, name, description, category_id, cover_image, created_at, updated_at
 		FROM products
 		WHERE to_tsvector('english', name || ' ' || COALESCE(description, '')) @@ plainto_tsquery('english', ?)
 		ORDER BY ts_rank(to_tsvector('english', name || ' ' || COALESCE(description, '')), plainto_tsquery('english', ?)) DESC, id ASC

@@ -17,12 +17,11 @@ type SearchResponse struct {
 
 // ProductDTO represents a product in API responses
 type ProductDTO struct {
-	ID          uint    `json:"id"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	CategoryID  uint    `json:"categoryId"`
-	CoverImage  string  `json:"coverImage"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	CategoryID  uint   `json:"categoryId"`
+	CoverImage  string `json:"coverImage"`
 }
 
 // SuccessResponse represents a successful API response

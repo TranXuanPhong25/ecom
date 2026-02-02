@@ -8,11 +8,10 @@ type Product struct {
 	ID          uint      `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
-	Price       float64   `json:"price"`
-	CategoryID  uint      `json:"category_id"`
-	CoverImage  string    `json:"cover_image"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	CategoryID  uint      `json:"categoryId"`
+	CoverImage  string    `json:"coverImage"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 // SearchResult represents the result of a search operation

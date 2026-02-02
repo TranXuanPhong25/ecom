@@ -61,7 +61,6 @@ func (s *SearchService) SearchProducts(ctx context.Context, request dto.SearchRe
 			ID:          product.ID,
 			Name:        product.Name,
 			Description: product.Description,
-			Price:       product.Price,
 			CategoryID:  product.CategoryID,
 			CoverImage:  product.CoverImage,
 		}

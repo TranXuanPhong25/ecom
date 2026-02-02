@@ -12,9 +12,10 @@ import (
 func SetupRoutes(e *echo.Echo, searchService in.SearchServicePort) {
 	// Create handler
 	handler := NewSearchHandler(searchService)
-
-	// Middleware
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		Skipper: func(c echo.Context) bool {
+			return c.Path() == "/health"
+		},
 		LogMethod:  true,
 		LogURI:     true,
 		LogStatus:  true,
@@ -22,7 +23,6 @@ func SetupRoutes(e *echo.Echo, searchService in.SearchServicePort) {
 		LogError:   true,
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
 			reqID, _ := c.Get("request_id").(string)
-
 			fmt.Printf(
 				"[HTTP] %s %s %d %s err=%v reqId=%s\n",
 				v.Method,
@@ -44,5 +44,5 @@ func SetupRoutes(e *echo.Echo, searchService in.SearchServicePort) {
 	})
 
 	// Search routes
-	e.GET("/search", handler.SearchProducts)
+	e.GET("/api/search", handler.SearchProducts)
 }
