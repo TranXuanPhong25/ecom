@@ -16,8 +16,6 @@ helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.5.1 -n envo
 
 ```bash
 kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
-kubectl create -f https://download.elastic.co/downloads/eck/3.2.0/crds.yaml
-kubectl apply -f https://download.elastic.co/downloads/eck/3.2.0/operator.yaml
 
 
 ```
