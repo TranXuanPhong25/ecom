@@ -13,6 +13,9 @@ SERVICES=(
     "upload-svc:go:./upload-service"
     "jwt-service:go:./jwt-service"
     "promotions-svc:go:./promotions"
+    "product-reviews-svc:go:./product-reviews"
+    "search-svc:go:./search-service"
+    "voucher-svc:go:./voucher-service"
 
 #    "chatbots-svc:spring:./orders"
     "carts-svc:go:./carts"
