@@ -1,3 +1,25 @@
+## [4.1.0](https://github.com/TranXuanPhong25/ecom/compare/v4.0.0...v4.1.0) (2026-02-02)
+
+### 🚀 Features
+
+* **orders:** pagable response ([f9bfdb0](https://github.com/TranXuanPhong25/ecom/commit/f9bfdb03b651c671094b2dcd07972a731c1014e9))
+* **promotions:** remove cors ([9ce7542](https://github.com/TranXuanPhong25/ecom/commit/9ce7542df73cab2fdef36a50ccbd1950fbaf787d))
+* **reviews:** basic crud ([fce2a3c](https://github.com/TranXuanPhong25/ecom/commit/fce2a3c7914db6e7f6c34a36a6cb794806f86fa5))
+* **search:** simple fulltext search ([dfc292d](https://github.com/TranXuanPhong25/ecom/commit/dfc292d02d81b0f2ecbe4a8f621d01091367290c))
+* **shops:** build script ([3ecfc83](https://github.com/TranXuanPhong25/ecom/commit/3ecfc838f7a7606bf6b7b35bfe38c4888cdfccf8))
+* update opa, build all script ([daa922b](https://github.com/TranXuanPhong25/ecom/commit/daa922b57c5bcdad58fbc50d68beac08de08353f))
+* **vouchers:** (new)basic curd ([d238c12](https://github.com/TranXuanPhong25/ecom/commit/d238c12b19c6f19d2cb8888bedddd3d24a1c6e03))
+
+### 🔨 Technical Changes
+
+* **carts:** add original, saleprice ([3605521](https://github.com/TranXuanPhong25/ecom/commit/3605521a3ec4818b881fc7447685937e62e5734b))
+* **k8s:** add more spring resource ([1dc7dcb](https://github.com/TranXuanPhong25/ecom/commit/1dc7dcb47de5f6342001e89053c0c34ef834bc76))
+* **k8s:** remove elastic search ([95d91df](https://github.com/TranXuanPhong25/ecom/commit/95d91dffc9ebd0d24308be07b0038cf0886ba33f))
+* **order-placement:** genereate order number ([759a0c5](https://github.com/TranXuanPhong25/ecom/commit/759a0c5f55e67e0fafc9a0098605473909708a9b))
+* **order-placement:** migrations and add options routes ([8b7ae55](https://github.com/TranXuanPhong25/ecom/commit/8b7ae55d007307dd8433aad2b340105763e5adf5))
+* **orders:** reduce field on list, configure mapper ([5ecf0a2](https://github.com/TranXuanPhong25/ecom/commit/5ecf0a2d7e5c34959484947e808ded8ae6f9a673))
+* **products:** pricing ([38a5aa2](https://github.com/TranXuanPhong25/ecom/commit/38a5aa2d7b229e860f386b05e6bc181a8dc462e1))
+
 ## [4.0.0](https://github.com/TranXuanPhong25/ecom/compare/v3.23.0...v4.0.0) (2026-01-31)
 
 ### ⚠ BREAKING CHANGES
