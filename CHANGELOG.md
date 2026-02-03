@@ -1,3 +1,14 @@
+## [4.1.1](https://github.com/TranXuanPhong25/ecom/compare/v4.1.0...v4.1.1) (2026-02-02)
+
+### 🐛 Bug Fixes
+
+* **search:** reconcile entity field missing and camelCase json use ([0174e51](https://github.com/TranXuanPhong25/ecom/commit/0174e518c49cea697ca6cda67db6724b5c9415f4))
+
+### 🔨 Technical Changes
+
+* **voucher:** camelCase json ([2c29599](https://github.com/TranXuanPhong25/ecom/commit/2c2959985fffc2424ebce359c5d15e886147b85d))
+* **voucher:** use uuid instead uint for userId, get userId from header, camelCase json ([3afce78](https://github.com/TranXuanPhong25/ecom/commit/3afce78667e56ea093ca2899f3b65804210c2682))
+
 ## [4.1.0](https://github.com/TranXuanPhong25/ecom/compare/v4.0.0...v4.1.0) (2026-02-02)
 
 ### 🚀 Features
