@@ -1,3 +1,9 @@
+## [4.2.0](https://github.com/TranXuanPhong25/ecom/compare/v4.1.1...v4.2.0) (2026-02-03)
+
+### 🚀 Features
+
+* **payment:** vnpaydemocode ([ac630f5](https://github.com/TranXuanPhong25/ecom/commit/ac630f53c6ffada4999417169bae6e90c389ed81))
+
 ## [4.1.1](https://github.com/TranXuanPhong25/ecom/compare/v4.1.0...v4.1.1) (2026-02-02)
 
 ### 🐛 Bug Fixes
