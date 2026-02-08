@@ -37,4 +37,13 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
    @Query("SELECT o FROM Order o WHERE o.shopId = :shopId AND o.status = :status")
    List<Order> findByShopIdAndStatus(@Param("shopId") String shopId, @Param("status") OrderStatus status);
+
+   @Query("SELECT COUNT(o) FROM Order o WHERE o.shopId = :shopId")
+   Long countByShopId(@Param("shopId") String shopId);
+
+   @Query("SELECT COUNT(o) FROM Order o WHERE o.shopId = :shopId AND o.status = :status")
+   Long countByShopIdAndStatus(@Param("shopId") String shopId, @Param("status") OrderStatus status);
+
+   @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.shopId = :shopId AND o.status IN :statuses")
+   Long sumTotalAmountByShopIdAndStatusIn(@Param("shopId") String shopId, @Param("statuses") List<OrderStatus> statuses);
 }

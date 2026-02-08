@@ -36,7 +36,7 @@ public class OrderEventMapper {
             .recipientName(event.getRecipientName())
             .recipientPhone(event.getRecipientPhone())
             .deliveryAddress(event.getDeliveryAddress())
-            .status(event.getStatus() != null ? event.getStatus() : OrderStatus.CREATED)
+            .status(event.getStatus() != null ? event.getStatus() : OrderStatus.UNCONFIRMED)
             .paymentMethod(event.getPaymentMethod())
             .paymentStatus(event.getPaymentStatus() != null ? event.getPaymentStatus() : "UNPAID")
             .paidAt(event.getPaidAt())

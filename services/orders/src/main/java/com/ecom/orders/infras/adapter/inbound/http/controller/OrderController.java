@@ -4,6 +4,7 @@ import com.ecom.orders.core.app.dto.ConfirmOrdersRequest;
 import com.ecom.orders.core.app.dto.ConfirmOrdersResponse;
 import com.ecom.orders.core.app.dto.OrderDTO;
 import com.ecom.orders.core.app.dto.OrderListItemDTO;
+import com.ecom.orders.core.app.dto.OrderStatsDTO;
 import com.ecom.orders.core.app.dto.PageResponse;
 import com.ecom.orders.core.app.mapper.OrderMapper;
 import com.ecom.orders.core.domain.model.Order;
@@ -96,7 +97,7 @@ public class OrderController {
 
    /**
     * Xác nhận đơn hàng hàng loạt (Seller only)
-    * Chỉ xác nhận được các đơn hàng có status = CREATED
+    * Chỉ xác nhận được các đơn hàng có status = UNCONFIRMED
     */
    @PostMapping("/confirm")
    public ResponseEntity<ConfirmOrdersResponse> confirmOrders(
@@ -122,7 +123,7 @@ public class OrderController {
 
             String reason = order == null
                   ? "Order not found"
-                  : "Order status is " + order.getStatus() + ", only CREATED orders can be confirmed";
+                  : "Order status is " + order.getStatus() + ", only UNCONFIRMED orders can be confirmed";
 
             failedOrders.add(ConfirmOrdersResponse.FailedOrder.builder()
                   .orderId(orderId)
@@ -145,5 +146,15 @@ public class OrderController {
             .build();
 
       return ResponseEntity.ok(response);
+   }
+
+   /**
+    * Lấy thống kê đơn hàng của shop
+    */
+   @GetMapping("/stats/shop/{shopId}")
+   public ResponseEntity<OrderStatsDTO> getOrderStatsByShopId(@PathVariable String shopId) {
+      log.info("Fetching order stats for shop: {}", shopId);
+      OrderStatsDTO stats = orderService.getOrderStatsByShopId(shopId);
+      return ResponseEntity.ok(stats);
    }
 }

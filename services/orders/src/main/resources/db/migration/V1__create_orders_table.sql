@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS orders
     delivery_address      TEXT NOT NULL,
     
     -- Order status
-    status                VARCHAR(50) NOT NULL DEFAULT 'CREATED',
-    -- CREATED -> CONFIRMED -> PROCESSING -> SHIPPING -> DELIVERED -> COMPLETED
+    status                VARCHAR(50) NOT NULL DEFAULT 'UNCONFIRMED', 
+    -- UNCONFIRMED -> CONFIRMED -> PROCESSING -> SHIPPING -> DELIVERED -> COMPLETED
     -- CANCELLED, RETURNED, REFUNDED
     
     -- Payment information

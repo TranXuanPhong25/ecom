@@ -48,7 +48,7 @@ public class Order {
    @Column(name = "status", nullable = false, length = 50)
    @Enumerated(EnumType.STRING)
    @Builder.Default
-   private OrderStatus status = OrderStatus.CREATED;
+   private OrderStatus status = OrderStatus.UNCONFIRMED;
 
    // Payment information
    @Column(name = "payment_method", nullable = false, length = 50)

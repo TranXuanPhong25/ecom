@@ -1,5 +1,6 @@
 package com.ecom.orders.core.domain.service;
 
+import com.ecom.orders.core.app.dto.OrderStatsDTO;
 import com.ecom.orders.core.domain.model.Order;
 import com.ecom.orders.core.domain.model.OrderStatus;
 import com.ecom.orders.infras.adapter.outbound.persistence.repository.OrderRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,7 +73,7 @@ public class OrderService {
       List<Order> orders = orderRepository.findByIdIn(orderIds);
 
       for (Order order : orders) {
-         if (order.getStatus() == OrderStatus.CREATED) {
+         if (order.getStatus() == OrderStatus.UNCONFIRMED) {
             order.setStatus(OrderStatus.CONFIRMED);
             order.setConfirmedAt(java.time.Instant.now());
          }
@@ -110,5 +112,41 @@ public class OrderService {
       };
 
       return orderRepository.findAll(spec, pageable);
+   }
+
+   @Transactional(readOnly = true)
+   public OrderStatsDTO getOrderStatsByShopId(String shopId) {
+      log.info("Getting order stats for shop: {}", shopId);
+
+      Long totalOrders = orderRepository.countByShopId(shopId);
+      Long unconfirmedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.UNCONFIRMED);
+      Long confirmedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.CONFIRMED);
+      Long shippedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.SHIPPED);
+      Long deliveredCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.DELIVERED);
+      Long cancelledCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.CANCELLED);
+      Long refundedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.REFUNDED);
+      // Total revenue from completed orders
+      Long totalRevenue = orderRepository.sumTotalAmountByShopIdAndStatusIn(
+            shopId, Arrays.asList(OrderStatus.DELIVERED));
+
+      // Pending revenue from non-cancelled orders
+      Long pendingRevenue = orderRepository.sumTotalAmountByShopIdAndStatusIn(
+            shopId, Arrays.asList(
+                  OrderStatus.UNCONFIRMED,
+                  OrderStatus.CONFIRMED,
+                  OrderStatus.SHIPPED,
+                  OrderStatus.DELIVERED));
+
+      return OrderStatsDTO.builder()
+            .totalOrders(totalOrders != null ? totalOrders : 0L)
+            .unconfirmedCount(unconfirmedCount != null ? unconfirmedCount : 0L)
+            .confirmedCount(confirmedCount != null ? confirmedCount : 0L)
+            .shippedCount(shippedCount != null ? shippedCount : 0L)
+            .deliveredCount(deliveredCount != null ? deliveredCount : 0L)
+            .refundedCount(refundedCount != null ? refundedCount : 0L)
+            .cancelledCount(cancelledCount != null ? cancelledCount : 0L)
+            .totalRevenue(totalRevenue != null ? totalRevenue : 0L)
+            .pendingRevenue(pendingRevenue != null ? pendingRevenue : 0L)
+            .build();
    }
 }
