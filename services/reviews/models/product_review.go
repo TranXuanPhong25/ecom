@@ -9,9 +9,8 @@ import (
 type Review struct {
 	gorm.Model           // ID, CreatedAt, UpdatedAt, DeletedAt
 	ProductID  uint      `json:"productId" gorm:"not null"`
-	UserID     uuid.UUID `json:"userId" gorm:"type:uuid;not null;index:idx_cart_item,unique"`
+	UserID     uuid.UUID `json:"userId" gorm:"type:uuid;not null"`
 	Username   string    `json:"username" gorm:"not null"`
 	Rating     int       `json:"rating" gorm:"not null;check:rating >= 1 AND rating <= 5"`
-	Title      string    `json:"title" gorm:"not null;size:100"`
 	Comment    string    `json:"comment" gorm:"not null;type:text"`
 }

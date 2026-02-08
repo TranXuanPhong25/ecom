@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -173,6 +174,7 @@ func (ctrl *ReviewController) DeleteReview(c echo.Context) error {
 
 // GetProductStats gets statistics for a product's reviews
 func (ctrl *ReviewController) GetProductStats(c echo.Context) error {
+	fmt.Printf("ổn mà")
 	productID, err := strconv.ParseUint(c.Param("productId"), 10, 32)
 	if err != nil {
 		return utils.BadRequestError(c, "Invalid product ID")

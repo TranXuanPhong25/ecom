@@ -27,7 +27,6 @@ func (s *ReviewService) CreateReview(req *dtos.CreateReviewRequest) (*dtos.Revie
 		UserID:    req.UserID,
 		Username:  req.Username,
 		Rating:    req.Rating,
-		Title:     req.Title,
 		Comment:   req.Comment,
 	}
 
@@ -108,7 +107,6 @@ func (s *ReviewService) UpdateReview(id uint, req *dtos.UpdateReviewRequest, use
 
 	// Update fields
 	review.Rating = req.Rating
-	review.Title = req.Title
 	review.Comment = req.Comment
 
 	err = s.repo.Update(review)
@@ -146,7 +144,6 @@ func (s *ReviewService) modelToResponse(review *models.Review) *dtos.ReviewRespo
 		UserID:    review.UserID,
 		Username:  review.Username,
 		Rating:    review.Rating,
-		Title:     review.Title,
 		Comment:   review.Comment,
 		CreatedAt: review.CreatedAt.Format(time.RFC3339),
 		UpdatedAt: review.UpdatedAt.Format(time.RFC3339),

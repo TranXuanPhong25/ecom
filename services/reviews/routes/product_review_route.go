@@ -15,8 +15,8 @@ func ReviewRoutes(e *echo.Echo) {
 	e.DELETE("/api/reviews/:id", ctrl.DeleteReview)
 
 	// Product reviews
-	e.GET("/api/reviews/products", ctrl.GetProductReviews)
-	e.GET("/api/reviews/products/stats", ctrl.GetProductStats)
+	e.GET("/api/reviews/products/:productId", ctrl.GetProductReviews)
+	e.GET("/api/reviews/products/:productId/stats", ctrl.GetProductStats)
 
 	// User reviews
 	e.GET("/api/reviews/users", ctrl.GetUserReviews)

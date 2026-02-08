@@ -10,3 +10,23 @@ async def get_daily_discoveries():
         {"id": 3, "title": "City Lights", "description": "Experience the vibrant city life."}
     ]
     return {"daily_discoveries": recommendations}
+
+@recommendation_router.get("/api/recommendations/similar-items/{item_id}")
+async def get_daily_discoveries():
+    # Placeholder for actual recommendation logic
+    recommendations = [
+        {"id": 1, "title": "Discover the Mountains", "description": "Explore the majestic mountain ranges."},
+        {"id": 2, "title": "Beach Getaway", "description": "Relax on the sunny beaches."},
+        {"id": 3, "title": "City Lights", "description": "Experience the vibrant city life."}
+    ]
+    return {"daily_discoveries": recommendations}
+
+@recommendation_router.get("/api/recommendations/frequently-bought-together/{item_id}")
+async def get_daily_discoveries():
+    # Placeholder for actual recommendation logic
+    recommendations = [
+        {"id": 1, "title": "Discover the Mountains", "description": "Explore the majestic mountain ranges."},
+        {"id": 2, "title": "Beach Getaway", "description": "Relax on the sunny beaches."},
+        {"id": 3, "title": "City Lights", "description": "Experience the vibrant city life."}
+    ]
+    return {"daily_discoveries": recommendations}
