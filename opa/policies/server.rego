@@ -113,7 +113,7 @@ allow if {
 
 allow if {
     input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET"}
-    regex.match(`\/api\/product-reviews`, input.path)
+    regex.match(`\/api\/reviews`, input.path)
 }
 allow if {
     input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET"}
