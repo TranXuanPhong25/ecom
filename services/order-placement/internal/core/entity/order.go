@@ -81,7 +81,7 @@ type Order struct {
 	DeliveryAddress string `gorm:"type:text;not null"`
 
 	// Order status
-	Status string `gorm:"type:varchar(50);not null;default:'CREATED';index"`
+	Status string `gorm:"type:varchar(50);not null;default:'UNCONFIRMED';index"`
 
 	// Payment information
 	PaymentMethod string     `gorm:"type:varchar(50);not null"`

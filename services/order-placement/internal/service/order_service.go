@@ -42,7 +42,7 @@ func (s *OrderService) CreateOrder(request *dto.CreateOrderRequest, userID strin
 		RecipientName:   request.RecipientName,
 		RecipientPhone:  request.RecipientPhone,
 		DeliveryAddress: request.DeliveryAddress,
-		Status:          "CREATED",
+		Status:          "UNCONFIRMED",
 		PaymentMethod:   request.PaymentMethod,
 		PaymentStatus:   "UNPAID",
 		ShippingMethod:  request.ShippingMethod,
