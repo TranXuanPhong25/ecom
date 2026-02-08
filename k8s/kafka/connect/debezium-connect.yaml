@@ -18,14 +18,15 @@ spec:
    statusStorageTopic: connect-cluster-status
    resources:
       requests:
-         memory: "1Gi"
-         cpu: "500m"
+         memory: "400Mi" # Yêu cầu tối thiểu từ K8s
+         cpu: "250m"
       limits:
-         memory: "2Gi"
-         cpu: "1"
+         memory: "800Mi" # Giới hạn cứng (Heap + Native Memory)
+         cpu: "1000m"
+
    jvmOptions:
-      "-Xms": "1g"
-      "-Xmx": "1g"
+      "-Xms": "256m" # Khởi điểm chỉ lấy 256MB
+      "-Xmx": "400m"
    config:
       config.providers.secrets.class: io.strimzi.kafka.KubernetesSecretConfigProvider
       config.providers: secrets
