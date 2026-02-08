@@ -1,3 +1,16 @@
+## [4.3.0](https://github.com/TranXuanPhong25/ecom/compare/v4.2.0...v4.3.0) (2026-02-08)
+
+### 🚀 Features
+
+* **orders:** change default order status, add stats endpoint ([dd73034](https://github.com/TranXuanPhong25/ecom/commit/dd730342e05f58b6730e7ce246bd99d9f5dc912f))
+
+### 🔨 Technical Changes
+
+* **k8s:** reduce debezium resources ([119d810](https://github.com/TranXuanPhong25/ecom/commit/119d810c67159b8e9d2c42818915dd360c95d873))
+* **order-placement:** change default order status to UNCONFIRMED ([04bdd39](https://github.com/TranXuanPhong25/ecom/commit/04bdd39119b16a60d02e9ee68b9a409f50d40711))
+* **reviews:** change folder name ([55ed43b](https://github.com/TranXuanPhong25/ecom/commit/55ed43b5b326378a32f6b957752de9613fb324aa))
+* **reviews:** remove title, add productId  path variable ([dbe9bda](https://github.com/TranXuanPhong25/ecom/commit/dbe9bdae95d50adc75477f17211032d5614e6108))
+
 ## [4.2.0](https://github.com/TranXuanPhong25/ecom/compare/v4.1.1...v4.2.0) (2026-02-03)
 
 ### 🚀 Features
