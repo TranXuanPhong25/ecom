@@ -15,7 +15,7 @@ spec:
       spec:
          containers:
             - name: kafka-ui
-              image: provectuslabs/kafka-ui:latest
+              image: docker.redpanda.com/redpandadata/console:latest
               ports:
                  - containerPort: 8080
                    name: kafka-ui
@@ -39,6 +39,9 @@ spec:
                    value: kafka-cluster-kafka-bootstrap:9092
                  - name: KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS
                    value: http://connect:8083
+                   #redpanda console
+                 - name: KAFKA_BROKERS
+                   value: kafka-cluster-kafka-bootstrap:9092
 ---
 apiVersion: v1
 kind: Service
