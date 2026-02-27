@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+   name: fulfillment-svc
+   namespace: services
+spec:
+   selector:
+      app: fulfillment
+   ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080
+   type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: fulfillment-service
+   namespace: services
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: fulfillment
+   template:
+      metadata:
+         labels:
+            app: fulfillment
+      spec:
+         containers:
+            - name: fulfillment
+              image: rengumin/fulfillment-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: SERVER_PORT
+                   value: "8080"
+                 - name: DB_HOST
+                   value: "fulfillment-pg-db.storages.svc.cluster.local"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: "postgres"
+                 - name: DB_PASSWORD
+                   value: "postgres"
+                 - name: DB_NAME
+                   value: "mydatabase"
+                 - name: KAFKA_BROKERS
+                   value: "kafka-cluster-kafka-bootstrap.kafka:9092"
+                 - name: DEFAULT_PICKUP_WINDOW
+                   value: "0.008"
+                 - name: MAX_DELIVERY_ATTEMPTS
+                   value: "3"
+                 - name: ESTIMATED_DELIVERY_DAYS
+                   value: "3"
+              resources:
+                 requests:
+                    memory: "128Mi"
+                    cpu: "100m"
+                 limits:
+                    memory: "512Mi"
+                    cpu: "500m"
+              livenessProbe:
+                 httpGet:
+                    path: /health
+                    port: 8080
+                 initialDelaySeconds: 30
+                 periodSeconds: 10
+              readinessProbe:
+                 httpGet:
+                    path: /health
+                    port: 8080
+                 initialDelaySeconds: 10
+                 periodSeconds: 5

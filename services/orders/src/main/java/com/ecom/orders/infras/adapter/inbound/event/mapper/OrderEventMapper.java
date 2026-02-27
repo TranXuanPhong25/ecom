@@ -64,8 +64,6 @@ public class OrderEventMapper {
 
       // Parse and add order items
       List<OrderItem> items = parseOrderItems(event.getItems());
-      System.out.println(items);
-      System.out.println(camelCaseMapper.getPropertyNamingStrategy());
       items.forEach(order::addOrderItem);
 
       return order;

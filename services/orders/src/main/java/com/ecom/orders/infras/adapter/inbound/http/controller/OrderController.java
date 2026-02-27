@@ -6,10 +6,13 @@ import com.ecom.orders.core.app.dto.OrderDTO;
 import com.ecom.orders.core.app.dto.OrderListItemDTO;
 import com.ecom.orders.core.app.dto.OrderStatsDTO;
 import com.ecom.orders.core.app.dto.PageResponse;
+import com.ecom.orders.core.app.dto.ReadyToShipRequest;
+import com.ecom.orders.core.app.dto.ReadyToShipResponse;
 import com.ecom.orders.core.app.mapper.OrderMapper;
 import com.ecom.orders.core.domain.model.Order;
 import com.ecom.orders.core.domain.model.OrderStatus;
 import com.ecom.orders.core.domain.service.OrderService;
+import com.ecom.orders.infras.adapter.outbound.client.FulfillmentClient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -156,5 +159,37 @@ public class OrderController {
       log.info("Fetching order stats for shop: {}", shopId);
       OrderStatsDTO stats = orderService.getOrderStatsByShopId(shopId);
       return ResponseEntity.ok(stats);
+   }
+
+   /**
+    * Mark order as ready to ship (Seller only)
+    * Triggers fulfillment pickup scheduling
+    */
+   @PostMapping("/{id}/ready-to-ship")
+   public ResponseEntity<ReadyToShipResponse> markReadyToShip(
+         @PathVariable Long id,
+         @Valid @RequestBody ReadyToShipRequest request) {
+      log.info("Marking order {} as ready to ship", id);
+      
+      try {
+         FulfillmentClient.FulfillmentResponse fulfillmentResponse = orderService.markReadyToShip(id, request);
+         
+         ReadyToShipResponse response = ReadyToShipResponse.builder()
+               .orderId(id)
+               .orderNumber(orderService.findById(id)
+                     .map(Order::getOrderNumber)
+                     .orElse("N/A"))
+               .packageNumber(fulfillmentResponse.getPackageNumber())
+               .pickupScheduledAt(fulfillmentResponse.getPickupScheduledAt().toString())
+               .estimatedDelivery(fulfillmentResponse.getEstimatedDelivery().toString())
+               .message("Đã xác nhận sẵn sàng giao hàng. Shipper sẽ đến lấy hàng.")
+               .build();
+         
+         return ResponseEntity.ok(response);
+         
+      } catch (RuntimeException e) {
+         log.error("Failed to mark order {} as ready to ship: {}", id, e.getMessage());
+         return ResponseEntity.badRequest().build();
+      }
    }
 }

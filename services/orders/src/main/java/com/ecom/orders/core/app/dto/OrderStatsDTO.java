@@ -13,7 +13,8 @@ public class OrderStatsDTO {
    private Long totalOrders;
    private Long unconfirmedCount;
    private Long confirmedCount;
-   private Long shippedCount;
+   private Long readyToShipCount;
+   private Long shippingCount;
    private Long deliveredCount;
    private Long refundedCount;
    private Long cancelledCount;

@@ -1,8 +1,10 @@
 package com.ecom.orders.core.domain.service;
 
 import com.ecom.orders.core.app.dto.OrderStatsDTO;
+import com.ecom.orders.core.app.dto.ReadyToShipRequest;
 import com.ecom.orders.core.domain.model.Order;
 import com.ecom.orders.core.domain.model.OrderStatus;
+import com.ecom.orders.infras.adapter.outbound.client.FulfillmentClient;
 import com.ecom.orders.infras.adapter.outbound.persistence.repository.OrderRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class OrderService {
 
    private final OrderRepository orderRepository;
+   private final FulfillmentClient fulfillmentClient;
 
    @Transactional
    public Order createOrder(Order order) {
@@ -121,7 +125,8 @@ public class OrderService {
       Long totalOrders = orderRepository.countByShopId(shopId);
       Long unconfirmedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.UNCONFIRMED);
       Long confirmedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.CONFIRMED);
-      Long shippedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.SHIPPED);
+      Long readyToShipCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.READY_TO_SHIP);
+      Long shippingCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.SHIPPING);
       Long deliveredCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.DELIVERED);
       Long cancelledCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.CANCELLED);
       Long refundedCount = orderRepository.countByShopIdAndStatus(shopId, OrderStatus.REFUNDED);
@@ -134,19 +139,65 @@ public class OrderService {
             shopId, Arrays.asList(
                   OrderStatus.UNCONFIRMED,
                   OrderStatus.CONFIRMED,
-                  OrderStatus.SHIPPED,
+                  OrderStatus.SHIPPING,
                   OrderStatus.DELIVERED));
 
       return OrderStatsDTO.builder()
             .totalOrders(totalOrders != null ? totalOrders : 0L)
             .unconfirmedCount(unconfirmedCount != null ? unconfirmedCount : 0L)
             .confirmedCount(confirmedCount != null ? confirmedCount : 0L)
-            .shippedCount(shippedCount != null ? shippedCount : 0L)
+            .readyToShipCount(readyToShipCount != null ? readyToShipCount : 0L)
+            .shippingCount(shippingCount != null ? shippingCount : 0L)
             .deliveredCount(deliveredCount != null ? deliveredCount : 0L)
             .refundedCount(refundedCount != null ? refundedCount : 0L)
             .cancelledCount(cancelledCount != null ? cancelledCount : 0L)
             .totalRevenue(totalRevenue != null ? totalRevenue : 0L)
             .pendingRevenue(pendingRevenue != null ? pendingRevenue : 0L)
             .build();
+   }
+
+   /**
+    * Mark order as ready to ship và schedule pickup với Fulfillment Service
+    * Pickup info sẽ được lấy từ shop data (không cần input từ seller)
+    */
+   @Transactional
+   public FulfillmentClient.FulfillmentResponse markReadyToShip(Long orderId, ReadyToShipRequest request) {
+      log.info("Marking order {} as ready to ship", orderId);
+
+      Order order = orderRepository.findByIdWithItems(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+
+      // Validate order status
+      if (order.getStatus() != OrderStatus.CONFIRMED) {
+         throw new RuntimeException(
+               "Order must be CONFIRMED before ready to ship. Current status: " + order.getStatus());
+      }
+
+      // Call Fulfillment Service to schedule pickup
+      // TODO: Get shop pickup info from Shop Service
+      FulfillmentClient.SchedulePickupRequest pickupRequest = new FulfillmentClient.SchedulePickupRequest();
+      pickupRequest.setOrderId(order.getId());
+      pickupRequest.setShopId(order.getShopId());
+      pickupRequest.setPickupAddress("Shop Address - " + order.getShopId()); // TODO: Get from Shop Service
+      pickupRequest.setPickupContactName("Shop Owner"); // TODO: Get from Shop Service
+      pickupRequest.setPickupContactPhone("0900000000"); // TODO: Get from Shop Service
+      pickupRequest.setDeliveryAddress(order.getDeliveryAddress());
+      pickupRequest.setDeliveryContactName(order.getRecipientName());
+      pickupRequest.setDeliveryContactPhone(order.getRecipientPhone());
+      pickupRequest.setWeightGrams(1000); // Default weight
+      pickupRequest.setSpecialInstructions(request.getSpecialInstructions());
+
+      FulfillmentClient.FulfillmentResponse response = fulfillmentClient.schedulePickup(pickupRequest);
+
+      // Update order status
+      order.setStatus(OrderStatus.READY_TO_SHIP);
+      order.setShippedAt(Instant.now());
+      order.setTrackingNumber(response.getPackageNumber());
+      order.setEstimatedDelivery(response.getEstimatedDelivery());
+      orderRepository.save(order);
+
+      log.info("Order {} marked as ready to ship. Package: {}", orderId, response.getPackageNumber());
+
+      return response;
    }
 }

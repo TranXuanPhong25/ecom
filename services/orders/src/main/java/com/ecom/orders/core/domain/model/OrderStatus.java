@@ -1,11 +1,11 @@
 package com.ecom.orders.core.domain.model;
 
 public enum OrderStatus {
+   UNCONFIRMED,
    CONFIRMED,
-   PICKED_UP,
-   SHIPPED,
+   READY_TO_SHIP,
+   SHIPPING,
    DELIVERED,
    CANCELLED,
-   REFUNDED,
-   UNCONFIRMED
+   REFUNDED
 }
