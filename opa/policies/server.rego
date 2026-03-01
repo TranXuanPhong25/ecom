@@ -119,3 +119,14 @@ allow if {
     input.method in { "POST", "PUT", "DELETE", "OPTIONS", "GET"}
     regex.match(`\/api\/voucher`, input.path)
 }
+
+allow if {
+    input.method in { "GET", "PUT", "DELETE" , "POST", "OPTIONS"}
+    regex.match(`\/api\/notifications`, input.path)
+}
+
+allow if {
+    input.method in { "GET", "PUT", "DELETE" , "POST", "OPTIONS"}
+    regex.match(`\/api\/chats`, input.path)
+}
+

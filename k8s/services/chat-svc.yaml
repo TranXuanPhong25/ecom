@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: chat-service
+   namespace: services
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: chat
+   template:
+      metadata:
+         labels:
+            app: chat
+      spec:
+         containers:
+            - name: chat
+              image: rengumin/chat-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: "chat-pg-db.storages"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: mydatabase
+                 - name: SERVER_PORT
+                   value: "8080"
+                 - name: SHOPS_SERVICE_ADDR
+                   value: "shops-svc.services:50050"
+                 - name: PRODUCT_SERVICE_URL
+                   value: "http://products-svc.services:8080/api"
+              resources:
+                 requests:
+                    cpu: "500m"
+                    memory: "256Mi"
+                 limits:
+                    cpu: "1"
+                    memory: "512Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: chat-svc
+   namespace: services
+spec:
+   type: ClusterIP
+   selector:
+      app: chat
+   ports:
+      - protocol: TCP
+        name: http
+        port: 8080
+        targetPort: 8080
+      - protocol: TCP
+        name: grpc
+        port: 50050
+        targetPort: 50050

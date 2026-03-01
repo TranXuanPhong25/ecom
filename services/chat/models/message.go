@@ -18,12 +18,12 @@ const (
 
 type Message struct {
 	ID             uuid.UUID      `gorm:"type:uuid;primaryKey;default:gen_random_uuid()" json:"id"`
-	ConversationID uuid.UUID      `gorm:"type:uuid;not null;index" json:"conversation_id"`
-	SenderID       string         `gorm:"type:varchar(255);not null" json:"sender_id"`
-	SenderType     string         `gorm:"type:varchar(50);not null" json:"sender_type"`
+	ConversationID uuid.UUID      `gorm:"type:uuid;not null;index" json:"conversationId"`
+	SenderID       string         `gorm:"type:varchar(255);not null" json:"senderId"`
+	SenderType     string         `gorm:"type:varchar(50);not null" json:"senderType"`
 	Content        string         `gorm:"type:text;not null" json:"content"`
-	MessageType    MessageType    `gorm:"type:varchar(20);not null;default:'text'" json:"message_type"`
-	IsBotMessage   bool           `gorm:"not null;default:false" json:"is_bot_message"`
-	CreatedAt      time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	DeletedAt      gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
+	MessageType    MessageType    `gorm:"type:varchar(20);not null;default:'text'" json:"messageType"`
+	IsBotMessage   bool           `gorm:"not null;default:false" json:"isBotMessage"`
+	CreatedAt      time.Time      `gorm:"autoCreateTime" json:"createdAt"`
+	DeletedAt      gorm.DeletedAt `gorm:"index" json:"deletedAt"`
 }

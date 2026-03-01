@@ -18,25 +18,25 @@ type UpdateConversationStatusPayload struct {
 
 // Message DTOs
 type SendMessagePayload struct {
-	SenderID    string             `json:"sender_id" validate:"required"`
-	SenderType  string             `json:"sender_type" validate:"required"`
-	Content     string             `json:"content" validate:"required"`
-	MessageType models.MessageType `json:"message_type" validate:"required,oneof=text image file system_event"`
-	IsBotMessage bool             `json:"is_bot_message"`
+	SenderID     string             `json:"senderId" validate:"required"`
+	SenderType   string             `json:"senderType" validate:"required"`
+	Content      string             `json:"content" validate:"required"`
+	MessageType  models.MessageType `json:"messageType" validate:"required,oneof=text image file system_event"`
+	IsBotMessage bool               `json:"isBotMessage"`
 }
 
 type MessageResponse struct {
 	ID             uuid.UUID          `json:"id"`
-	ConversationID uuid.UUID          `json:"conversation_id"`
-	SenderID       string             `json:"sender_id"`
-	SenderType     string             `json:"sender_type"`
+	ConversationID uuid.UUID          `json:"conversationId"`
+	SenderID       string             `json:"senderId"`
+	SenderType     string             `json:"senderType"`
 	Content        string             `json:"content"`
-	MessageType    models.MessageType `json:"message_type"`
-	IsBotMessage   bool               `json:"is_bot_message"`
-	CreatedAt      time.Time          `json:"created_at"`
+	MessageType    models.MessageType `json:"messageType"`
+	IsBotMessage   bool               `json:"isBotMessage"`
+	CreatedAt      time.Time          `json:"createdAt"`
 }
 
 // LastRead DTOs
 type UpdateLastReadPayload struct {
-	ParticipantID string `json:"participant_id" validate:"required"`
+	ParticipantID string `json:"participantId" validate:"required"`
 }
