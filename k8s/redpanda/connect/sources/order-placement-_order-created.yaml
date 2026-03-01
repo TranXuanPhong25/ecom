@@ -2,7 +2,7 @@ apiVersion: kafka.strimzi.io/v1
 kind: KafkaConnector
 metadata:
    name: debezium-connector-create-order
-   namespace: redpanda
+   namespace: kafka
    labels:
       strimzi.io/cluster: debezium-connect-cluster
 spec:

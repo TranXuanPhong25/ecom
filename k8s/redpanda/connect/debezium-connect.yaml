@@ -3,7 +3,7 @@ apiVersion: kafka.strimzi.io/v1
 kind: KafkaConnect
 metadata:
    name: debezium-connect-cluster
-   namespace: redpanda
+   namespace: kafka
    annotations:
       strimzi.io/use-connector-resources: "true"
 spec:
@@ -11,7 +11,14 @@ spec:
    image: rengumin/custom-debezium-connect:latest
 
    replicas: 1
-   bootstrapServers: redpanda.redpanda:9092
+   bootstrapServers: redpanda.redpanda:9093
+   tls:
+      trustedCertificates:
+         - secretName: kafka-ca
+           certificate: ca.crt
+   config:
+      security.protocol: SSL
+      ssl.endpoint.identification.algorithm: HTTPS
    groupId: connect-cluster
    offsetStorageTopic: connect-cluster-offsets
    configStorageTopic: connect-cluster-configs
