@@ -13,7 +13,7 @@ type ProductVariant struct {
 }
 
 type StockCheckRequest struct {
-	ProductID string `json:"product_id" validate:"required"`
+	ProductID string `json:"productId" validate:"required"`
 	Quantity  int    `json:"quantity" validate:"required,min=1"`
 }
 

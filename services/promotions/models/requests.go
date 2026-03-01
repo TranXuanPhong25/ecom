@@ -10,13 +10,13 @@ import (
 type CreateEventBannerRequest struct {
 	Title       string    `json:"title" validate:"required,min=3,max=200"`
 	Description string    `json:"description"`
-	ImageURL    string    `json:"image_url" validate:"required,url"`
-	LinkURL     string    `json:"link_url" validate:"omitempty,url"`
-	StartTime   time.Time `json:"start_time" validate:"required"`
-	EndTime     time.Time `json:"end_time" validate:"required,gtfield=StartTime"`
+	ImageURL    string    `json:"imageUrl" validate:"required,url"`
+	LinkURL     string    `json:"linkUrl" validate:"omitempty,url"`
+	StartTime   time.Time `json:"startTime" validate:"required"`
+	EndTime     time.Time `json:"endTime" validate:"required,gtfield=StartTime"`
 	Priority    int       `json:"priority"`
-	IsActive    bool      `json:"is_active"`
-	EventType   string    `json:"event_type" validate:"required,oneof=black_friday flash_sale new_year holiday seasonal other"`
+	IsActive    bool      `json:"isActive"`
+	EventType   string    `json:"eventType" validate:"required,oneof=black_friday flash_sale new_year holiday seasonal other"`
 	Position    string    `json:"position" validate:"omitempty,oneof=main sidebar popup"`
 }
 
@@ -25,39 +25,39 @@ type UpdateEventBannerRequest struct {
 	ID          uuid.UUID  `json:"id" validate:"required,uuid"`
 	Title       string     `json:"title" validate:"omitempty,min=3,max=200"`
 	Description string     `json:"description"`
-	ImageURL    string     `json:"image_url" validate:"omitempty,url"`
-	LinkURL     string     `json:"link_url" validate:"omitempty,url"`
-	StartTime   *time.Time `json:"start_time"`
-	EndTime     *time.Time `json:"end_time"`
+	ImageURL    string     `json:"imageUrl" validate:"omitempty,url"`
+	LinkURL     string     `json:"linkUrl" validate:"omitempty,url"`
+	StartTime   *time.Time `json:"startTime"`
+	EndTime     *time.Time `json:"endTime"`
 	Priority    *int       `json:"priority"`
-	IsActive    *bool      `json:"is_active"`
-	EventType   string     `json:"event_type" validate:"omitempty,oneof=black_friday flash_sale new_year holiday seasonal other"`
+	IsActive    *bool      `json:"isActive"`
+	EventType   string     `json:"eventType" validate:"omitempty,oneof=black_friday flash_sale new_year holiday seasonal other"`
 	Position    string     `json:"position" validate:"omitempty,oneof=main sidebar popup"`
 }
 
 // CreatePromoBarRequest - Request để tạo promo bar
 type CreatePromoBarRequest struct {
 	Message         string    `json:"message" validate:"required,min=3,max=300"`
-	BackgroundColor string    `json:"background_color" validate:"omitempty,hexcolor"`
-	TextColor       string    `json:"text_color" validate:"omitempty,hexcolor"`
-	LinkURL         string    `json:"link_url" validate:"omitempty,url"`
-	StartTime       time.Time `json:"start_time" validate:"required"`
-	EndTime         time.Time `json:"end_time" validate:"required,gtfield=StartTime"`
-	IsActive        bool      `json:"is_active"`
+	BackgroundColor string    `json:"backgroundColor" validate:"omitempty,hexcolor"`
+	TextColor       string    `json:"textColor" validate:"omitempty,hexcolor"`
+	LinkURL         string    `json:"linkUrl" validate:"omitempty,url"`
+	StartTime       time.Time `json:"startTime" validate:"required"`
+	EndTime         time.Time `json:"endTime" validate:"required,gtfield=StartTime"`
+	IsActive        bool      `json:"isActive"`
 	Priority        int       `json:"priority"`
-	IsCloseable     bool      `json:"is_closeable"`
+	IsCloseable     bool      `json:"isCloseable"`
 }
 
 // UpdatePromoBarRequest - Request để cập nhật promo bar
 type UpdatePromoBarRequest struct {
 	ID              uuid.UUID  `json:"id" validate:"required,uuid"`
 	Message         string     `json:"message" validate:"omitempty,min=3,max=300"`
-	BackgroundColor string     `json:"background_color" validate:"omitempty,hexcolor"`
-	TextColor       string     `json:"text_color" validate:"omitempty,hexcolor"`
-	LinkURL         string     `json:"link_url" validate:"omitempty,url"`
-	StartTime       *time.Time `json:"start_time"`
-	EndTime         *time.Time `json:"end_time"`
-	IsActive        *bool      `json:"is_active"`
+	BackgroundColor string     `json:"backgroundColor" validate:"omitempty,hexcolor"`
+	TextColor       string     `json:"textColor" validate:"omitempty,hexcolor"`
+	LinkURL         string     `json:"linkUrl" validate:"omitempty,url"`
+	StartTime       *time.Time `json:"startTime"`
+	EndTime         *time.Time `json:"endTime"`
+	IsActive        *bool      `json:"isActive"`
 	Priority        *int       `json:"priority"`
-	IsCloseable     *bool      `json:"is_closeable"`
+	IsCloseable     *bool      `json:"isCloseable"`
 }
