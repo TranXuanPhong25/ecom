@@ -1,3 +1,15 @@
+## [4.5.0](https://github.com/TranXuanPhong25/ecom/compare/v4.4.0...v4.5.0) (2026-03-01)
+
+### 🚀 Features
+
+* chat ([a70f558](https://github.com/TranXuanPhong25/ecom/commit/a70f558abbbc463e2706202de1debd96d45dca61))
+* noti ([e815fa4](https://github.com/TranXuanPhong25/ecom/commit/e815fa4af189f8517468a2675336c94655734136))
+
+### 🔨 Technical Changes
+
+* bring back strimzi operator for kafka connectd ([35b01b9](https://github.com/TranXuanPhong25/ecom/commit/35b01b98c7c4761a5e2061c1eba309b06bee31f5))
+* migration from kafka to redpanda ([b59c458](https://github.com/TranXuanPhong25/ecom/commit/b59c45887fb913258ed28e664cc2244695de5c8f))
+
 ## [4.4.0](https://github.com/TranXuanPhong25/ecom/compare/v4.3.0...v4.4.0) (2026-02-27)
 
 ### 🚀 Features
