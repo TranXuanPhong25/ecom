@@ -1,3 +1,14 @@
+## [4.4.0](https://github.com/TranXuanPhong25/ecom/compare/v4.3.0...v4.4.0) (2026-02-27)
+
+### 🚀 Features
+
+* basic crud chat service ([c4c329e](https://github.com/TranXuanPhong25/ecom/commit/c4c329e06911f13064f2ba3baba583b03b2760da))
+* fulfillment, order ([5744f98](https://github.com/TranXuanPhong25/ecom/commit/5744f984cb7e0fdc2c1b5458e5411b158bba4331))
+
+### 🔨 Technical Changes
+
+* redpanda console for kafka-ui ([78d4b37](https://github.com/TranXuanPhong25/ecom/commit/78d4b37060e5b35a13e120d9d0d1377953611719))
+
 ## [4.3.0](https://github.com/TranXuanPhong25/ecom/compare/v4.2.0...v4.3.0) (2026-02-08)
 
 ### 🚀 Features
