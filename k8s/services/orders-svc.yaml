@@ -32,11 +32,14 @@ spec:
                  - name: DB_NAME
                    value: mydatabase
                  - name: KAFKA_BOOTSTRAP_SERVERS
-                   value: kafka-cluster-kafka-bootstrap.kafka:9092
+                   value: redpanda.redpanda:9093
+                 - name: KAFKA_SSL_TRUST_STORE_LOCATION
+                   value: "/app/config/truststore.jks"
                  - name: SPRING_DEVTOOLS_RESTART_ENABLED
                    value: "false"
                  - name: SPRING_DEVTOOLS_LIVERELOAD_ENABLED
                    value: "false"
+
               resources:
                  limits:
                     memory: "1Gi"
@@ -44,6 +47,14 @@ spec:
                  requests:
                     memory: "400Mi"
                     cpu: "512m"
+              volumeMounts:
+                 - name: truststore-volume
+                   mountPath: /app/config
+                   readOnly: true
+         volumes:
+            - name: truststore-volume
+              secret:
+                 secretName: kafka-truststore
 ---
 apiVersion: v1
 kind: Service

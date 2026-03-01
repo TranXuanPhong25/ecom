@@ -46,7 +46,9 @@ spec:
                  - name: DB_NAME
                    value: "mydatabase"
                  - name: KAFKA_BROKERS
-                   value: "kafka-cluster-kafka-bootstrap.kafka:9092"
+                   value: "redpanda.redpanda:9093"
+                 - name: KAFKA_SSL_CA_CERT_LOCATION
+                   value: "/app/config/ca.crt"
                  - name: DEFAULT_PICKUP_WINDOW
                    value: "0.008"
                  - name: MAX_DELIVERY_ATTEMPTS
@@ -72,3 +74,11 @@ spec:
                     port: 8080
                  initialDelaySeconds: 10
                  periodSeconds: 5
+              volumeMounts:
+                 - name: ca-volume
+                   mountPath: /app/config
+                   readOnly: true
+         volumes:
+            - name: ca-volume
+              secret:
+                 secretName: kafka-ca

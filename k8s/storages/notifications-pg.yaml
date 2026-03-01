@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: notifications-pg
+   namespace: storages
+spec:
+   serviceName: notifications-pg
+   replicas: 1
+   selector:
+      matchLabels:
+         app: notifications-pg
+   template:
+      metadata:
+         labels:
+            app: notifications-pg
+      spec:
+         containers:
+            - name: notifications-pg
+              image: postgres:15-alpine
+              env:
+                 - name: POSTGRES_USER
+                   value: postgres
+                 - name: POSTGRES_PASSWORD
+                   value: postgres
+                 - name: POSTGRES_DB
+                   value: mydatabase
+                 - name: PGDATA
+                   value: /var/lib/postgresql/data/pgdata
+              volumeMounts:
+                 - name: db-storage
+                   mountPath: /var/lib/postgresql/data
+   volumeClaimTemplates:
+      - metadata:
+           name: db-storage
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 1Gi
+           storageClassName: local-path
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: notifications-pg-db
+   namespace: storages
+spec:
+   clusterIP: None
+   selector:
+      app: notifications-pg
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+   namespace: storages
+   name: allow-notifications-service-to-db
+spec:
+   podSelector:
+      matchLabels:
+         app: notifications-pg
+   policyTypes:
+      - Ingress
+   ingress:
+      - from:
+           - namespaceSelector:
+                matchLabels:
+                   name: services
+        ports:
+           - protocol: TCP
+             port: 5432

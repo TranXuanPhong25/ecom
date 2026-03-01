@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"os"
@@ -58,6 +59,7 @@ func runMigrations(cfg *config.Config) {
 
 func main() {
 	// Load configuration
+	time.Sleep(1000 * time.Millisecond) // Wait for dependent services to be ready (e.g., Kafka, DB)
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
@@ -77,13 +79,13 @@ func main() {
 
 	// Initialize event publisher
 	kafkaBrokers := strings.Split(cfg.KafkaBrokers, ",")
-	publisher := event.NewKafkaPublisher(kafkaBrokers)
-	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicDelivered))
-	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicDeliveryFailed))
-	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicPickedUp))
-	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicPickupScheduled))
-	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicInTransit))
-	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicOutForDelivery))
+	publisher := event.NewKafkaPublisher(kafkaBrokers, cfg.TLSConfig)
+	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicDelivered), cfg.TLSConfig)
+	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicDeliveryFailed), cfg.TLSConfig)
+	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicPickedUp), cfg.TLSConfig)
+	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicPickupScheduled), cfg.TLSConfig)
+	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicInTransit), cfg.TLSConfig)
+	err = createTopicIfNotExists(kafkaBrokers, string(entity.TopicOutForDelivery), cfg.TLSConfig)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -146,38 +148,49 @@ func connectDB(cfg *config.Config) (*gorm.DB, error) {
 	return db, nil
 }
 
-func createTopicIfNotExists(brokers []string, topic string) error {
-	conn, err := kafka.Dial("tcp", brokers[0])
+func createTopicIfNotExists(brokers []string, topic string, tlsConfig *tls.Config) error {
+	dialer := &kafka.Dialer{
+		Timeout:   10 * time.Second,
+		TLS:       tlsConfig,
+		DualStack: true,
+	}
+
+	ctx := context.Background()
+
+	// Connect to any broker with TLS
+	conn, err := dialer.DialContext(ctx, "tcp", brokers[0])
 	if err != nil {
 		return fmt.Errorf("failed to connect to Kafka: %w", err)
 	}
 	defer conn.Close()
 
+	// Get controller
 	controller, err := conn.Controller()
 	if err != nil {
 		return fmt.Errorf("failed to get Kafka controller: %w", err)
 	}
-	var controllerConn *kafka.Conn
-	controllerConn, err = kafka.Dial("tcp", fmt.Sprintf("%s:%d", controller.Host, controller.Port))
+
+	// Connect to controller WITH TLS
+	controllerConn, err := dialer.DialContext(
+		ctx,
+		"tcp",
+		fmt.Sprintf("%s:%d", controller.Host, controller.Port),
+	)
 	if err != nil {
 		return fmt.Errorf("failed to connect to Kafka controller: %w", err)
 	}
 	defer controllerConn.Close()
 
-	topicConfigs := []kafka.TopicConfig{
-		{
-			Topic:             topic,
-			NumPartitions:     1,
-			ReplicationFactor: 1,
-		},
-	}
-
-	err = controllerConn.CreateTopics(topicConfigs...)
-	if err != nil && !strings.Contains(err.Error(), "Topic with this name already exists") {
+	// Create topic
+	err = controllerConn.CreateTopics(kafka.TopicConfig{
+		Topic:             topic,
+		NumPartitions:     1,
+		ReplicationFactor: 1,
+	})
+	if err != nil && !strings.Contains(err.Error(), "already exists") {
 		return fmt.Errorf("failed to create Kafka topic: %w", err)
 	}
 
-	log.Printf("Kafka topic '%s' is ready", topic)
 	return nil
 }
 

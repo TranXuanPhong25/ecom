@@ -1,6 +1,8 @@
 package com.ecom.orders.infras.config;
 
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,9 @@ public class KafkaConsumerConfig {
    @Value("${spring.kafka.consumer.group-id}")
    private String groupId;
 
+   @Value("${spring.kafka.ssl.trust-store-location}")
+   private String truststoreLocation;
+
    @Bean
    public ConsumerFactory<String, String> consumerFactory() {
       Map<String, Object> props = new HashMap<>();
@@ -36,6 +41,10 @@ public class KafkaConsumerConfig {
       props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
       props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
       props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 100);
+      props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+      props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststoreLocation);
+      props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "changeit");
+      props.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "JKS");
       return new DefaultKafkaConsumerFactory<>(props);
    }
 

@@ -39,3 +39,10 @@ metadata:
    name: kafka
    labels:
       name: kafka
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: redpanda
+   labels:
+      name: redpanda

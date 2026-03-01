@@ -16,7 +16,14 @@ helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.5.1 -n envo
 
 ```bash
 kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
-
+helm install redpanda redpanda/redpanda \
+  --version 25.3.2 \
+  --namespace redpanda \
+  --create-namespace \
+  --set external.domain=customredpandadomain.local \
+  --set statefulset.initContainers.setDataDirOwnership.enabled=true \
+  --set statefulset.replicas=1 \
+  --set statefulset.podAntiAffinity.type=soft \
 
 ```
 
@@ -36,4 +43,15 @@ kubectl create configmap opa-server-policy --from-file=opa/policies/server.rego 
 eval $(minikube docker-env)
 docker save product-categories:dev | sudo k3s ctr images import -
 firewalld to expose
+```
+
+```bash
+kubectl create secret generic kafka-truststore \
+  --from-file=truststore.jks \
+  -n services
+
+
+kubectl create secret generic kafka-ca \
+--from-file=ca.crt \
+-n services
 ```

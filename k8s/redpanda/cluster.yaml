@@ -1,0 +1,32 @@
+apiVersion: cluster.redpanda.com/v1alpha2
+kind: Redpanda
+metadata:
+   name: redpanda
+   namespace: redpanda
+spec:
+   clusterSpec:
+      external:
+         domain: customredpandadomain.local
+      statefulset:
+         replicas: 1
+         podAntiAffinity:
+            type: soft
+         initContainers:
+            setDataDirOwnership:
+               enabled: true
+      # tls:
+      #    enabled: false
+      # listeners:
+      #    kafka:
+      #       port: 9092 # internal listener (ClusterIP)
+      #       tls:
+      #          enabled: false
+      #       authenticationMethod: none
+      #       external:
+      #          default:
+      #             enabled: true
+      #             port: 9094
+      #             advertisedPorts:
+      #                - 31092
+      #             tls:
+      #                enabled: false

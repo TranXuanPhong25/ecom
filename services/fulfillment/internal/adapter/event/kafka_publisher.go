@@ -2,6 +2,7 @@ package event
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 
@@ -13,11 +14,14 @@ type kafkaPublisher struct {
 	writer *kafka.Writer
 }
 
-func NewKafkaPublisher(brokers []string) *kafkaPublisher {
+func NewKafkaPublisher(brokers []string, tlsConfig *tls.Config) *kafkaPublisher {
 	return &kafkaPublisher{
 		writer: &kafka.Writer{
 			Addr:     kafka.TCP(brokers...),
 			Balancer: &kafka.LeastBytes{},
+			Transport: &kafka.Transport{
+				TLS: tlsConfig,
+			},
 		},
 	}
 }
@@ -103,4 +107,3 @@ func (p *kafkaPublisher) PublishDeliveryFailed(ctx context.Context, pkg *entity.
 func (p *kafkaPublisher) Close() error {
 	return p.writer.Close()
 }
-
