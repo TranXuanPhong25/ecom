@@ -15,6 +15,7 @@ type ChatHandler struct {
 }
 
 func NewChatHandler(chatService port.IChatService) *ChatHandler {
+
 	return &ChatHandler{
 		chatService: chatService,
 	}

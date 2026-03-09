@@ -25,6 +25,18 @@ type SendMessagePayload struct {
 	IsBotMessage bool               `json:"isBotMessage"`
 }
 
+// Message represents a chat message routed through the hub.
+type Message struct {
+	ConvID    string `json:"conv_id"`
+	SenderID  string `json:"sender_id"`
+	Content   string `json:"content"`
+	Type      string `json:"type"` // "text", "image", "system"
+	CreatedAt int64  `json:"createdAt"`
+}
+type IncomingMessageWS struct {
+	Content string `json:"content"`
+	Type    string `json:"type"`
+}
 type MessageResponse struct {
 	ID             uuid.UUID          `json:"id"`
 	ConversationID uuid.UUID          `json:"conversationId"`
