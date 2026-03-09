@@ -1,3 +1,14 @@
+## [4.6.0](https://github.com/TranXuanPhong25/ecom/compare/v4.5.0...v4.6.0) (2026-03-09)
+
+### 🚀 Features
+
+* **chat:** ws handler ([f9d9980](https://github.com/TranXuanPhong25/ecom/commit/f9d998064fb4660e11ba21e98ff80e2514d738f3))
+
+### 🔨 Technical Changes
+
+* migrate chat service to hexagonal architecture ([f4dbf96](https://github.com/TranXuanPhong25/ecom/commit/f4dbf961927ada19ecec98051a52e7030297c699))
+* remove snake_case json ([f4b87fb](https://github.com/TranXuanPhong25/ecom/commit/f4b87fb7714eccf0987d12982746087d6f4a9f4b))
+
 ## [4.5.0](https://github.com/TranXuanPhong25/ecom/compare/v4.4.0...v4.5.0) (2026-03-01)
 
 ### 🚀 Features
