@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: payment-onepay-service
+   namespace: services
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: payment-onepay
+   template:
+      metadata:
+         labels:
+            app: payment-onepay
+      spec:
+         containers:
+            - name: payment-onepay
+              image: rengumin/payment-onepay-svc:1.0
+              ports:
+                 - containerPort: 8080
+              env:
+                 - name: DB_HOST
+                   value: "payment-onepay-pg-db.storages"
+                 - name: DB_PORT
+                   value: "5432"
+                 - name: DB_USER
+                   value: postgres
+                 - name: DB_PASSWORD
+                   value: postgres
+                 - name: DB_NAME
+                   value: payment
+                 - name: SERVER_PORT
+                   value: "8080"
+                 - name: ONEPAY_MERCHANT_ID
+                   value: "TESTONEPAY"
+                 - name: ONEPAY_ACCESS_CODE
+                   valueFrom:
+                      secretKeyRef:
+                         name: app-secrets
+                         key: ONEPAY_ACCESS_CODE
+                 - name: ONEPAY_HASH_KEY
+                   valueFrom:
+                      secretKeyRef:
+                         name: app-secrets
+                         key: ONEPAY_HASH_KEY
+                 - name: ONEPAY_GATEWAY_URL
+                   value: "https://mtf.onepay.vn/paygate/vpcpay.op"
+                 - name: ONEPAY_QUERY_URL
+                   value: "https://mtf.onepay.vn/msp/api/v1/vpc/invoices/queries"
+                 - name: ONEPAY_RETURN_URL
+                   value: "http://localhost:8000/api/payments/return"
+                 - name: ONEPAY_IPN_URL
+                   value: "http://localhost:8000/api/payments/ipn"
+              resources:
+                 requests:
+                    cpu: "250m"
+                    memory: "128Mi"
+                 limits:
+                    cpu: "500m"
+                    memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: payment-onepay-svc
+   namespace: services
+spec:
+   type: ClusterIP
+   selector:
+      app: payment-onepay
+   ports:
+      - protocol: TCP
+        name: http
+        port: 8080
+        targetPort: 8080

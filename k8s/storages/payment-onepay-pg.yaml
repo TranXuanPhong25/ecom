@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: payment-onepay-pg-db
+   namespace: storages
+spec:
+   serviceName: payment-onepay-pg-db
+   replicas: 1
+   selector:
+      matchLabels:
+         app: payment-onepay-pg
+   template:
+      metadata:
+         labels:
+            app: payment-onepay-pg
+      spec:
+         containers:
+            - name: postgres
+              image: postgres:16-alpine
+              ports:
+                 - containerPort: 5432
+              env:
+                 - name: POSTGRES_USER
+                   value: postgres
+                 - name: POSTGRES_PASSWORD
+                   value: postgres
+                 - name: POSTGRES_DB
+                   value: payment
+              volumeMounts:
+                 - name: payment-onepay-pg-data
+                   mountPath: /var/lib/postgresql/data
+   volumeClaimTemplates:
+      - metadata:
+           name: payment-onepay-pg-data
+        spec:
+           accessModes: ["ReadWriteOnce"]
+           resources:
+              requests:
+                 storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: payment-onepay-pg-db
+   namespace: storages
+spec:
+   type: ClusterIP
+   selector:
+      app: payment-onepay-pg
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432

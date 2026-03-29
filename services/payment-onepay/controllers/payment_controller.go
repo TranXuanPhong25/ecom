@@ -41,7 +41,7 @@ func (ctrl *PaymentController) CreatePayment(c echo.Context) error {
 
 	clientIP := c.RealIP()
 	if clientIP == "" {
-		clientIP = "127.0.0.1" // fallback 
+		clientIP = "127.0.0.1" // fallback
 	}
 
 	resp, err := ctrl.service.CreatePayment(req, clientIP)
