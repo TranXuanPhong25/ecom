@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/TranXuanPhong25/ecom/services/chat/internal/app/dto"
+	"github.com/TranXuanPhong25/ecom/services/chat/internal/domain/entity"
 	"github.com/TranXuanPhong25/ecom/services/chat/internal/infras/configs"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -14,13 +15,13 @@ import (
 type Client struct {
 	ID     string
 	UserID string
-	ConvID string
+	ConvID uuid.UUID
 	Send   chan []byte
 	Hub    *Hub
 	Conn   *websocket.Conn
 }
 
-func NewClient(hub *Hub, conn *websocket.Conn, userID, convID string) *Client {
+func NewClient(hub *Hub, conn *websocket.Conn, userID string, convID uuid.UUID) *Client {
 	return &Client{
 		ID:     uuid.New().String(),
 		UserID: userID,
@@ -58,12 +59,29 @@ func (c *Client) ReadPump() {
 			log.Printf("[Client] invalid message from client=%s: %v", c.ID, err)
 			return
 		}
+		if incomingMsg.MessageType != "text" && incomingMsg.Content != "image" {
+			c.Conn.WriteMessage(websocket.PongMessage, nil)
+			continue
+		}
+		persistMsg := &dto.SendMessagePayload{
+			SenderID:    c.UserID,
+			SenderType:  "customer",
+			Content:     incomingMsg.Content,
+			MessageType: entity.MessageType(incomingMsg.MessageType),
+		}
+		savedMsg, err := c.Hub.chatService.SendMessage(c.ConvID, persistMsg)
+		//feedback sent/ error
+		if err != nil {
+			log.Printf("[Client] error sending message from client=%s: %v", c.ID, err)
+			c.Conn.WriteMessage(websocket.TextMessage, []byte("Messaging error"))
+			return
+		}
 		msgSendToHub := &dto.Message{
-			ConvID:    c.ConvID,
-			SenderID:  c.UserID,
-			Content:   incomingMsg.Content,
-			Type:      incomingMsg.Type,
-			CreatedAt: time.Now().UnixMicro(),
+			ConvID:      c.ConvID.String(),
+			SenderID:    c.UserID,
+			Content:     incomingMsg.Content,
+			MessageType: incomingMsg.MessageType,
+			CreatedAt:   savedMsg.CreatedAt.UnixMilli(),
 		}
 		c.Hub.broadcast <- msgSendToHub
 	}

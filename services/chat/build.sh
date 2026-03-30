@@ -13,7 +13,7 @@ docker save $DOCKER_USERNAME/$SERVICE_NAME:$VERSION | sudo k3s ctr images import
 
 # # Push to Docker Hub
 echo "Pushing $SERVICE_NAME to Docker Hub..."
-docker push $DOCKER_USERNAME/$SERVICE_NAME:$VERSION
+# docker push $DOCKER_USERNAME/$SERVICE_NAME:$VERSION
 kubectl rollout restart deployment chat-service -n services
 
 echo "$SERVICE_NAME built and pushed successfully!"

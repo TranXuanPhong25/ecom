@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/TranXuanPhong25/ecom/services/chat/internal/app/chat"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 )
@@ -38,6 +39,13 @@ func (h *WSChatHandler) ServeWS(c echo.Context) error {
 		// })
 		convID = "c41d92b5-937f-43b6-951f-0db260106923"
 	}
+	parsedConvID, err := uuid.Parse(convID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid convID",
+		})
+	}
+
 	userID := c.Request().Header.Get("X-User-Id")
 	if userID == "" {
 		// return c.JSON(http.StatusUnauthorized, "")
@@ -45,11 +53,11 @@ func (h *WSChatHandler) ServeWS(c echo.Context) error {
 	}
 	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "Error upgrading websocket connection: " + err.Error(),
-		})
+		c.Logger().Errorf("WebSocket upgrade error: %v", err)
+		return err
 	}
-	client := chat.NewClient(h.hub, conn, userID, convID)
+
+	client := chat.NewClient(h.hub, conn, userID, parsedConvID)
 	h.hub.AddClient(client)
 	go client.ReadPump()
 	go client.WritePump()

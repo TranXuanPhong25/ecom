@@ -25,7 +25,7 @@ func main() {
 	chatService := chat.NewChatService(convRepo, msgRepo, lastReadRepo)
 	chatHandler := handler.NewChatHandler(chatService)
 
-	hub := chat.NewHub()
+	hub := chat.NewHub(chatService)
 	go hub.Run()
 	wsChatHandler := ws.NewWSChatHandler(hub)
 

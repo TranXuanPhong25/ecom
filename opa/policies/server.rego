@@ -130,3 +130,8 @@ allow if {
     regex.match(`\/api\/chats`, input.path)
 }
 
+allow if {
+    input.method in { "GET", "PUT", "DELETE" , "POST", "OPTIONS"}
+    regex.match(`\/ws\/chats`, input.path)
+}
+

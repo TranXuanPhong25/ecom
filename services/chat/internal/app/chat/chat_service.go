@@ -61,7 +61,6 @@ func (s *chatService) SendMessage(conversationID uuid.UUID, payload *dto.SendMes
 		SenderType:     payload.SenderType,
 		Content:        payload.Content,
 		MessageType:    payload.MessageType,
-		IsBotMessage:   payload.IsBotMessage,
 	}
 	if err := s.msgRepo.Create(msg); err != nil {
 		return nil, err

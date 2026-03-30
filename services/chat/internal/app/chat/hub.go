@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/TranXuanPhong25/ecom/services/chat/internal/app/dto"
+	"github.com/TranXuanPhong25/ecom/services/chat/internal/domain/port"
 	"github.com/TranXuanPhong25/ecom/services/chat/internal/infras/configs"
 )
 
@@ -21,15 +22,18 @@ type Hub struct {
 	unregister chan *Client
 
 	mu sync.RWMutex
+
+	chatService port.IChatService
 }
 
-func NewHub() *Hub {
+func NewHub(chatService port.IChatService) *Hub {
 	return &Hub{
 		convs:       make(map[string]map[*Client]bool),
 		userClients: make(map[string]map[*Client]bool),
 		broadcast:   make(chan *dto.Message, configs.SendBufferSize),
 		register:    make(chan *Client),
 		unregister:  make(chan *Client),
+		chatService: chatService,
 	}
 }
 func (h *Hub) Run() {
@@ -47,30 +51,30 @@ func (h *Hub) Run() {
 func (h *Hub) AddClient(c *Client) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if h.convs[c.ConvID] == nil {
-		h.convs[c.ConvID] = make(map[*Client]bool)
+	if h.convs[c.ConvID.String()] == nil {
+		h.convs[c.ConvID.String()] = make(map[*Client]bool)
 	}
-	h.convs[c.ConvID][c] = true
+	h.convs[c.ConvID.String()][c] = true
 
 	if h.userClients[c.UserID] == nil {
 		h.userClients[c.UserID] = make(map[*Client]bool)
 	}
 	h.userClients[c.UserID][c] = true
 	log.Printf("[Hub] client %s (user=%s) joined conv=%s | room_size=%d",
-		c.ID, c.UserID, c.ConvID, len(h.convs[c.ConvID]))
+		c.ID, c.UserID, c.ConvID.String(), len(h.convs[c.ConvID.String()]))
 }
 
 func (h *Hub) removeClient(c *Client) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	if clients, ok := h.convs[c.ConvID]; ok {
+	if clients, ok := h.convs[c.ConvID.String()]; ok {
 		if _, exists := clients[c]; exists {
 			// nếu tồn tại clients
 			close(c.Send)
 			delete(clients, c)
 			if len(clients) == 0 {
-				delete(h.convs, c.ConvID)
-				log.Printf("[Hub] conv=%s room removed (empty)", c.ConvID)
+				delete(h.convs, c.ConvID.String())
+				log.Printf("[Hub] conv=%s room removed (empty)", c.ConvID.String())
 			}
 		}
 	}
@@ -78,7 +82,7 @@ func (h *Hub) removeClient(c *Client) {
 		if _, exists := clients[c]; exists {
 			delete(clients, c)
 			if len(clients) == 0 {
-				delete(h.userClients, c.ConvID)
+				delete(h.userClients, c.ConvID.String())
 			}
 		}
 	}
@@ -100,6 +104,7 @@ func (h *Hub) fanOut(msg *dto.Message) {
 		}
 		select {
 		case client.Send <- encodeMessage(msg):
+
 		default:
 			log.Printf("[Hub] dropping slow client %s (user=%s)", client.ID, client.UserID)
 

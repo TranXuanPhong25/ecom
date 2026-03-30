@@ -18,24 +18,23 @@ type UpdateConversationStatusPayload struct {
 
 // Message DTOs
 type SendMessagePayload struct {
-	SenderID     string             `json:"senderId" validate:"required"`
-	SenderType   string             `json:"senderType" validate:"required"`
-	Content      string             `json:"content" validate:"required"`
-	MessageType  entity.MessageType `json:"messageType" validate:"required,oneof=text image file system_event"`
-	IsBotMessage bool               `json:"isBotMessage"`
+	SenderID    string             `json:"senderId" validate:"required"`
+	SenderType  string             `json:"senderType" validate:"required"`
+	Content     string             `json:"content" validate:"required"`
+	MessageType entity.MessageType `json:"messageType" validate:"required,oneof=text image file system_event"`
 }
 
 // Message represents a chat message routed through the hub.
 type Message struct {
-	ConvID    string `json:"conv_id"`
-	SenderID  string `json:"sender_id"`
-	Content   string `json:"content"`
-	Type      string `json:"type"` // "text", "image", "system"
-	CreatedAt int64  `json:"createdAt"`
+	ConvID      string             `json:"conv_id"`
+	SenderID    string             `json:"sender_id"`
+	Content     string             `json:"content"`
+	MessageType entity.MessageType `json:"type"` // "text", "image", "system"
+	CreatedAt   int64              `json:"createdAt"`
 }
 type IncomingMessageWS struct {
-	Content string `json:"content"`
-	Type    string `json:"type"`
+	Content     string             `json:"content"`
+	MessageType entity.MessageType `json:"type"`
 }
 type MessageResponse struct {
 	ID             uuid.UUID          `json:"id"`
@@ -44,7 +43,6 @@ type MessageResponse struct {
 	SenderType     string             `json:"senderType"`
 	Content        string             `json:"content"`
 	MessageType    entity.MessageType `json:"messageType"`
-	IsBotMessage   bool               `json:"isBotMessage"`
 	CreatedAt      time.Time          `json:"createdAt"`
 }
 

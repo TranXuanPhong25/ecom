@@ -9,7 +9,16 @@ spec:
       - matches:
            - path:
                 type: PathPrefix
-                value: "/api/chats"
+                value: /api/chats
+        backendRefs:
+           - name: chat-svc
+             namespace: services
+             port: 8080
+
+      - matches:
+           - path:
+                type: PathPrefix
+                value: /ws/chats
         backendRefs:
            - name: chat-svc
              namespace: services
