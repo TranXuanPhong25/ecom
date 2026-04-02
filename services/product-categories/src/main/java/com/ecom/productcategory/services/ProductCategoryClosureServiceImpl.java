@@ -12,6 +12,7 @@ import java.util.List;
 public class ProductCategoryClosureServiceImpl implements ProductCategoryClosureService {
     @Autowired
     private ProductCategoryClosureRepository productCategoryClosureRepository;
+
     @Transactional
     @Override
     public void deleteByCategoryIds(List<Integer> categoryIds) {
@@ -21,20 +22,19 @@ public class ProductCategoryClosureServiceImpl implements ProductCategoryClosure
     @Transactional
     @Override
     public void createProductCategory(Integer parentId, Integer id) {
-       if(id==null){
-           throw new IllegalArgumentException("id cannot be null");
-       }
-       ProductCategoryClosureEntity productCategoryClosureEntity = new ProductCategoryClosureEntity(id,id,0);
-       productCategoryClosureRepository.save(productCategoryClosureEntity);
-       if(parentId!=null){
-           productCategoryClosureRepository.createSubCategory(parentId, id);
-       }
+        if (id == null) {
+            throw new IllegalArgumentException("id cannot be null");
+        }
+        ProductCategoryClosureEntity productCategoryClosureEntity = new ProductCategoryClosureEntity(id, id, 0);
+        productCategoryClosureRepository.save(productCategoryClosureEntity);
+        if (parentId != null) {
+            productCategoryClosureRepository.createSubCategory(parentId, id);
+        }
     }
 
     @Override
     public List<Integer> getAllDescendantById(Integer id) {
         return productCategoryClosureRepository.getAllDescendantById(id);
     }
-
 
 }

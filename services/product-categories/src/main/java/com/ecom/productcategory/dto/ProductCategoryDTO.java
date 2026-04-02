@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -12,10 +13,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class ProductCategoryDTO extends ProductCategoryEntity {
     private ProductCategoryEntity parent;
     private Integer parentId;
     private List<ProductCategoryDTO> children;
+
     public ProductCategoryDTO(ProductCategoryEntity productCategoryEntity) {
         super(productCategoryEntity.getId(), productCategoryEntity.getName(), productCategoryEntity.getImageUrl());
     }

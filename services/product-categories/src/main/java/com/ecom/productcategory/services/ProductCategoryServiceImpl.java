@@ -5,6 +5,7 @@ import com.ecom.productcategory.dto.ProductCategoryNodeDTO;
 import com.ecom.productcategory.dto.ProductCategoryPathNode;
 import com.ecom.productcategory.entities.ProductCategoryEntity;
 import com.ecom.productcategory.exceptions.ResourceNotFoundException;
+import com.ecom.productcategory.models.ProductCategoryDetailProjection;
 import com.ecom.productcategory.models.ProductCategoryUpdateModel;
 import com.ecom.productcategory.repositories.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         List<ProductCategoryEntity> childEntities = productCategoryRepository.findAllChildrenById(category.getId());
         if (!childEntities.isEmpty()) {
             List<ProductCategoryNodeDTO> children = childEntities.stream()
-                                                                .map(ProductCategoryNodeDTO::new)
-                                                                .toList();
+                    .map(ProductCategoryNodeDTO::new)
+                    .toList();
             category.setChildren(children);
             for (ProductCategoryNodeDTO child : children) {
                 constructTree(child);
@@ -42,8 +43,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public List<ProductCategoryNodeDTO> getProductCategoriesTree() {
         List<ProductCategoryEntity> rootCategories = productCategoryRepository.findAllRootCategories();
         List<ProductCategoryNodeDTO> productCategoryDTOs = rootCategories.stream()
-                                                                        .map(ProductCategoryNodeDTO::new)
-                                                                        .collect(Collectors.toList());
+                .map(ProductCategoryNodeDTO::new)
+                .collect(Collectors.toList());
         for (ProductCategoryNodeDTO rootCategory : productCategoryDTOs) {
             constructTree(rootCategory);
         }
@@ -57,21 +58,49 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             productCategoryRepository.deleteAllById(deletedProductCategoryIds);
             productCategoryClosureService.deleteByCategoryIds(deletedProductCategoryIds);
         }
-
-        productCategoryRepository.saveAll(productCategoryUpdateModel.getProductCategories());
+        List<Integer> existedCategoryIDs = productCategoryUpdateModel.getProductCategories().stream()
+                .filter(category -> category.getId() != null)
+                .map(ProductCategoryEntity::getId)
+                .toList();
+        if (existedCategoryIDs != null && !existedCategoryIDs.isEmpty()) {
+            List<ProductCategoryEntity> updatedCategories = productCategoryRepository.findAllById(existedCategoryIDs);
+            for (ProductCategoryEntity updatedCategory : updatedCategories) {
+                for (ProductCategoryEntity category : productCategoryUpdateModel.getProductCategories()) {
+                    if (category.getId() != null && category.getId().equals(updatedCategory.getId())) {
+                        updatedCategory.setName(category.getName());
+                        updatedCategory.setImageUrl(category.getImageUrl());
+                        break;
+                    }
+                }
+            }
+            productCategoryRepository.saveAll(updatedCategories);
+        }
         return productCategoryRepository.findAll();
     }
 
     @Override
     public ProductCategoryDTO getProductCategoryById(Integer id) {
-        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product category not found with id: " + id));
-        ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO(productCategoryEntity);
-        List<ProductCategoryEntity> children = productCategoryRepository.findAllChildrenById(id);
-        productCategoryDTO.setChildren(children.stream().map(ProductCategoryDTO::new).collect(Collectors.toList()));
 
+        List<ProductCategoryDetailProjection> categoryWithChildren = productCategoryRepository
+                .findCategoryWithChildren(id);
+        List<ProductCategoryDTO> children = categoryWithChildren.stream()
+                .filter(projection -> projection.getChildrenId() != null)
+                .map(projection -> {
+                    ProductCategoryDTO childDTO = new ProductCategoryDTO();
+                    childDTO.setId(projection.getChildrenId());
+                    childDTO.setName(projection.getChildrenName());
+                    childDTO.setImageUrl(projection.getChildrenImageUrl());
+                    return childDTO;
+                })
+                .toList();
+        ProductCategoryDTO productCategoryDTO = ProductCategoryDTO.builder()
+                .id(categoryWithChildren.get(0).getId())
+                .name(categoryWithChildren.get(0).getName())
+                .imageUrl(categoryWithChildren.get(0).getImageUrl())
+                .children(children)
+                .build();
         ProductCategoryEntity parentCategory = productCategoryRepository.findAncestorById(id);
-        if( parentCategory != null) {
+        if (parentCategory != null) {
             productCategoryDTO.setParent(parentCategory);
             productCategoryDTO.setParentId(parentCategory.getId());
         } else {
@@ -85,8 +114,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public ProductCategoryEntity createProductCategory(ProductCategoryDTO productCategoryDTO) {
         if (productCategoryDTO == null
                 || productCategoryDTO.getName() == null
-                || productCategoryDTO.getName().isEmpty()
-        ) {
+                || productCategoryDTO.getName().isEmpty()) {
             throw new IllegalArgumentException("Product category name cannot be null or empty");
         }
         ProductCategoryEntity productCategoryEntity = new ProductCategoryEntity();
@@ -96,8 +124,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         Integer parentCategoryId = productCategoryDTO.getParentId();
         productCategoryClosureService.createProductCategory(
                 parentCategoryId,
-                productCategoryEntity.getId()
-        );
+                productCategoryEntity.getId());
         if (productCategoryDTO.getChildren() != null && !productCategoryDTO.getChildren().isEmpty()) {
             for (ProductCategoryDTO child : productCategoryDTO.getChildren()) {
                 child.setParentId(productCategoryEntity.getId());
@@ -108,16 +135,19 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryEntity updateProductCategory( ProductCategoryEntity productCategoryDetails) {
-        Optional<ProductCategoryEntity> productCategory = productCategoryRepository.findById(productCategoryDetails.getId());
-        if( !productCategory.isPresent()) {
-            throw new ResourceNotFoundException("Product category not found with id: " + productCategoryDetails.getId());
+    public ProductCategoryEntity updateProductCategory(ProductCategoryEntity productCategoryDetails) {
+        Optional<ProductCategoryEntity> productCategory = productCategoryRepository
+                .findById(productCategoryDetails.getId());
+        if (!productCategory.isPresent()) {
+            throw new ResourceNotFoundException(
+                    "Product category not found with id: " + productCategoryDetails.getId());
         }
         productCategory.get().setName(productCategoryDetails.getName());
         productCategory.get().setImageUrl(productCategoryDetails.getImageUrl());
 
         return productCategoryRepository.save(productCategory.get());
     }
+
     @Override
     public void deleteProductCategory(Integer id) {
         if (!productCategoryRepository.existsById(id)) {
