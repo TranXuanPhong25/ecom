@@ -1,3 +1,10 @@
+## [4.7.0](https://github.com/TranXuanPhong25/ecom/compare/v4.6.0...v4.7.0) (2026-04-02)
+
+### 🚀 Features
+
+* chat ([706f424](https://github.com/TranXuanPhong25/ecom/commit/706f4240f8a39a749b57fb7fb228d5ae93d0a324))
+* payment ([6fbf602](https://github.com/TranXuanPhong25/ecom/commit/6fbf602af23ab002f55ac732c6f622da0d8603e6))
+
 ## [4.6.0](https://github.com/TranXuanPhong25/ecom/compare/v4.5.0...v4.6.0) (2026-03-09)
 
 ### 🚀 Features
