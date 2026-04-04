@@ -63,3 +63,38 @@ func (h *SearchHandler) SearchProducts(c echo.Context) error {
 		Data:    response,
 	})
 }
+
+// AutocompleteProducts handles product autocomplete requests
+// GET /api/search/autocomplete?q=keyword&limit=10
+func (h *SearchHandler) AutocompleteProducts(c echo.Context) error {
+	query := c.QueryParam("q")
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+
+	request := dto.AutocompleteRequest{
+		Query: query,
+		Limit: limit,
+	}
+
+	if request.Query == "" {
+		return c.JSON(http.StatusBadRequest, dto.ErrorResponse{
+			Success: false,
+			Error:   "Bad Request",
+			Message: "Autocomplete query is required",
+		})
+	}
+
+	response, err := h.searchService.AutocompleteProducts(c.Request().Context(), request)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, dto.ErrorResponse{
+			Success: false,
+			Error:   "Internal Server Error",
+			Message: err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, dto.SuccessResponse{
+		Success: true,
+		Message: "Autocomplete suggestions fetched successfully",
+		Data:    response,
+	})
+}

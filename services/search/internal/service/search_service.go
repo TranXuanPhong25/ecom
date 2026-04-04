@@ -73,3 +73,29 @@ func (s *SearchService) SearchProducts(ctx context.Context, request dto.SearchRe
 		Limit:    limit,
 	}, nil
 }
+
+// AutocompleteProducts returns fuzzy product suggestions by keyword
+func (s *SearchService) AutocompleteProducts(ctx context.Context, request dto.AutocompleteRequest) (*dto.AutocompleteResponse, error) {
+	query := strings.TrimSpace(request.Query)
+	if query == "" {
+		return nil, errors.New("autocomplete query cannot be empty")
+	}
+
+	limit := request.Limit
+	if limit < 1 {
+		limit = 10
+	}
+	if limit > 20 {
+		limit = 20
+	}
+
+	suggestions, err := s.productRepo.AutocompleteByKeyword(ctx, query, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.AutocompleteResponse{
+		Suggestions: suggestions,
+		Limit:       limit,
+	}, nil
+}

@@ -7,12 +7,24 @@ type SearchRequest struct {
 	Limit int    `json:"limit" validate:"min=1,max=100"`
 }
 
+// AutocompleteRequest represents an autocomplete query request
+type AutocompleteRequest struct {
+	Query string `json:"query" validate:"required,min=1,max=200"`
+	Limit int    `json:"limit" validate:"min=1,max=20"`
+}
+
 // SearchResponse represents the response of a search operation
 type SearchResponse struct {
 	Products []ProductDTO `json:"products"`
 	Total    int64        `json:"total"`
 	Page     int          `json:"page"`
 	Limit    int          `json:"limit"`
+}
+
+// AutocompleteResponse represents the response for autocomplete suggestions
+type AutocompleteResponse struct {
+	Suggestions []string `json:"suggestions"`
+	Limit       int      `json:"limit"`
 }
 
 // ProductDTO represents a product in API responses

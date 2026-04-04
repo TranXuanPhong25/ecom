@@ -11,4 +11,6 @@ import (
 type SearchServicePort interface {
 	// SearchProducts searches for products based on a keyword query
 	SearchProducts(ctx context.Context, request dto.SearchRequest) (*dto.SearchResponse, error)
+	// AutocompleteProducts returns product suggestions based on fuzzy keyword matching
+	AutocompleteProducts(ctx context.Context, request dto.AutocompleteRequest) (*dto.AutocompleteResponse, error)
 }

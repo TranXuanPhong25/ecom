@@ -36,6 +36,14 @@ func ConnectDatabase(cfg DatabaseConfig) (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
+	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm").Error; err != nil {
+		return nil, fmt.Errorf("failed to enable pg_trgm extension: %w", err)
+	}
+
+	// if err := db.Exec("CREATE INDEX idx_product_name_prefix ON products (name text_pattern_ops);").Error; err != nil {
+	// 	return nil, fmt.Errorf("failed to create name index: %w", err)
+	// }
+
 	// Configure connection pool
 	sqlDB, err := db.DB()
 	if err != nil {

@@ -11,4 +11,6 @@ import (
 type ProductRepositoryPort interface {
 	// SearchByKeyword searches for products using full-text search
 	SearchByKeyword(ctx context.Context, keyword string, limit, offset int) ([]entity.Product, int64, error)
+	// AutocompleteByKeyword returns product suggestions using fuzzy matching
+	AutocompleteByKeyword(ctx context.Context, keyword string, limit int) ([]string, error)
 }

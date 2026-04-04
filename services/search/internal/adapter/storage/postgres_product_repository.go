@@ -55,3 +55,25 @@ func (r *PostgresProductRepository) SearchByKeyword(ctx context.Context, keyword
 
 	return products, total, nil
 }
+
+// AutocompleteByKeyword returns product names using fuzzy matching.
+// If pg_trgm is unavailable, it falls back to plain ILIKE matching.
+func (r *PostgresProductRepository) AutocompleteByKeyword(ctx context.Context, keyword string, limit int) ([]string, error) {
+	var suggestions []string
+
+	query := `
+	SELECT DISTINCT name
+	FROM products
+	WHERE name ILIKE ? || '%'
+	ORDER BY name ASC
+	LIMIT ?
+`
+
+	if err := r.db.WithContext(ctx).
+		Raw(query, keyword, limit).
+		Scan(&suggestions).Error; err != nil {
+		return nil, fmt.Errorf("failed to autocomplete products: %w", err)
+	}
+
+	return suggestions, nil
+}

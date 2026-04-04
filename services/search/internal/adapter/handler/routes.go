@@ -45,4 +45,5 @@ func SetupRoutes(e *echo.Echo, searchService in.SearchServicePort) {
 
 	// Search routes
 	e.GET("/api/search", handler.SearchProducts)
+	e.GET("/api/search/autocomplete", handler.AutocompleteProducts)
 }
