@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-common
+  namespace: storages
+spec:
+  serviceName: redis-common
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-common
+  template:
+    metadata:
+      labels:
+        app: redis-common
+    spec:
+      containers:
+        - name: redis-common
+          image: redis:6-alpine
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: db-storage
+              mountPath: /data 
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 15
+            periodSeconds: 20
+  volumeClaimTemplates:
+    - metadata:
+        name: db-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: local-path
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-common
+  namespace: storages
+spec:
+  clusterIP: None
+  selector:
+    app: redis-common
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-service-to-redis-common
+  namespace: storages
+spec:
+  podSelector:
+    matchLabels:
+      app: redis-common
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: services
+      ports:
+        - protocol: TCP
+          port: 6379
