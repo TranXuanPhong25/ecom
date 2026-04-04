@@ -33,6 +33,15 @@ spec:
                    value: mydatabase
                  - name: PRODUCT_CATEGORIES_SERVICE_URL
                    value: http://product-categories-svc.services:8080/api/product-categories
+                 - name: REDIS_HOST
+                   value: redis-common.storages
+                 - name: REDIS_PORT
+                   value: "6379"
+                 - name: REDIS_PASSWORD
+                   value: ""
+                 - name: REDIS_DATABASE
+                   value: "0"
+                  
               resources:
                  limits:
                     memory: "1Gi"

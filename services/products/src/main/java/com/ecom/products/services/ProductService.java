@@ -7,6 +7,7 @@ import com.ecom.products.entities.ProductVariant;
 import com.ecom.products.models.CreateProductRequest;
 import com.ecom.products.models.ProductCategoryPathNode;
 import com.ecom.products.repositories.ProductRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
@@ -14,11 +15,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -28,6 +32,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final BrandService brandService;
     private final CategoryService categoryService;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public ProductDTO createProduct(CreateProductRequest createProductRequest) {
@@ -59,6 +65,32 @@ public class ProductService {
     }
 
     public ProductDTO getProductById(Long id) {
+        String cacheKey = "product-service:products::" + id;
+        Object cachedProduct;
+        try {
+            cachedProduct = redisTemplate.opsForValue().get(cacheKey);
+        } catch (Exception ex) {
+            redisTemplate.delete(cacheKey);
+            cachedProduct = null;
+        }
+        if (cachedProduct != null) {
+            if (cachedProduct instanceof ProductDTO dto) {
+                return dto;
+            }
+
+            if (cachedProduct instanceof Map<?, ?>) {
+                try {
+                    return objectMapper.convertValue(cachedProduct, ProductDTO.class);
+                } catch (IllegalArgumentException ex) {
+                    // Corrupted or incompatible cache payload should be evicted and rebuilt from DB.
+                    redisTemplate.delete(cacheKey);
+                }
+            } else {
+                redisTemplate.delete(cacheKey);
+            }
+        }
+        System.out.println("Cache miss for product id: " + id);
+        
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
             return null;
@@ -70,6 +102,7 @@ public class ProductService {
             Mono<List<ProductCategoryPathNode>> categoryPathMono = categoryService.getCategoryPath(product.getCategoryId());
             productDTO.setCategoryPath(categoryPathMono.block());
         }
+        redisTemplate.opsForValue().set(cacheKey, productDTO, Duration.ofMinutes(1));
         return productDTO;
 
     }
@@ -153,6 +186,7 @@ public class ProductService {
         }
         try {
             productRepository.deleteAllById(ids);
+            redisTemplate.delete(ids.stream().map(id -> "product-service:products::" + id).toList());
         } catch (DataIntegrityViolationException ex) {
             throw new RuntimeException("Error occur when deleting products: " + ex.getMessage(), ex);
         }

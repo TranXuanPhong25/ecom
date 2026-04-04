@@ -7,6 +7,9 @@ import com.ecom.products.models.DeleteProductsPayload;
 import com.ecom.products.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +40,14 @@ public class ProductController {
 
         return new PageResponse<>(productService.getProductsByShopId(shopId, pageable));
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         ProductDTO productDTO = productService.getProductById(id);
         return productDTO != null ? ResponseEntity.ok(productDTO) : ResponseEntity.notFound().build();
     }
 
+    @CacheEvict(value = "product-service:products", key = "#id")
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id,
             @RequestBody CreateProductRequest updateProductRequest) {
@@ -51,6 +55,7 @@ public class ProductController {
         return updatedProduct != null ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
     }
 
+    @CacheEvict(value = "product-service:products", key = "#id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
