@@ -1,3 +1,11 @@
+## [4.8.0](https://github.com/TranXuanPhong25/ecom/compare/v4.7.0...v4.8.0) (2026-04-04)
+
+### 🚀 Features
+
+* autocompletion ([4ee5776](https://github.com/TranXuanPhong25/ecom/commit/4ee5776ef964e5242243b60c82b6a1600b93d770))
+* cache ([5e548ce](https://github.com/TranXuanPhong25/ecom/commit/5e548ce8001e8a74cb730aa1a60c008713f02d5b))
+* redis setup ([d0c7f63](https://github.com/TranXuanPhong25/ecom/commit/d0c7f636e59652478d1988e36f3d17ba2c3f5530))
+
 ## [4.7.0](https://github.com/TranXuanPhong25/ecom/compare/v4.6.0...v4.7.0) (2026-04-02)
 
 ### 🚀 Features
